@@ -13,11 +13,11 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    // Fade in logo dần dần khi vừa mở web
-    const timer = setTimeout(() => {
+    // Kích hoạt hiển thị tức thì (logo đã được preload trong <head> ở 126KB WebP)
+    const raf = requestAnimationFrame(() => {
       setIsLoaded(true);
-    }, 150);
-    return () => clearTimeout(timer);
+    });
+    return () => cancelAnimationFrame(raf);
   }, []);
 
   const handleStartExperience = async () => {
@@ -44,16 +44,24 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
       <div className="flex flex-col items-center justify-center px-6 gap-10 sm:gap-12">
         {/* Duy nhất Logo Phát Lộc gốc kiểu 3D kết cấu kính mờ xuyên sáng, màu xanh ngọc gốc */}
         <div
-          className={`transition-all duration-1000 ease-out cursor-pointer ${
-            isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3'
+          className={`transition-all duration-700 ease-out cursor-pointer ${
+            isLoaded ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-2 scale-[0.98]'
           }`}
           onClick={handleStartExperience}
         >
-          <img
-            src="/assets/logo/phatloc-3d-rendered-full.png?v=frontal"
-            alt="Nội Thất Phát Lộc"
-            className="h-48 sm:h-60 md:h-72 w-auto max-w-[85vw] object-contain transition-transform duration-500 hover:scale-[1.02] filter drop-shadow-[0_12px_28px_rgba(0,0,0,0.55)]"
-          />
+          <picture>
+            <source srcSet="/assets/logo/phatloc-3d-rendered-full.webp" type="image/webp" />
+            <img
+              src="/assets/logo/phatloc-3d-rendered-full.webp"
+              alt="Nội Thất Phát Lộc"
+              fetchPriority="high"
+              loading="eager"
+              decoding="sync"
+              width={965}
+              height={630}
+              className="h-48 sm:h-60 md:h-72 w-auto max-w-[85vw] object-contain transition-transform duration-500 hover:scale-[1.02] filter drop-shadow-[0_12px_28px_rgba(0,0,0,0.55)]"
+            />
+          </picture>
         </div>
 
         {/* Nút mũi tên: màu xanh nhạt, nền kính mờ, đứng im, quay qua phải */}
