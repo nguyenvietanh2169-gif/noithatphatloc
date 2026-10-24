@@ -88,30 +88,20 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
           </picture>
         </div>
 
-        {/* Nút mũi tên & gợi ý cuộn trang khám phá */}
-        <div className="flex flex-col items-center gap-3">
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              handleStartExperience();
-            }}
-            className={`group flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full cursor-pointer bg-white/[0.07] hover:bg-white/[0.14] border border-white/15 backdrop-blur-md transition-all duration-700 ease-out hover:scale-105 ${
-              isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3'
-            }`}
-            style={{ transitionDelay: '200ms' }}
-            aria-label="Vào trang và phát nhạc"
-          >
-            <ArrowRight className="w-6 h-6 sm:w-7 sm:h-7 text-[#7DD3FC] group-hover:text-[#BAE6FD] stroke-[2.2] transition-colors" />
-          </button>
-
-          <span
-            className={`text-[11px] text-white/40 tracking-[0.2em] uppercase font-mono-num transition-opacity duration-700 hidden sm:block ${
-              isLoaded ? 'opacity-100' : 'opacity-0'
-            }`}
-          >
-            Cuộn chuột hoặc bấm để khám phá
-          </span>
-        </div>
+        {/* Nút mũi tên kích hoạt vào trang & phát nhạc */}
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            handleStartExperience();
+          }}
+          className={`group flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full cursor-pointer bg-white/[0.07] hover:bg-white/[0.14] border border-white/15 backdrop-blur-md transition-all duration-700 ease-out hover:scale-105 ${
+            isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3'
+          }`}
+          style={{ transitionDelay: '200ms' }}
+          aria-label="Vào trang và phát nhạc"
+        >
+          <ArrowRight className="w-6 h-6 sm:w-7 sm:h-7 text-[#7DD3FC] group-hover:text-[#BAE6FD] stroke-[2.2] transition-colors" />
+        </button>
       </div>
     </div>
   );
