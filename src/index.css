@@ -1,0 +1,223 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-heading: 'Montserrat', 'Plus Jakarta Sans', sans-serif;
+    --font-sans: 'Plus Jakarta Sans', sans-serif;
+    --font-mono: 'JetBrains Mono', 'Plus Jakarta Sans', monospace;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: #F8F7F4;
+    color: #151618;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, .font-heading {
+    font-family: var(--font-heading);
+  }
+
+  .font-mono-num {
+    font-family: var(--font-mono);
+  }
+
+  /* Optimize high quality rendering for crisp images */
+  img {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: high-quality;
+  }
+}
+
+/* Custom hairline borders like Formfield */
+.border-hairline {
+  border-color: rgba(22, 24, 28, 0.12);
+}
+
+.bg-paper {
+  background-color: #F8F7F4;
+}
+
+.bg-warm-card {
+  background-color: #F3F1EC;
+}
+
+/* Smooth continuous marquee animation */
+@keyframes marquee-left {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes marquee-right {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0%); }
+}
+
+.animate-marquee-left {
+  display: flex;
+  width: max-content;
+  animation: marquee-left 35s linear infinite;
+}
+
+.animate-marquee-right {
+  display: flex;
+  width: max-content;
+  animation: marquee-right 35s linear infinite;
+}
+
+.animate-marquee-left:hover,
+.animate-marquee-right:hover {
+  animation-play-state: paused;
+}
+
+/* LOWT-inspired 3D Perspective Carousel */
+.carousel-3d-container {
+  perspective: 1200px;
+  transform-style: preserve-3d;
+}
+
+.carousel-3d-track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform-style: preserve-3d;
+}
+
+.carousel-3d-card {
+  position: absolute;
+  transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), filter 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity, filter;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #F8F7F4;
+}
+::-webkit-scrollbar-thumb {
+  background: #C8C5BC;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #9D998E;
+}
+
+/* Fashion Runway Motion Animations */
+@keyframes slideUpIn {
+  0% {
+    transform: translateY(100%);
+  }
+  100% {
+    transform: translateY(0%);
+  }
+}
+
+@keyframes slideDownIn {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(0%);
+  }
+}
+
+@keyframes slideUpOut {
+  0% {
+    transform: translateY(0%) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-15%) scale(0.97);
+    opacity: 0.3;
+  }
+}
+
+@keyframes slideDownOut {
+  0% {
+    transform: translateY(0%) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(15%) scale(0.97);
+    opacity: 0.3;
+  }
+}
+
+.animate-slide-up-in {
+  animation: slideUpIn 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-slide-up-out {
+  animation: slideUpOut 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-slide-down-in {
+  animation: slideDownIn 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-slide-down-out {
+  animation: slideDownOut 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fashionFadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fashionZoom {
+  0% {
+    opacity: 0.6;
+    transform: scale(1.06);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fashion-text {
+  animation: fashionFadeUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-fashion-zoom {
+  animation: fashionZoom 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* 3D Perspective Carousel (Phong cách LOWT Music Playlist) */
+.carousel-3d-container {
+  perspective: 1200px;
+  transform-style: preserve-3d;
+}
+
+.carousel-3d-track {
+  transform-style: preserve-3d;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.carousel-3d-card {
+  position: absolute;
+  transform-style: preserve-3d;
+  transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.65s ease, filter 0.65s ease, box-shadow 0.65s ease;
+  user-select: none;
+  will-change: transform, opacity, filter;
+}
