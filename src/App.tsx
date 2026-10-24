@@ -109,7 +109,7 @@ function MainApp() {
           target="_blank"
           rel="noreferrer"
           className="w-12 h-12 rounded-full bg-[#0068FF] text-white flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
-          title="Chat Zalo với Phát Lộc (0585338339 - 08360847193)"
+          title="Chat Zalo với Phát Lộc (mr LỢI 0585338339 - mr LỘC 08360847193)"
         >
           <MessageCircle className="w-6 h-6 fill-current" />
         </a>
@@ -118,7 +118,7 @@ function MainApp() {
         <a
           href="tel:0585338339"
           className="w-12 h-12 rounded-full bg-[#141414] text-white flex items-center justify-center shadow-lg hover:bg-[#00D0E8] hover:text-black transition-colors"
-          title="Gọi Hotline: 0585338339 / 08360847193"
+          title="Gọi Hotline: mr LỢI 0585338339 / mr LỘC 08360847193"
         >
           <Phone className="w-5 h-5 fill-current" />
         </a>

@@ -245,14 +245,14 @@ export const PriceEstimatorModal: React.FC<PriceEstimatorModalProps> = ({ isOpen
               className="py-1.5 px-2 bg-[#141414] hover:bg-[#00A8BC] text-white font-medium text-[10px] sm:text-xs uppercase tracking-wider transition-colors flex items-center justify-center gap-1 rounded-xs"
             >
               <Phone className="w-3 h-3 text-[#00D0E8]" />
-              <span className="truncate">Gọi Anh Lợi</span>
+              <span className="truncate">Gọi mr LỢI</span>
             </a>
             <a
               href="tel:08360847193"
               className="py-1.5 px-2 bg-[#141414] hover:bg-[#00A8BC] text-white font-medium text-[10px] sm:text-xs uppercase tracking-wider transition-colors flex items-center justify-center gap-1 rounded-xs"
             >
               <Phone className="w-3 h-3 text-[#00D0E8]" />
-              <span className="truncate">Gọi Anh Lộc</span>
+              <span className="truncate">Gọi mr LỘC</span>
             </a>
           </div>
 

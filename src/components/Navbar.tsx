@@ -197,14 +197,14 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenEstimator }) => {
                 className="py-3 text-center text-xs uppercase tracking-[0.14em] font-semibold bg-[#141414] text-white flex items-center justify-center gap-1.5"
               >
                 <Phone className="w-3.5 h-3.5 text-[#00D0E8]" />
-                <span>Anh Lợi</span>
+                <span>mr LỢI</span>
               </a>
               <a
                 href="tel:08360847193"
                 className="py-3 text-center text-xs uppercase tracking-[0.14em] font-semibold bg-[#141414] text-white flex items-center justify-center gap-1.5"
               >
                 <Phone className="w-3.5 h-3.5 text-[#00D0E8]" />
-                <span>Anh Lộc</span>
+                <span>mr LỘC</span>
               </a>
             </div>
           </div>

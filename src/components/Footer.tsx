@@ -116,13 +116,13 @@ export const Footer: React.FC<FooterProps> = ({ onOpenEstimator }) => {
                   <span className="text-[10px] text-white/50 font-mono-num uppercase block">HOTLINE / ZALO TƯ VẤN:</span>
                   <div className="flex flex-col gap-1 text-xs">
                     <div>
-                      <span className="text-white/60">Anh Lợi:</span>{' '}
+                      <span className="text-white/60">mr LỢI:</span>{' '}
                       <a href="tel:0585338339" className="hover:text-[#00D0E8] font-semibold tracking-wide text-white transition-colors">
                         0585 338 339
                       </a>
                     </div>
                     <div>
-                      <span className="text-white/60">Anh Lộc:</span>{' '}
+                      <span className="text-white/60">mr LỘC:</span>{' '}
                       <a href="tel:08360847193" className="hover:text-[#00D0E8] font-semibold tracking-wide text-white transition-colors">
                         0836 084 7193
                       </a>

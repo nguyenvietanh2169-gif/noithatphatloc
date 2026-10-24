@@ -27,6 +27,38 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     targetVolumeRef.current = volume;
   }, [volume]);
 
+  const updateMediaSession = (playing: boolean) => {
+    if (typeof window !== 'undefined' && 'mediaSession' in navigator) {
+      try {
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: 'Nội Thất Phát Lộc',
+          artist: 'mr LỢI (0585 338 339) • mr LỘC (0836 084 7193)',
+          album: 'Thiết Kế & Thi Công Nội Thất Đương Đại',
+          artwork: [
+            {
+              src: '/assets/logo/phatloc-lockscreen-artwork-512.jpg',
+              sizes: '512x512',
+              type: 'image/jpeg',
+            },
+            {
+              src: '/assets/logo/phatloc-lockscreen-artwork-512.webp',
+              sizes: '512x512',
+              type: 'image/webp',
+            },
+            {
+              src: '/assets/logo/phatloc-lockscreen-artwork-192.jpg',
+              sizes: '192x192',
+              type: 'image/jpeg',
+            },
+          ],
+        });
+        navigator.mediaSession.playbackState = playing ? 'playing' : 'paused';
+      } catch (e) {
+        console.warn('MediaSession metadata error:', e);
+      }
+    }
+  };
+
   useEffect(() => {
     // Initialize audio element with high reliability
     const audio = new Audio('/assets/audio/background-music.m4a');
@@ -34,7 +66,34 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     audio.volume = 0.55;
     audio.preload = 'auto';
 
-    audio.addEventListener('ended', () => setIsPlaying(false));
+    audio.addEventListener('play', () => {
+      setIsPlaying(true);
+      updateMediaSession(true);
+    });
+    audio.addEventListener('pause', () => {
+      setIsPlaying(false);
+      updateMediaSession(false);
+    });
+    audio.addEventListener('ended', () => {
+      setIsPlaying(false);
+      updateMediaSession(false);
+    });
+
+    if (typeof window !== 'undefined' && 'mediaSession' in navigator) {
+      try {
+        navigator.mediaSession.setActionHandler('play', () => {
+          audio.play().catch(() => {});
+        });
+        navigator.mediaSession.setActionHandler('pause', () => {
+          audio.pause();
+        });
+        navigator.mediaSession.setActionHandler('stop', () => {
+          audio.pause();
+        });
+      } catch (e) {
+        console.warn('MediaSession handler setup error:', e);
+      }
+    }
 
     audioRef.current = audio;
 
