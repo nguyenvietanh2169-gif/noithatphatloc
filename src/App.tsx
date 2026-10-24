@@ -20,10 +20,24 @@ function MainApp() {
   const [showBackToTop, setShowBackToTop] = useState(false);
 
   React.useEffect(() => {
+    let ticking = false;
+    let prevShow = false;
+
     const checkScroll = () => {
-      setShowBackToTop(window.scrollY > 500);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const shouldShow = window.scrollY > 500;
+          if (shouldShow !== prevShow) {
+            prevShow = shouldShow;
+            setShowBackToTop(shouldShow);
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
-    window.addEventListener('scroll', checkScroll);
+
+    window.addEventListener('scroll', checkScroll, { passive: true });
     return () => window.removeEventListener('scroll', checkScroll);
   }, []);
 

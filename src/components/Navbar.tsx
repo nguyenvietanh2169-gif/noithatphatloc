@@ -12,10 +12,24 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenEstimator }) => {
   const { isPlaying, togglePlay } = useAudio();
 
   useEffect(() => {
+    let ticking = false;
+    let prevScrolled = false;
+
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 40);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const shouldScroll = window.scrollY > 40;
+          if (shouldScroll !== prevScrolled) {
+            prevScrolled = shouldScroll;
+            setIsScrolled(shouldScroll);
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
-    window.addEventListener('scroll', handleScroll);
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 

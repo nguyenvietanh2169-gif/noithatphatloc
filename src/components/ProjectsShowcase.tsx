@@ -421,9 +421,10 @@ export const ProjectsShowcase: React.FC = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Touch Swipe State cho Mobile
-  const [touchStartX, setTouchStartX] = useState<number | null>(null);
-  const [touchEndX, setTouchEndX] = useState<number | null>(null);
+  // Touch Swipe Refs cho Mobile (độ nhạy cao, không re-render, phân biệt tuyệt đối cuộn dọc và vuốt ngang)
+  const touchStartXRef = useRef<number | null>(null);
+  const touchStartYRef = useRef<number | null>(null);
+  const touchStartTimeRef = useRef<number>(0);
 
   // Ref cho dải thumbnail cuộn ngang (Filmstrip)
   const thumbnailStripRef = useRef<HTMLDivElement>(null);
@@ -581,23 +582,35 @@ export const ProjectsShowcase: React.FC = () => {
     return () => clearInterval(timer);
   }, [displayMode, isPlaying, filtered3DList.length]);
 
-  // Mobile Touch Handlers
+  // Mobile Touch Handlers với nhận diện cử chỉ nhạy bén & phân tách triệt để với cuộn dọc
   const onTouchStart = (e: React.TouchEvent) => {
-    setTouchStartX(e.targetTouches[0].clientX);
+    touchStartXRef.current = e.touches[0].clientX;
+    touchStartYRef.current = e.touches[0].clientY;
+    touchStartTimeRef.current = Date.now();
   };
-  const onTouchMove = (e: React.TouchEvent) => {
-    setTouchEndX(e.targetTouches[0].clientX);
-  };
-  const onTouchEnd = () => {
-    if (touchStartX === null || touchEndX === null) return;
-    const diffX = touchStartX - touchEndX;
-    if (diffX > 45) {
-      handleNext3D(); // Vuốt sang trái -> xem ảnh kế tiếp
-    } else if (diffX < -45) {
-      handlePrev3D(); // Vuốt sang phải -> xem ảnh trước
+
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartXRef.current === null || touchStartYRef.current === null) return;
+    const endX = e.changedTouches[0].clientX;
+    const endY = e.changedTouches[0].clientY;
+    const diffX = touchStartXRef.current - endX;
+    const diffY = touchStartYRef.current - endY;
+    const duration = Date.now() - touchStartTimeRef.current;
+
+    const absX = Math.abs(diffX);
+    const absY = Math.abs(diffY);
+
+    // Vuốt nhạy (ngưỡng 26px), ưu tiên trục ngang (> 1.25x trục dọc) và thời gian ngắn (< 750ms)
+    // Nếu người dùng cuộn dọc (absY lớn), tuyệt đối không xoay carousel
+    if (absX > 26 && absX > absY * 1.25 && duration < 750) {
+      if (diffX > 0) {
+        handleNext3D(); // Vuốt sang trái -> xem ảnh kế tiếp
+      } else {
+        handlePrev3D(); // Vuốt sang phải -> xem ảnh trước
+      }
     }
-    setTouchStartX(null);
-    setTouchEndX(null);
+    touchStartXRef.current = null;
+    touchStartYRef.current = null;
   };
 
   // Real Projects list
@@ -731,9 +744,9 @@ export const ProjectsShowcase: React.FC = () => {
             <div className="space-y-4">
               {/* KHUNG TRÌNH CHIẾU 3D HÌNH TRỤ XOAY TRÒN (LOWT 3D PERSPECTIVE) */}
               <div
+                style={{ touchAction: 'pan-y' }}
                 className="carousel-3d-container relative w-full h-[420px] sm:h-[480px] md:h-[540px] flex items-center justify-center overflow-hidden py-4 select-none"
                 onTouchStart={onTouchStart}
-                onTouchMove={onTouchMove}
                 onTouchEnd={onTouchEnd}
               >
                 {/* 3D Track */}

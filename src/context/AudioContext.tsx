@@ -52,8 +52,13 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   };
 
-  const isMobile = () => {
-    return typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+  const isMobileDevice = () => {
+    if (typeof window === 'undefined') return false;
+    return (
+      'ontouchstart' in window ||
+      navigator.maxTouchPoints > 0 ||
+      /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+    );
   };
 
   const playAudio = async () => {
@@ -61,38 +66,30 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     if (!audio) return;
 
     clearFadeInterval();
-
     const target = isMuted ? 0 : targetVolumeRef.current;
 
-    // Detect if browser allows volume adjustment
-    let supportsVolumeRamp = true;
-    try {
-      const test = audio.volume;
-      audio.volume = Math.min(1, test * 0.99);
-      if (audio.volume === test && isMobile()) {
-        supportsVolumeRamp = false;
-      }
-    } catch {
-      supportsVolumeRamp = false;
-    }
-
-    try {
-      if (!supportsVolumeRamp || isMuted) {
+    // Trên điện thoại: phát tức thì, không dùng interval để tránh Safari lag/chặn volume
+    if (isMobileDevice() || isMuted) {
+      try {
         audio.volume = target;
         await audio.play();
         setIsPlaying(true);
-        return;
+      } catch (err) {
+        console.warn('Audio play was interrupted:', err);
       }
+      return;
+    }
 
-      // Smooth Fade In (máy tính: 1200ms, điện thoại nếu hỗ trợ: 600ms)
-      const duration = isMobile() ? 600 : 1200;
-      const intervalMs = 25;
-      const totalSteps = Math.max(1, Math.round(duration / intervalMs));
-      const stepIncrement = target / totalSteps;
-
+    // Trên desktop: Fade In êm dịu 1200ms
+    try {
       audio.volume = 0;
       await audio.play();
       setIsPlaying(true);
+
+      const duration = 1200;
+      const intervalMs = 25;
+      const totalSteps = Math.max(1, Math.round(duration / intervalMs));
+      const stepIncrement = target / totalSteps;
 
       let currentVal = 0;
       fadeIntervalRef.current = setInterval(() => {
@@ -114,21 +111,20 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     if (!audio) return;
 
     clearFadeInterval();
-
-    const currentVol = audio.volume;
     const target = targetVolumeRef.current;
 
-    // If muted or audio not audible or on mobile without volume support, pause directly
-    if (isMuted || currentVol <= 0.05) {
+    // Trên điện thoại: pause tức thì ngay lập tức, giải quyết triệt để lỗi không pause được trên Safari iOS
+    if (isMobileDevice() || isMuted || audio.volume <= 0.05) {
       audio.pause();
       setIsPlaying(false);
       audio.volume = target;
       return;
     }
 
-    // Smooth Fade Out (máy tính: 800ms, điện thoại: 350ms)
-    const duration = isMobile() ? 350 : 800;
+    // Trên desktop: Fade Out êm ái 800ms
+    const duration = 800;
     const intervalMs = 25;
+    const currentVol = audio.volume;
     const totalSteps = Math.max(1, Math.round(duration / intervalMs));
     const stepDecrement = currentVol / totalSteps;
 
@@ -138,7 +134,7 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       if (currentVal <= 0.02) {
         audio.pause();
         setIsPlaying(false);
-        audio.volume = target; // Restore base volume for future playback
+        audio.volume = target; // Phục hồi lại âm lượng ban đầu
         clearFadeInterval();
       } else {
         audio.volume = Math.max(0, currentVal);

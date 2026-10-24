@@ -63,60 +63,83 @@ const AUTOPLAY_DURATION = 6000; // 6 seconds
 
 export const HeroSlider: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(false);
   const [progress, setProgress] = useState(0);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
-  const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const lastChangeTimeRef = useRef<number>(Date.now());
+  const touchStartXRef = useRef<number>(0);
+  const touchStartYRef = useRef<number>(0);
 
   const goToSlide = (nextIndex: number) => {
-    if (isTransitioning || nextIndex === currentIndex) return;
-    setIsTransitioning(true);
     setCurrentIndex(nextIndex);
+    lastChangeTimeRef.current = Date.now();
     setProgress(0);
-    setTimeout(() => {
-      setIsTransitioning(false);
-    }, 800);
   };
 
   const handleNext = () => {
-    const next = (currentIndex + 1) % HERO_SLIDES.length;
-    goToSlide(next);
+    goToSlide((currentIndex + 1) % HERO_SLIDES.length);
   };
 
   const handlePrev = () => {
-    const prev = (currentIndex - 1 + HERO_SLIDES.length) % HERO_SLIDES.length;
-    goToSlide(prev);
+    goToSlide((currentIndex - 1 + HERO_SLIDES.length) % HERO_SLIDES.length);
   };
 
-  // Autoplay with progress tracker
+  // Robust Autoplay using timestamp diff - immune to timer freezing or background tab suspension
   useEffect(() => {
-    setProgress(0);
-    const stepTime = 50; // update progress every 50ms
-    const stepIncrement = (stepTime / AUTOPLAY_DURATION) * 100;
+    lastChangeTimeRef.current = Date.now();
 
-    progressIntervalRef.current = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          return 100;
-        }
-        return prev + stepIncrement;
-      });
-    }, stepTime);
+    const interval = setInterval(() => {
+      const elapsed = Date.now() - lastChangeTimeRef.current;
+      if (elapsed >= AUTOPLAY_DURATION) {
+        lastChangeTimeRef.current = Date.now();
+        setProgress(0);
+        setCurrentIndex((prev) => (prev + 1) % HERO_SLIDES.length);
+      } else {
+        setProgress(Math.min(100, (elapsed / AUTOPLAY_DURATION) * 100));
+      }
+    }, 80);
 
-    timerRef.current = setTimeout(() => {
-      handleNext();
-    }, AUTOPLAY_DURATION);
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        lastChangeTimeRef.current = Date.now();
+        setProgress(0);
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
 
     return () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
-      if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
+      clearInterval(interval);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-  }, [currentIndex]);
+  }, []);
+
+  // Touch swipe handling for mobile
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartXRef.current = e.touches[0].clientX;
+    touchStartYRef.current = e.touches[0].clientY;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const diffX = touchStartXRef.current - e.changedTouches[0].clientX;
+    const diffY = touchStartYRef.current - e.changedTouches[0].clientY;
+
+    // Must be predominantly horizontal swipe > 45px
+    if (Math.abs(diffX) > 45 && Math.abs(diffX) > Math.abs(diffY) * 1.3) {
+      if (diffX > 0) {
+        handleNext();
+      } else {
+        handlePrev();
+      }
+    }
+  };
 
   const activeSlide = HERO_SLIDES[currentIndex];
 
   return (
-    <section className="relative w-full h-[92vh] min-h-[640px] max-h-[960px] overflow-hidden bg-[#121316] text-white">
+    <section
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      className="relative w-full h-[88svh] sm:h-[92vh] min-h-[560px] max-h-[920px] overflow-hidden bg-[#121316] text-white select-none"
+    >
       {/* Background Slides with Ken Burns subtle motion */}
       {HERO_SLIDES.map((slide, idx) => {
         const isActive = idx === currentIndex;
