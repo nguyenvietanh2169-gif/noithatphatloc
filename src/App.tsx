@@ -46,7 +46,7 @@ function MainApp() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8F7F4] text-[#141414] flex flex-col selection:bg-[#00D0E8] selection:text-black relative">
+    <div className="min-h-screen bg-[#F8F7F4] text-[#141414] flex flex-col selection:bg-[#00D0E8] selection:text-black relative overflow-x-clip">
       {/* Welcome Screen Overlay (Trang Chào Mừng với Logo Phát Lộc ở giữa & Nút mũi tên kích hoạt âm nhạc) */}
       <WelcomeScreen />
 

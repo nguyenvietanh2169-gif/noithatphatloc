@@ -17,10 +17,34 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
     const raf = requestAnimationFrame(() => {
       setIsLoaded(true);
     });
-    return () => cancelAnimationFrame(raf);
-  }, []);
+
+    // Cho phép người dùng máy tính lăn chuột (scroll wheel) hoặc bấm phím để vào trang tự nhiên
+    const handleWheel = (e: WheelEvent) => {
+      if (e.deltaY > 10 && !isExiting && !isDismissed) {
+        handleStartExperience();
+      }
+    };
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (['ArrowDown', 'PageDown', ' ', 'Enter'].includes(e.key) && !isExiting && !isDismissed) {
+        e.preventDefault();
+        handleStartExperience();
+      }
+    };
+
+    window.addEventListener('wheel', handleWheel, { passive: true });
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener('wheel', handleWheel);
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isExiting, isDismissed]);
 
   const handleStartExperience = async () => {
+    if (isExiting || isDismissed) return;
+
     // 1. Kích hoạt phát nhạc nền
     await playAudio();
 
@@ -29,25 +53,25 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
     setTimeout(() => {
       setIsDismissed(true);
       if (onEnter) onEnter();
-    }, 700);
+    }, 600);
   };
 
   if (isDismissed) return null;
 
   return (
     <div
-      className={`fixed inset-0 z-[100] flex flex-col items-center justify-center select-none transition-opacity duration-700 ease-out bg-[#181A1D] ${
+      onClick={handleStartExperience}
+      className={`fixed inset-0 z-[100] flex flex-col items-center justify-center select-none transition-opacity duration-700 ease-out bg-[#181A1D] cursor-pointer ${
         isExiting ? 'opacity-0 pointer-events-none' : 'opacity-100'
       }`}
     >
-      {/* Vùng trung tâm: Duy nhất Logo 3D Frosted Crystal màu xanh gốc fade-in lên dần dần & Nút mũi tên */}
-      <div className="flex flex-col items-center justify-center px-6 gap-10 sm:gap-12">
+      {/* Vùng trung tâm: Duy nhất Logo 3D Frosted Crystal màu xanh gốc & Nút mũi tên */}
+      <div className="flex flex-col items-center justify-center px-6 gap-8 sm:gap-10">
         {/* Duy nhất Logo Phát Lộc gốc kiểu 3D kết cấu kính mờ xuyên sáng, màu xanh ngọc gốc */}
         <div
-          className={`transition-all duration-700 ease-out cursor-pointer ${
+          className={`transition-all duration-700 ease-out ${
             isLoaded ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-2 scale-[0.98]'
           }`}
-          onClick={handleStartExperience}
         >
           <picture>
             <source srcSet="/assets/logo/phatloc-3d-rendered-full.webp" type="image/webp" />
@@ -59,22 +83,35 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onEnter }) => {
               decoding="sync"
               width={965}
               height={630}
-              className="h-48 sm:h-60 md:h-72 w-auto max-w-[85vw] object-contain transition-transform duration-500 hover:scale-[1.02] filter drop-shadow-[0_12px_28px_rgba(0,0,0,0.55)]"
+              className="h-44 sm:h-56 md:h-68 w-auto max-w-[85vw] object-contain transition-transform duration-500 hover:scale-[1.02] filter drop-shadow-[0_12px_28px_rgba(0,0,0,0.55)]"
             />
           </picture>
         </div>
 
-        {/* Nút mũi tên: màu xanh nhạt, nền kính mờ, đứng im, quay qua phải */}
-        <button
-          onClick={handleStartExperience}
-          className={`group flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full cursor-pointer bg-white/[0.07] hover:bg-white/[0.14] border border-white/15 backdrop-blur-md transition-all duration-700 ease-out ${
-            isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3'
-          }`}
-          style={{ transitionDelay: '300ms' }}
-          aria-label="Vào trang và phát nhạc"
-        >
-          <ArrowRight className="w-6 h-6 sm:w-7 sm:h-7 text-[#7DD3FC] group-hover:text-[#BAE6FD] stroke-[2.2] transition-colors" />
-        </button>
+        {/* Nút mũi tên & gợi ý cuộn trang khám phá */}
+        <div className="flex flex-col items-center gap-3">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              handleStartExperience();
+            }}
+            className={`group flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full cursor-pointer bg-white/[0.07] hover:bg-white/[0.14] border border-white/15 backdrop-blur-md transition-all duration-700 ease-out hover:scale-105 ${
+              isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3'
+            }`}
+            style={{ transitionDelay: '200ms' }}
+            aria-label="Vào trang và phát nhạc"
+          >
+            <ArrowRight className="w-6 h-6 sm:w-7 sm:h-7 text-[#7DD3FC] group-hover:text-[#BAE6FD] stroke-[2.2] transition-colors" />
+          </button>
+
+          <span
+            className={`text-[11px] text-white/40 tracking-[0.2em] uppercase font-mono-num transition-opacity duration-700 hidden sm:block ${
+              isLoaded ? 'opacity-100' : 'opacity-0'
+            }`}
+          >
+            Cuộn chuột hoặc bấm để khám phá
+          </span>
+        </div>
       </div>
     </div>
   );
