@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { AudioProvider } from './context/AudioContext';
+import { WelcomeScreen } from './components/WelcomeScreen';
+import { MusicController } from './components/MusicController';
 import { Navbar } from './components/Navbar';
 import { HeroSlider } from './components/HeroSlider';
 import { KineticMarquee } from './components/KineticMarquee';
@@ -12,7 +15,7 @@ import { Footer } from './components/Footer';
 import { PriceEstimatorModal } from './components/PriceEstimatorModal';
 import { Calculator, MessageCircle, Phone, ArrowUp } from 'lucide-react';
 
-export default function App() {
+function MainApp() {
   const [isEstimatorOpen, setIsEstimatorOpen] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
 
@@ -29,8 +32,14 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8F7F4] text-[#141414] flex flex-col selection:bg-[#00D0E8] selection:text-black">
-      {/* Navigation */}
+    <div className="min-h-screen bg-[#F8F7F4] text-[#141414] flex flex-col selection:bg-[#00D0E8] selection:text-black relative">
+      {/* Welcome Screen Overlay (Trang Chào Mừng với Logo Phát Lộc ở giữa & Nút mũi tên kích hoạt âm nhạc) */}
+      <WelcomeScreen />
+
+      {/* Persistent Audio Controller (Luôn có nút play/pause nhạc trong toàn bộ trang) */}
+      <MusicController />
+
+      {/* Navigation Bar */}
       <Navbar onOpenEstimator={() => setIsEstimatorOpen(true)} />
 
       <main className="flex-1">
@@ -112,5 +121,13 @@ export default function App() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <AudioProvider>
+      <MainApp />
+    </AudioProvider>
   );
 }

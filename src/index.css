@@ -221,3 +221,17 @@
   user-select: none;
   will-change: transform, opacity, filter;
 }
+
+/* Audio Visualizer Equalizer */
+@keyframes equalizer {
+  0% {
+    height: 3px;
+  }
+  50% {
+    height: 14px;
+  }
+  100% {
+    height: 6px;
+  }
+}
+

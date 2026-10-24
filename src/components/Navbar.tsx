@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, ArrowUpRight, Phone } from 'lucide-react';
+import { Menu, X, ArrowUpRight, Phone, Play, Pause } from 'lucide-react';
+import { useAudio } from '../context/AudioContext';
 
 interface NavbarProps {
   onOpenEstimator: () => void;
@@ -8,6 +9,7 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({ onOpenEstimator }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { isPlaying, togglePlay } = useAudio();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -69,6 +71,24 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenEstimator }) => {
 
           {/* Right Action Buttons */}
           <div className="hidden sm:flex items-center gap-2 xl:gap-3 flex-shrink-0">
+            {/* Minimalist Audio Control Icon Button */}
+            <button
+              onClick={togglePlay}
+              className={`flex items-center justify-center w-8 h-8 rounded-full border transition-all cursor-pointer backdrop-blur-md ${
+                isPlaying
+                  ? 'border-black/15 bg-black/[0.06] text-[#00A8BC]'
+                  : 'border-black/10 bg-black/[0.03] text-neutral-600 hover:text-black'
+              }`}
+              title={isPlaying ? 'Tạm dừng nhạc' : 'Phát nhạc'}
+              aria-label={isPlaying ? 'Tạm dừng nhạc' : 'Phát nhạc'}
+            >
+              {isPlaying ? (
+                <Pause className="w-3.5 h-3.5 fill-current stroke-[2]" />
+              ) : (
+                <Play className="w-3.5 h-3.5 fill-current translate-x-0.5 stroke-[2]" />
+              )}
+            </button>
+
             <button
               onClick={onOpenEstimator}
               className="px-3 xl:px-4 py-2 text-[10.5px] xl:text-[11px] uppercase tracking-[0.12em] font-semibold border border-black/20 hover:border-black bg-transparent hover:bg-black hover:text-white transition-all duration-200 cursor-pointer whitespace-nowrap"
@@ -117,6 +137,25 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenEstimator }) => {
           </div>
 
           <div className="flex flex-col gap-3 pt-6 border-t border-black/10 mt-6">
+            {/* Minimalist Audio Control for Mobile Drawer */}
+            <button
+              onClick={togglePlay}
+              className={`flex items-center justify-between px-4 py-2.5 rounded-lg border text-xs font-medium transition-all backdrop-blur-md ${
+                isPlaying
+                  ? 'border-black/15 bg-black/[0.05] text-[#008A9B]'
+                  : 'border-black/10 bg-black/[0.02] text-neutral-600'
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                {isPlaying ? (
+                  <Pause className="w-4 h-4 fill-current stroke-[2]" />
+                ) : (
+                  <Play className="w-4 h-4 fill-current translate-x-0.5 stroke-[2]" />
+                )}
+                <span>{isPlaying ? 'Tạm dừng nhạc nền' : 'Phát nhạc nền'}</span>
+              </div>
+            </button>
+
             {/* Thông tin pháp lý & liên hệ công ty */}
             <div className="text-[11px] text-[#55565B] space-y-1 bg-black/[0.03] p-3 rounded-xs border border-black/5">
               <span className="font-bold text-[#141414] block">CÔNG TY TNHH NỘI THẤT PHÁT LỘC</span>

@@ -29,14 +29,32 @@ interface ProjectItem {
 }
 
 // 1. TOÀN BỘ ẢNH THỰC TẾ (100% Chụp tại công trình & xưởng sau khi hoàn thiện)
-const REAL_PROJECTS: ProjectItem[] = realPhotosData.map((item) => {
+const REAL_PROJECTS: ProjectItem[] = realPhotosData.map((item, idx) => {
   let roomType: 'living' | 'bedroom' | 'kitchen' | 'wardrobe' | 'workshop' | 'wall' = 'living';
-  if (item.category.includes('Bếp') || item.category.includes('Ăn')) roomType = 'kitchen';
-  else if (item.category.includes('Ngủ') || item.category.includes('Học') || item.category.includes('Làm Việc') || item.category.includes('Giường')) roomType = 'bedroom';
-  else if (item.category.includes('Tủ Áo') || item.category.includes('Quần Áo')) roomType = 'wardrobe';
-  else if (item.category.includes('Lam Gỗ') || item.category.includes('Vách Trang Trí') || item.category.includes('Vách Ngăn') || item.category.includes('Vách Ốp Gỗ')) roomType = 'wall';
-  else if (item.category.includes('Xưởng') || item.category.includes('Lắp Đặt') || item.category.includes('Thi Công')) roomType = 'workshop';
-  else if (item.category.includes('Tủ Gỗ Chống Nước') || item.category.includes('Phòng Khách') || item.category.includes('Kệ Tivi') || item.category.includes('Tủ Rượu') || item.category.includes('Cầu Thang') || item.category.includes('Kệ Sách')) roomType = 'living';
+  let materialSpec = 'MDF lõi xanh chống ẩm An Cường • Phủ Melamine cao cấp';
+  let hardware = 'Bản lề giảm chấn Hafele • Ray âm êm ái';
+  
+  if (item.category.includes('Bếp') || item.category.includes('Ăn')) {
+    roomType = 'kitchen';
+    materialSpec = 'Thùng chống nước Picomat / MDF lõi xanh • Mặt đá & Kính ốp';
+    hardware = 'Ray âm Blum giảm chấn • Tay nâng đôi';
+  } else if (item.category.includes('Tủ Áo') || item.category.includes('Quần Áo') || item.category.includes('Cánh Kính')) {
+    roomType = 'wardrobe';
+    materialSpec = 'Khung nhôm Slim Anode xám khói • Kính cường lực & LED âm';
+    hardware = 'Bản lề cánh kính cao cấp • Cảm biến vẫy tay';
+  } else if (item.category.includes('Ngủ') || item.category.includes('Giường') || item.category.includes('Làm Việc')) {
+    roomType = 'bedroom';
+    materialSpec = 'Gỗ MDF chống ẩm phủ Melamine vân óc chó / sồi tự nhiên';
+    hardware = 'Phụ kiện liên kết âm mộc thẩm mỹ';
+  } else if (item.category.includes('Lam') || item.category.includes('Vách') || item.category.includes('Than Tre')) {
+    roomType = 'wall';
+    materialSpec = 'Hệ vách nan gỗ CNC / vách than tre • Nẹp chỉ kim loại PVD';
+    hardware = 'Xương trợ lực kiên cố';
+  } else if (item.category.includes('Rượu') || item.category.includes('Kệ Tivi')) {
+    roomType = 'living';
+    materialSpec = 'Khung nhôm cánh kính cường lực • Thùng vân gỗ óc chó';
+    hardware = 'Ray LED nhôm định hình hắt sáng âm đợt';
+  }
 
   return {
     id: item.id,
@@ -46,7 +64,12 @@ const REAL_PROJECTS: ProjectItem[] = realPhotosData.map((item) => {
     location: item.location,
     roomCategory: item.category,
     roomType,
-    spec: 'Sản xuất trực tiếp tại xưởng mộc Phát Lộc & lắp đặt hoàn thiện',
+    spec: materialSpec,
+    tags: [
+      `№ ${(idx + 1).toString().padStart(2, '0')}`,
+      item.location,
+      hardware.split('•')[0].trim()
+    ],
   };
 });
 
@@ -463,39 +486,39 @@ export const ProjectsShowcase: React.FC = () => {
     let pointerEvents: 'auto' | 'none' = 'auto';
 
     if (offset === 0) {
-      // Active Center card (Nổi bật nhất ở giữa)
+      // Active Center card (Nổi bật nhất ở giữa, to và rõ nét trên cả điện thoại)
       transform = isMobile
-        ? 'translateZ(65px) scale(1.08)'
+        ? 'translateZ(75px) scale(1.05)'
         : 'translateZ(95px) scale(1.12)';
       zIndex = 20;
     } else if (offset === -1) {
       // Thẻ liền kề bên trái
       transform = isMobile
-        ? 'translateX(-95px) translateZ(0px) rotateY(18deg) scale(0.86)'
+        ? 'translateX(-115px) translateZ(-25px) rotateY(16deg) scale(0.82)'
         : 'translateX(-220px) translateZ(0px) rotateY(22deg) scale(0.88)';
       zIndex = 10;
-      filter = 'brightness(0.48) blur(0.5px)';
+      filter = 'brightness(0.38) blur(0.8px)';
     } else if (offset === -2) {
       // Thẻ phía xa bên trái
       transform = isMobile
-        ? 'translateX(-165px) translateZ(-40px) rotateY(26deg) scale(0.72)'
+        ? 'translateX(-190px) translateZ(-65px) rotateY(24deg) scale(0.68)'
         : 'translateX(-390px) translateZ(-80px) rotateY(36deg) scale(0.76)';
       zIndex = 5;
-      filter = 'brightness(0.25) blur(1.5px)';
+      filter = 'brightness(0.2) blur(2px)';
     } else if (offset === 1) {
       // Thẻ liền kề bên phải
       transform = isMobile
-        ? 'translateX(95px) translateZ(0px) rotateY(-18deg) scale(0.86)'
+        ? 'translateX(115px) translateZ(-25px) rotateY(-16deg) scale(0.82)'
         : 'translateX(220px) translateZ(0px) rotateY(-22deg) scale(0.88)';
       zIndex = 10;
-      filter = 'brightness(0.48) blur(0.5px)';
+      filter = 'brightness(0.38) blur(0.8px)';
     } else if (offset === 2) {
       // Thẻ phía xa bên phải
       transform = isMobile
-        ? 'translateX(165px) translateZ(-40px) rotateY(-26deg) scale(0.72)'
+        ? 'translateX(190px) translateZ(-65px) rotateY(-24deg) scale(0.68)'
         : 'translateX(390px) translateZ(-80px) rotateY(-36deg) scale(0.76)';
       zIndex = 5;
-      filter = 'brightness(0.25) blur(1.5px)';
+      filter = 'brightness(0.2) blur(2px)';
     } else {
       // Các thẻ ẩn ngầm phía sau (Offset >= 3 hoặc <= -3)
       const dir = offset > 0 ? 1 : -1;
@@ -549,12 +572,12 @@ export const ProjectsShowcase: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [displayMode, filtered3DList.length, lightboxData, active3DIndex]);
 
-  // Tự động xoay 3D Carousel nhẹ nhàng mỗi 6 giây
+  // Tự động xoay 3D Carousel nhẹ nhàng mỗi 3.8 giây (hình tự chạy để người xem nhận biết và vuốt ngang)
   useEffect(() => {
     if (displayMode !== 'runway' || !isPlaying) return;
     const timer = setInterval(() => {
       handleNext3D();
-    }, 6000);
+    }, 3800);
     return () => clearInterval(timer);
   }, [displayMode, isPlaying, filtered3DList.length]);
 
@@ -708,7 +731,7 @@ export const ProjectsShowcase: React.FC = () => {
             <div className="space-y-4">
               {/* KHUNG TRÌNH CHIẾU 3D HÌNH TRỤ XOAY TRÒN (LOWT 3D PERSPECTIVE) */}
               <div
-                className="carousel-3d-container relative w-full h-[400px] sm:h-[480px] md:h-[540px] flex items-center justify-center overflow-hidden py-4 select-none"
+                className="carousel-3d-container relative w-full h-[420px] sm:h-[480px] md:h-[540px] flex items-center justify-center overflow-hidden py-4 select-none"
                 onTouchStart={onTouchStart}
                 onTouchMove={onTouchMove}
                 onTouchEnd={onTouchEnd}
@@ -729,7 +752,7 @@ export const ProjectsShowcase: React.FC = () => {
                           isActive
                             ? 'ring-1 ring-white/30 shadow-[0_25px_60px_rgba(0,0,0,0.95)]'
                             : 'shadow-[0_15px_40px_rgba(0,0,0,0.7)]'
-                        } w-[280px] h-[210px] sm:w-[420px] sm:h-[295px] md:w-[540px] md:h-[370px] lg:w-[640px] lg:h-[420px] bg-[#0d0e12] border border-white/10`}
+                        } w-[84vw] max-w-[340px] h-[250px] sm:w-[440px] sm:h-[310px] md:w-[560px] md:h-[380px] lg:w-[660px] lg:h-[430px] bg-[#0d0e12] border border-white/10`}
                       >
                         {/* Ảnh công trình */}
                         <img
@@ -763,23 +786,6 @@ export const ProjectsShowcase: React.FC = () => {
                     );
                   })}
                 </div>
-
-                {/* Nút mũi tên cạnh trái/phải */}
-                <button
-                  onClick={handlePrev3D}
-                  aria-label="Bản vẽ trước"
-                  className="absolute left-1 sm:left-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/60 hover:bg-white text-white hover:text-black border border-white/15 flex items-center justify-center backdrop-blur-md transition-all cursor-pointer z-30 active:scale-95 shadow-2xl"
-                >
-                  <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
-                </button>
-
-                <button
-                  onClick={handleNext3D}
-                  aria-label="Bản vẽ sau"
-                  className="absolute right-1 sm:right-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/60 hover:bg-white text-white hover:text-black border border-white/15 flex items-center justify-center backdrop-blur-md transition-all cursor-pointer z-30 active:scale-95 shadow-2xl"
-                >
-                  <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
-                </button>
               </div>
 
               {/* DẢI THUMBNAIL PHÍA DƯỚI (TỐI GIẢN, KHÔNG CHỮ THỪA) */}
@@ -885,127 +891,158 @@ export const ProjectsShowcase: React.FC = () => {
       </section>
 
       {/* ========================================================================= */}
-      {/* PHẦN 2: HÌNH ẢNH CÔNG TRÌNH THỰC TẾ (LƯỚI INSTAGRAM HIỆN ĐẠI)             */}
+      {/* PHẦN 2: HÌNH ẢNH CÔNG TRÌNH THỰC TẾ (PHONG CÁCH TẠP CHÍ KIẾN TRÚC EDITORIAL)*/}
       {/* ========================================================================= */}
-      <section id="projects" className="py-16 sm:py-24 bg-[#F8F7F4] border-b border-black/10 overflow-hidden">
+      <section id="projects" className="py-20 sm:py-28 bg-[#F4F3EF] border-b border-black/10 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10">
           
-          {/* Header Thực Tế */}
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 pb-5 border-b border-black/10 gap-4">
+          {/* Header Tạp Chí Kiến Trúc */}
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 pb-6 border-b border-black/10 gap-6">
             <div>
-              <span className="text-[11px] uppercase tracking-[0.24em] font-semibold text-[#00A8BC] mb-2.5 block font-mono-num">
-                * HỒ SƠ THI CÔNG NGUYÊN BẢN
-              </span>
-              <h2 className="font-heading text-2xl sm:text-4xl md:text-5xl font-black tracking-tight text-[#141414] leading-[1.16] uppercase">
+              <div className="flex items-center gap-2 mb-2.5">
+                <span className="w-2 h-2 rounded-full bg-[#00A8BC]" />
+                <span className="text-[11px] uppercase tracking-[0.24em] font-semibold text-[#00A8BC] font-mono-num">
+                  ARCHITECTURAL LOOKBOOK • HỒ SƠ THI CÔNG NGUYÊN BẢN
+                </span>
+              </div>
+              <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-[#141414] leading-[1.14] uppercase">
                 HÌNH ẢNH NỘI THẤT THỰC TẾ.
               </h2>
             </div>
             <p className="text-xs sm:text-sm text-[#55565B] max-w-md font-light leading-relaxed">
-              100% hình ảnh các sản phẩm tủ bếp, tủ áo, kệ tivi, giường ngủ được hoàn thiện và bàn giao trực tiếp tại công trình cho gia chủ.
+              100% hình ảnh thực tế thi công tại công trình được lưu giữ nguyên bản tỷ lệ chiều cao kịch trần (3:4), tôn vinh tay nghề thợ mộc và kỹ nghệ hoàn thiện của Phát Lộc.
             </p>
           </div>
 
-          {/* Filter Bar Thực Tế */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-3 mb-6 scrollbar-none whitespace-nowrap text-xs">
+          {/* Filter Bar Tạp Chí - Phân loại không gian tinh tế */}
+          <div className="flex items-center gap-2.5 overflow-x-auto pb-4 mb-8 scrollbar-none whitespace-nowrap text-xs">
             <button
               onClick={() => { setRealFilter('all'); setVisibleRealCount(6); }}
-              className={`px-3.5 py-1.5 rounded-full border text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer ${
+              className={`px-4 py-2 rounded-full border text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer ${
                 realFilter === 'all'
-                  ? 'bg-[#141414] border-[#141414] text-white shadow-xs'
-                  : 'bg-white border-black/10 text-[#666] hover:border-black/30'
+                  ? 'bg-[#141414] border-[#141414] text-white shadow-sm'
+                  : 'bg-white border-black/10 text-[#555] hover:border-black/30 hover:text-black'
               }`}
             >
-              Tất cả ({REAL_PROJECTS.length})
+              Tất cả công trình ({REAL_PROJECTS.length})
             </button>
             <button
               onClick={() => { setRealFilter('bedroom'); setVisibleRealCount(6); }}
-              className={`px-3.5 py-1.5 rounded-full border text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer ${
+              className={`px-4 py-2 rounded-full border text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer ${
                 realFilter === 'bedroom'
-                  ? 'bg-[#141414] border-[#141414] text-white shadow-xs'
-                  : 'bg-white border-black/10 text-[#666] hover:border-black/30'
+                  ? 'bg-[#141414] border-[#141414] text-white shadow-sm'
+                  : 'bg-white border-black/10 text-[#555] hover:border-black/30 hover:text-black'
               }`}
             >
-              Tủ áo & Giường ngủ
+              Tủ Áo Cánh Kính & Phòng Ngủ
             </button>
             <button
               onClick={() => { setRealFilter('kitchen'); setVisibleRealCount(6); }}
-              className={`px-3.5 py-1.5 rounded-full border text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer ${
+              className={`px-4 py-2 rounded-full border text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer ${
                 realFilter === 'kitchen'
-                  ? 'bg-[#141414] border-[#141414] text-white shadow-xs'
-                  : 'bg-white border-black/10 text-[#666] hover:border-black/30'
+                  ? 'bg-[#141414] border-[#141414] text-white shadow-sm'
+                  : 'bg-white border-black/10 text-[#555] hover:border-black/30 hover:text-black'
               }`}
             >
-              Tủ bếp & Bàn đảo
+              Tủ Bếp & Đảo Bếp May Đo
             </button>
             <button
               onClick={() => { setRealFilter('living'); setVisibleRealCount(6); }}
-              className={`px-3.5 py-1.5 rounded-full border text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer ${
+              className={`px-4 py-2 rounded-full border text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer ${
                 realFilter === 'living'
-                  ? 'bg-[#141414] border-[#141414] text-white shadow-xs'
-                  : 'bg-white border-black/10 text-[#666] hover:border-black/30'
+                  ? 'bg-[#141414] border-[#141414] text-white shadow-sm'
+                  : 'bg-white border-black/10 text-[#555] hover:border-black/30 hover:text-black'
               }`}
             >
-              Kệ tivi & Tủ rượu
+              Kệ Tivi & Tủ Rượu Sang Trọng
             </button>
             <button
               onClick={() => { setRealFilter('wall_workshop'); setVisibleRealCount(6); }}
-              className={`px-3.5 py-1.5 rounded-full border text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer ${
+              className={`px-4 py-2 rounded-full border text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer ${
                 realFilter === 'wall_workshop'
                   ? 'bg-[#141414] border-[#141414] text-white shadow-xs'
-                  : 'bg-white border-black/10 text-[#666] hover:border-black/30'
+                  : 'bg-white border-black/10 text-[#555] hover:border-black/30 hover:text-black'
               }`}
             >
-              Lam gỗ & Vách trang trí
+              Vách Lam Gỗ & Nghệ Thuật Ốp
             </button>
           </div>
 
-          {/* LƯỚI THỰC TẾ (2 CỘT TRÊN MOBILE, 3 CỘT TRÊN DESKTOP) */}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-2.5 sm:gap-3 md:gap-4">
+          {/* LƯỚI TẠP CHÍ KIẾN TRÚC EDITORIAL (2 CỘT DỌC TRÊN MOBILE, TỶ LỆ 3:4 CHUẨN MỰC) */}
+          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5 lg:gap-7">
             {displayedRealList.map((project, idx) => (
-              <div
+              <article
                 key={project.id}
                 onClick={() => setLightboxData({ list: filteredRealList, index: idx })}
-                className="aspect-square relative bg-black/5 overflow-hidden rounded-md cursor-pointer group shadow-xs hover:shadow-xl transition-all duration-300 border border-black/5 hover:border-black/30"
+                className="group bg-white rounded-xs border border-black/8 hover:border-[#00A8BC]/40 shadow-xs hover:shadow-2xl transition-all duration-500 flex flex-col overflow-hidden cursor-pointer"
               >
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  className="w-full h-full object-cover transform transition-transform duration-500 ease-out group-hover:scale-106 pointer-events-none"
-                  loading="lazy"
-                />
+                {/* Khung ảnh nguyên bản 3:4 (Không crop trần/sàn, trọn vẹn kiến trúc kịch trần) */}
+                <div className="aspect-[3/4] relative bg-[#EDEBE6] overflow-hidden">
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="w-full h-full object-cover transform transition-transform duration-700 ease-out group-hover:scale-104 pointer-events-none"
+                    loading="lazy"
+                  />
 
-                <div className="absolute inset-0 bg-black/55 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-3 sm:p-4 pointer-events-none">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[9px] sm:text-[10px] font-mono-num uppercase tracking-wider px-2 py-0.5 rounded bg-[#00A8BC] text-white font-bold">
-                      {project.roomCategory}
-                    </span>
-                    <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-md text-white flex items-center justify-center">
-                      <Maximize2 className="w-3.5 h-3.5" />
-                    </div>
+                  {/* Lớp phủ điện ảnh nhẹ khi hover */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+
+                  {/* Nút phóng to Lightbox nghệ thuật */}
+                  <div className="absolute top-2.5 right-2.5 sm:top-3.5 sm:right-3.5 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/20 hover:bg-white text-white hover:text-black backdrop-blur-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-1 group-hover:translate-y-0 shadow-md">
+                    <Maximize2 className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                   </div>
 
-                  <div>
-                    <h4 className="font-heading text-xs sm:text-sm font-bold text-white line-clamp-1">
-                      {project.title}
-                    </h4>
-                    <span className="text-[10px] text-white/70 font-mono-num block mt-0.5">
-                      {project.location}
+                  {/* Huy hiệu danh mục không gian */}
+                  <div className="absolute bottom-2.5 left-2.5 sm:bottom-3.5 sm:left-3.5 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+                    <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-xs bg-[#00A8BC] text-white text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider font-mono-num shadow-sm">
+                      {project.roomCategory}
                     </span>
                   </div>
                 </div>
-              </div>
+
+                {/* Thẻ chú thích kiến trúc bên dưới ảnh (Architectural Museum Index Plaque) */}
+                <div className="p-2.5 sm:p-4 lg:p-5 flex-1 flex flex-col justify-between bg-white border-t border-black/5">
+                  <div>
+                    <div className="flex items-center justify-between text-[8.5px] sm:text-[10px] md:text-[10.5px] font-mono text-[#8C8980] mb-1 uppercase tracking-wider">
+                      <span className="truncate max-w-[85px] sm:max-w-none">{project.roomCategory}</span>
+                      <span className="truncate max-w-[65px] sm:max-w-none">{project.location}</span>
+                    </div>
+
+                    <h3 className="font-heading text-xs sm:text-sm md:text-[15px] font-bold text-[#141414] group-hover:text-[#00A8BC] transition-colors line-clamp-1 sm:line-clamp-2 leading-snug">
+                      {project.title}
+                    </h3>
+                  </div>
+
+                  {/* Thông số kỹ thuật vật liệu & phụ kiện may đo */}
+                  <div className="mt-2 sm:mt-3 pt-2 sm:pt-3 border-t border-black/6 flex flex-col gap-1">
+                    <div className="flex items-center justify-between text-[9px] sm:text-[10.5px] text-[#55565B] font-light">
+                      <span className="text-[#8C8980] text-[8.5px] sm:text-[10px] font-mono uppercase tracking-wider">Vật liệu:</span>
+                      <span className="font-medium text-[#222] truncate max-w-[95px] sm:max-w-[210px] text-right">
+                        {project.spec?.split('•')[0] || 'MDF chống ẩm An Cường'}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between text-[9px] sm:text-[10.5px] text-[#55565B] font-light">
+                      <span className="text-[#8C8980] text-[8.5px] sm:text-[10px] font-mono uppercase tracking-wider">Gia công:</span>
+                      <span className="text-[#00A8BC] font-mono-num font-medium text-[8.5px] sm:text-[10.5px]">
+                        Xưởng Phát Lộc
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </article>
             ))}
           </div>
 
           {/* NÚT XEM THÊM ẢNH THỰC TẾ */}
           {visibleRealCount < filteredRealList.length && (
-            <div className="text-center pt-8 mt-2">
+            <div className="text-center pt-12 mt-4">
               <button
                 onClick={() => setVisibleRealCount((prev) => prev + 6)}
-                className="inline-flex items-center gap-2 px-7 py-3 bg-[#141414] hover:bg-[#00A8BC] text-white font-semibold text-xs uppercase tracking-[0.2em] transition-all cursor-pointer rounded-full shadow-md active:scale-95"
+                className="inline-flex items-center gap-3 px-8 py-3.5 bg-[#141414] hover:bg-[#00A8BC] text-white font-semibold text-xs uppercase tracking-[0.2em] transition-all cursor-pointer rounded-full shadow-lg hover:shadow-cyan-500/20 active:scale-95"
               >
-                <span>Xem thêm ảnh thực tế (Còn {filteredRealList.length - visibleRealCount} ảnh)</span>
-                <ArrowDown className="w-4 h-4 animate-bounce" />
+                <span>Mở thêm hồ sơ công trình (Còn {filteredRealList.length - visibleRealCount} ảnh)</span>
+                <ArrowDown className="w-4 h-4" />
               </button>
             </div>
           )}
