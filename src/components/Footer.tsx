@@ -3,9 +3,10 @@ import { ArrowUpRight, MapPin, Phone, Mail, Clock, CreditCard, Shield } from 'lu
 
 interface FooterProps {
   onOpenEstimator: () => void;
+  onOpenContact?: (tab: 'phone' | 'zalo') => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onOpenEstimator }) => {
+export const Footer: React.FC<FooterProps> = ({ onOpenEstimator, onOpenContact }) => {
   return (
     <footer className="bg-[#121316] text-white pt-24 pb-12 border-t border-white/10">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
@@ -30,15 +31,13 @@ export const Footer: React.FC<FooterProps> = ({ onOpenEstimator }) => {
               >
                 Nhận dự toán miễn phí
               </button>
-              <a
-                href="https://zalo.me/0585338339"
-                target="_blank"
-                rel="noreferrer"
-                className="px-8 py-4 border border-white/30 hover:border-white text-white font-medium text-xs uppercase tracking-[0.18em] transition-all flex items-center justify-center gap-2"
+              <button
+                onClick={() => (onOpenContact ? onOpenContact('zalo') : window.open('https://zalo.me/0585338339', '_blank'))}
+                className="px-8 py-4 border border-white/30 hover:border-white text-white font-medium text-xs uppercase tracking-[0.18em] transition-all flex items-center justify-center gap-2 cursor-pointer hover:bg-white/10"
               >
                 <span>Nhắn tin qua Zalo</span>
                 <ArrowUpRight className="w-4 h-4" />
-              </a>
+              </button>
             </div>
           </div>
         </div>

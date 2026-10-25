@@ -159,10 +159,44 @@ export const CloudflareVideoSection: React.FC = () => {
   const activeItemRef = useRef<HTMLDivElement>(null);
   const isInitialMount = useRef<boolean>(true);
 
+  // Cấu hình phát video inline mượt mà tại khung trên điện thoại (ngăn iOS/Android tự phóng to toàn màn hình)
   useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.currentTime = 0;
-      videoRef.current.play().then(() => setIsPlaying(true)).catch(() => {});
+    const video = videoRef.current;
+    if (!video) return;
+
+    video.setAttribute('playsinline', '');
+    video.setAttribute('webkit-playsinline', '');
+    video.setAttribute('x5-playsinline', '');
+    video.setAttribute('x5-video-player-type', 'h5');
+    video.setAttribute('x5-video-player-fullscreen', 'false');
+    // @ts-ignore
+    video.playsInline = true;
+
+    const handleFullscreen = (e: Event) => {
+      e.preventDefault();
+      if (typeof (video as any).webkitExitFullscreen === 'function') {
+        try {
+          (video as any).webkitExitFullscreen();
+        } catch (_) {}
+      }
+    };
+
+    video.addEventListener('webkitbeginfullscreen', handleFullscreen);
+    return () => {
+      video.removeEventListener('webkitbeginfullscreen', handleFullscreen);
+    };
+  }, []);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (video) {
+      video.currentTime = 0;
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => setIsPlaying(true))
+          .catch(() => setIsPlaying(false));
+      }
     }
 
     // Không tự động cuộn khi mount lần đầu để tránh việc trình duyệt bị nhảy trang xuống giữa
@@ -258,12 +292,19 @@ export const CloudflareVideoSection: React.FC = () => {
                 <>
                   <video
                     ref={videoRef}
-                    key={activeStreamSrc}
                     src={activeStreamSrc}
                     autoPlay
                     loop
                     muted={isMuted}
                     playsInline
+                    disablePictureInPicture
+                    controls={false}
+                    {...({
+                      'webkit-playsinline': 'true',
+                      'x5-playsinline': 'true',
+                      'x5-video-player-type': 'h5',
+                      'x5-video-player-fullscreen': 'false',
+                    } as any)}
                     onTimeUpdate={handleTimeUpdate}
                     className="w-full h-full object-cover cursor-pointer"
                     onClick={togglePlay}

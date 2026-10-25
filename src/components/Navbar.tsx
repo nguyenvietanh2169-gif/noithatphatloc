@@ -4,9 +4,10 @@ import { useAudio } from '../context/AudioContext';
 
 interface NavbarProps {
   onOpenEstimator: () => void;
+  onOpenContact?: (tab: 'phone' | 'zalo') => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenEstimator }) => {
+export const Navbar: React.FC<NavbarProps> = ({ onOpenEstimator, onOpenContact }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { isPlaying, togglePlay } = useAudio();
@@ -110,14 +111,15 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenEstimator }) => {
               Dự toán chi phí
             </button>
 
-            <a
-              href="tel:0585338339"
-              className="flex items-center gap-1.5 px-3.5 xl:px-4 py-2 text-[10.5px] xl:text-[11px] uppercase tracking-[0.12em] font-semibold bg-[#141414] text-white hover:bg-[#00A8BC] transition-colors whitespace-nowrap"
+            <button
+              onClick={() => (onOpenContact ? onOpenContact('phone') : (window.location.href = 'tel:0585338339'))}
+              className="flex items-center gap-1.5 px-3.5 xl:px-4 py-2 text-[10.5px] xl:text-[11px] uppercase tracking-[0.12em] font-semibold bg-[#141414] text-white hover:bg-[#00D0E8] hover:text-black transition-colors whitespace-nowrap cursor-pointer"
+              title="Hotline hỗ trợ mr LỢI & mr LỘC"
             >
               <Phone className="w-3.5 h-3.5" />
               <span>Liên hệ</span>
               <ArrowUpRight className="w-3.5 h-3.5" />
-            </a>
+            </button>
           </div>
 
           {/* Mobile menu trigger */}

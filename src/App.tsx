@@ -12,10 +12,15 @@ import { WorkshopSection } from './components/WorkshopSection';
 import { ProcessSection } from './components/ProcessSection';
 import { Footer } from './components/Footer';
 import { PriceEstimatorModal } from './components/PriceEstimatorModal';
+import { ContactModal } from './components/ContactModal';
 import { Calculator, MessageCircle, Phone, ArrowUp } from 'lucide-react';
 
 function MainApp() {
   const [isEstimatorOpen, setIsEstimatorOpen] = useState(false);
+  const [contactModal, setContactModal] = useState<{ isOpen: boolean; tab: 'phone' | 'zalo' }>({
+    isOpen: false,
+    tab: 'phone',
+  });
   const [showBackToTop, setShowBackToTop] = useState(false);
 
   // Đảm bảo mỗi khi truy cập trang hoặc tải lại, luôn đưa về đỉnh trang chủ
@@ -58,7 +63,10 @@ function MainApp() {
       <MusicController />
 
       {/* Navigation Bar */}
-      <Navbar onOpenEstimator={() => setIsEstimatorOpen(true)} />
+      <Navbar
+        onOpenEstimator={() => setIsEstimatorOpen(true)}
+        onOpenContact={(tab) => setContactModal({ isOpen: true, tab })}
+      />
 
       <main className="flex-1">
         {/* Hero Slider with 5 Curated Images & Kinetic Text Slide */}
@@ -87,12 +95,22 @@ function MainApp() {
       </main>
 
       {/* Footer */}
-      <Footer onOpenEstimator={() => setIsEstimatorOpen(true)} />
+      <Footer
+        onOpenEstimator={() => setIsEstimatorOpen(true)}
+        onOpenContact={(tab) => setContactModal({ isOpen: true, tab })}
+      />
 
       {/* Interactive Quotation & Cost Estimator Modal */}
       <PriceEstimatorModal
         isOpen={isEstimatorOpen}
         onClose={() => setIsEstimatorOpen(false)}
+      />
+
+      {/* Contact Choice Modal (Lựa chọn 2 hotline mr LỢI & mr LỘC khi gọi điện hoặc chat Zalo) */}
+      <ContactModal
+        isOpen={contactModal.isOpen}
+        onClose={() => setContactModal((prev) => ({ ...prev, isOpen: false }))}
+        initialTab={contactModal.tab}
       />
 
       {/* Floating Action Buttons (Sticky Right Corner) */}
@@ -107,25 +125,25 @@ function MainApp() {
           <span className="hidden md:inline">Báo giá nhanh</span>
         </button>
 
-        {/* Zalo Contact */}
-        <a
-          href="https://zalo.me/0585338339"
-          target="_blank"
-          rel="noreferrer"
-          className="w-12 h-12 rounded-full bg-[#0068FF] text-white flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
-          title="Chat Zalo với Phát Lộc (mr LỢI 0585338339 - mr LỘC 08360847193)"
+        {/* Zalo Contact (Mở popup lựa chọn 2 hotline mr LỢI / mr LỘC) */}
+        <button
+          onClick={() => setContactModal({ isOpen: true, tab: 'zalo' })}
+          className="w-12 h-12 rounded-full bg-[#0068FF] hover:bg-[#0052cc] text-white flex items-center justify-center shadow-lg hover:scale-110 transition-transform cursor-pointer"
+          title="Chat Zalo với mr LỢI (0585 338 339) hoặc mr LỘC (0836 084 7193)"
+          aria-label="Chat Zalo với Phát Lộc"
         >
           <MessageCircle className="w-6 h-6 fill-current" />
-        </a>
+        </button>
 
-        {/* Direct Call */}
-        <a
-          href="tel:0585338339"
-          className="w-12 h-12 rounded-full bg-[#141414] text-white flex items-center justify-center shadow-lg hover:bg-[#00D0E8] hover:text-black transition-colors"
-          title="Gọi Hotline: mr LỢI 0585338339 / mr LỘC 08360847193"
+        {/* Direct Call (Mở popup lựa chọn 2 hotline mr LỢI / mr LỘC) */}
+        <button
+          onClick={() => setContactModal({ isOpen: true, tab: 'phone' })}
+          className="w-12 h-12 rounded-full bg-[#141414] text-white flex items-center justify-center shadow-lg hover:bg-[#00D0E8] hover:text-black transition-colors cursor-pointer"
+          title="Gọi Hotline mr LỢI (0585 338 339) hoặc mr LỘC (0836 084 7193)"
+          aria-label="Gọi điện thoại hotline Phát Lộc"
         >
           <Phone className="w-5 h-5 fill-current" />
-        </a>
+        </button>
 
         {/* Back to top */}
         {showBackToTop && (
