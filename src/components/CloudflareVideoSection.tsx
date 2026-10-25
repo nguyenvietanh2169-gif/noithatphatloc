@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Play, Pause, Volume2, VolumeX, ChevronRight } from 'lucide-react';
+import { Play, Pause, Volume2, VolumeX, ChevronRight, ChevronLeft } from 'lucide-react';
 
 export interface VideoReelItem {
   id: string;
@@ -155,13 +155,36 @@ export const CloudflareVideoSection: React.FC = () => {
   const [isMuted, setIsMuted] = useState<boolean>(true);
   const [progress, setProgress] = useState<number>(0);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const playlistContainerRef = useRef<HTMLDivElement>(null);
+  const activeItemRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (videoRef.current) {
       videoRef.current.currentTime = 0;
       videoRef.current.play().then(() => setIsPlaying(true)).catch(() => {});
     }
+
+    // Cuộn mượt dải danh sách ngang đến video đang phát trên mobile
+    if (activeItemRef.current && playlistContainerRef.current) {
+      activeItemRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'center',
+      });
+    }
   }, [selectedVideo]);
+
+  const handleNextVideo = () => {
+    const currentIndex = videoPlaylist.findIndex((v) => v.id === selectedVideo.id);
+    const nextIndex = (currentIndex + 1) % videoPlaylist.length;
+    setSelectedVideo(videoPlaylist[nextIndex]);
+  };
+
+  const handlePrevVideo = () => {
+    const currentIndex = videoPlaylist.findIndex((v) => v.id === selectedVideo.id);
+    const prevIndex = (currentIndex - 1 + videoPlaylist.length) % videoPlaylist.length;
+    setSelectedVideo(videoPlaylist[prevIndex]);
+  };
 
   const togglePlay = () => {
     if (videoRef.current) {
@@ -292,8 +315,33 @@ export const CloudflareVideoSection: React.FC = () => {
               )}
             </div>
 
+            {/* Quick Prev / Next Bar */}
+            <div className="flex items-center justify-between w-full max-w-[320px] sm:max-w-[360px] mt-3 px-1">
+              <button
+                onClick={handlePrevVideo}
+                className="flex items-center gap-1.5 text-xs text-white/70 hover:text-white transition-colors cursor-pointer py-1.5 px-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 active:scale-95"
+                title="Thước phim trước"
+              >
+                <ChevronLeft className="w-3.5 h-3.5" />
+                <span className="text-[11px] font-mono-num">Trước</span>
+              </button>
+
+              <span className="text-[11px] font-mono-num text-[#00D0E8] tracking-wider font-semibold">
+                {String(videoPlaylist.findIndex((v) => v.id === selectedVideo.id) + 1).padStart(2, '0')} / {String(videoPlaylist.length).padStart(2, '0')}
+              </span>
+
+              <button
+                onClick={handleNextVideo}
+                className="flex items-center gap-1.5 text-xs text-white/70 hover:text-white transition-colors cursor-pointer py-1.5 px-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 active:scale-95"
+                title="Thước phim tiếp theo"
+              >
+                <span className="text-[11px] font-mono-num">Tiếp</span>
+                <ChevronRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
             {/* Current Active Video Caption */}
-            <div className="mt-4 text-center max-w-[340px]">
+            <div className="mt-3 text-center max-w-[340px]">
               <h3 className="font-heading text-sm font-bold text-white uppercase tracking-wide">
                 {selectedVideo.title}
               </h3>
@@ -304,63 +352,74 @@ export const CloudflareVideoSection: React.FC = () => {
           </div>
 
           {/* Right: Playlist of Vertical Reel Cards */}
-          <div className="lg:col-span-7 flex flex-col gap-3">
+          <div className="lg:col-span-7 flex flex-col gap-3 w-full min-w-0">
             <div className="pb-2 border-b border-white/10 flex items-center justify-between">
               <span className="text-xs font-mono-num text-white/70 tracking-wider uppercase">
                 DANH SÁCH THƯỚC PHIM CÔNG TRÌNH ({videoPlaylist.length} VIDEO)
               </span>
-              <span className="text-[11px] font-mono-num text-white/40">
-                CHẠM ĐỂ CHỌN PHÁT
+              <span className="text-[11px] font-mono-num text-[#00D0E8]/90 lg:text-white/40">
+                <span className="lg:hidden">VUỐT NGANG ĐỂ CHỌN →</span>
+                <span className="hidden lg:inline">CHẠM ĐỂ CHỌN PHÁT</span>
               </span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 max-h-[600px] overflow-y-auto pr-1">
+            {/* Dải cuộn ngang trên Mobile (không bẫy cuộn dọc trang, cao chỉ ~85px) & Lưới 2 cột trên Desktop */}
+            <div
+              ref={playlistContainerRef}
+              className="flex lg:grid lg:grid-cols-2 gap-2.5 sm:gap-3 overflow-x-auto lg:overflow-y-auto lg:max-h-[580px] pb-3 pt-1 scrollbar-none snap-x snap-mandatory overscroll-x-contain"
+            >
               {videoPlaylist.map((item) => {
                 const isSelected = selectedVideo.id === item.id;
                 return (
                   <div
                     key={item.id}
+                    ref={isSelected ? activeItemRef : null}
                     onClick={() => setSelectedVideo(item)}
-                    className={`p-2.5 sm:p-3 border transition-all cursor-pointer flex gap-3 items-center rounded-xs ${
+                    className={`w-[230px] sm:w-[250px] lg:w-auto shrink-0 snap-start p-2 sm:p-2.5 border transition-all cursor-pointer flex gap-2.5 items-center rounded-xs select-none ${
                       isSelected
-                        ? 'bg-white/15 border-[#00D0E8] shadow-[0_0_15px_rgba(0,208,232,0.15)]'
+                        ? 'bg-white/15 border-[#00D0E8] shadow-[0_0_15px_rgba(0,208,232,0.15)] ring-1 ring-[#00D0E8]/30'
                         : 'bg-white/5 border-white/10 hover:border-white/30 hover:bg-white/10'
                     }`}
                   >
                     {/* 9:16 vertical thumbnail */}
-                    <div className="relative w-14 sm:w-16 aspect-[9/16] shrink-0 bg-black overflow-hidden rounded-xs border border-white/10">
+                    <div className="relative w-12 sm:w-14 aspect-[9/16] shrink-0 bg-black overflow-hidden rounded-xs border border-white/10">
                       <img
                         src={item.thumb}
                         alt={item.title}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover pointer-events-none"
                         loading="lazy"
                       />
                       <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
                         <div
-                          className={`w-6 h-6 rounded-full flex items-center justify-center transition-transform ${
+                          className={`w-5 h-5 rounded-full flex items-center justify-center transition-transform ${
                             isSelected ? 'bg-[#00D0E8] text-black scale-110' : 'bg-white/30 text-white'
                           }`}
                         >
-                          <Play className="w-3 h-3 fill-current ml-0.5" />
+                          <Play className="w-2.5 h-2.5 fill-current ml-0.5" />
                         </div>
                       </div>
-                      <span className="absolute bottom-1 right-1 text-[8px] font-mono-num bg-black/80 px-1 py-0.2 text-white/90">
+                      <span className="absolute bottom-0.5 right-0.5 text-[8px] font-mono-num bg-black/80 px-1 py-0.2 text-white/90">
                         {item.duration}
                       </span>
                     </div>
 
                     {/* Meta info */}
                     <div className="flex-1 min-w-0">
-                      <div className="mb-0.5">
-                        <span className="text-[9px] sm:text-[10px] uppercase font-mono-num text-[#00D0E8]">
+                      <div className="mb-0.5 flex items-center justify-between gap-1">
+                        <span className="text-[9px] uppercase font-mono-num text-[#00D0E8] truncate">
                           {item.badge}
                         </span>
+                        {isSelected && (
+                          <span className="text-[8px] font-mono-num bg-[#00D0E8]/20 text-[#00D0E8] px-1.5 py-0.2 rounded-full shrink-0">
+                            ĐANG PHÁT
+                          </span>
+                        )}
                       </div>
 
                       <h4 className="font-heading text-xs font-bold text-white line-clamp-2 leading-snug">
                         {item.title}
                       </h4>
-                      <p className="text-[10px] sm:text-[11px] text-white/50 line-clamp-1 mt-0.5 font-light">
+                      <p className="text-[10px] text-white/50 line-clamp-1 mt-0.5 font-light">
                         {item.subtitle}
                       </p>
                     </div>
