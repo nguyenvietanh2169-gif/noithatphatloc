@@ -4,8 +4,9 @@ interface AudioContextType {
   isPlaying: boolean;
   isMuted: boolean;
   volume: number;
+  hasStarted: boolean;
   togglePlay: () => void;
-  playAudio: () => Promise<void>;
+  playAudio: () => Promise<boolean>;
   pauseAudio: () => void;
   toggleMute: () => void;
   setVolume: (vol: number) => void;
@@ -17,10 +18,12 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [isMuted, setIsMuted] = useState<boolean>(false);
   const [volume, setVolumeState] = useState<number>(0.55);
+  const [hasStarted, setHasStarted] = useState<boolean>(false);
   
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const fadeIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const targetVolumeRef = useRef<number>(0.55);
+  const hasStartedRef = useRef<boolean>(false);
 
   // Keep targetVolumeRef in sync
   useEffect(() => {
@@ -120,9 +123,9 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     );
   };
 
-  const playAudio = async () => {
+  const playAudio = async (): Promise<boolean> => {
     const audio = audioRef.current;
-    if (!audio) return;
+    if (!audio) return false;
 
     clearFadeInterval();
     const target = isMuted ? 0 : targetVolumeRef.current;
@@ -133,10 +136,13 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         audio.volume = target;
         await audio.play();
         setIsPlaying(true);
+        setHasStarted(true);
+        hasStartedRef.current = true;
+        return true;
       } catch (err) {
         console.warn('Audio play was interrupted:', err);
+        return false;
       }
-      return;
     }
 
     // Trên desktop: Fade In êm dịu 1200ms
@@ -144,6 +150,8 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       audio.volume = 0;
       await audio.play();
       setIsPlaying(true);
+      setHasStarted(true);
+      hasStartedRef.current = true;
 
       const duration = 1200;
       const intervalMs = 25;
@@ -160,8 +168,10 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           audio.volume = Math.min(target, currentVal);
         }
       }, intervalMs);
+      return true;
     } catch (err) {
       console.warn('Audio play request was blocked or interrupted:', err);
+      return false;
     }
   };
 
@@ -226,12 +236,49 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   };
 
+  // Tự động phát nhạc và mở controller khi người dùng chạm, vuốt hoặc cuộn chuột lần đầu
+  useEffect(() => {
+    const handleFirstInteraction = async () => {
+      if (hasStartedRef.current) return;
+      
+      const success = await playAudio();
+      if (success) {
+        hasStartedRef.current = true;
+        setHasStarted(true);
+        cleanup();
+      }
+    };
+
+    const cleanup = () => {
+      window.removeEventListener('touchstart', handleFirstInteraction);
+      window.removeEventListener('touchend', handleFirstInteraction);
+      window.removeEventListener('pointerdown', handleFirstInteraction);
+      window.removeEventListener('click', handleFirstInteraction);
+      window.removeEventListener('keydown', handleFirstInteraction);
+      window.removeEventListener('scroll', handleFirstInteraction);
+      window.removeEventListener('wheel', handleFirstInteraction);
+    };
+
+    window.addEventListener('touchstart', handleFirstInteraction, { passive: true });
+    window.addEventListener('touchend', handleFirstInteraction, { passive: true });
+    window.addEventListener('pointerdown', handleFirstInteraction, { passive: true });
+    window.addEventListener('click', handleFirstInteraction, { passive: true });
+    window.addEventListener('keydown', handleFirstInteraction, { passive: true });
+    window.addEventListener('scroll', handleFirstInteraction, { passive: true });
+    window.addEventListener('wheel', handleFirstInteraction, { passive: true });
+
+    return () => {
+      cleanup();
+    };
+  }, []);
+
   return (
     <AudioContext.Provider
       value={{
         isPlaying,
         isMuted,
         volume,
+        hasStarted,
         togglePlay,
         playAudio,
         pauseAudio,

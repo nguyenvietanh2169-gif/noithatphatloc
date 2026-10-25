@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { AudioProvider } from './context/AudioContext';
-import { WelcomeScreen } from './components/WelcomeScreen';
 import { MusicController } from './components/MusicController';
 import { Navbar } from './components/Navbar';
 import { HeroSlider } from './components/HeroSlider';
@@ -47,10 +46,7 @@ function MainApp() {
 
   return (
     <div className="min-h-screen bg-[#F8F7F4] text-[#141414] flex flex-col selection:bg-[#00D0E8] selection:text-black relative overflow-x-clip">
-      {/* Welcome Screen Overlay (Trang Chào Mừng với Logo Phát Lộc ở giữa & Nút mũi tên kích hoạt âm nhạc) */}
-      <WelcomeScreen />
-
-      {/* Persistent Audio Controller (Luôn có nút play/pause nhạc trong toàn bộ trang) */}
+      {/* Floating Audio Controller (Tự động xuất hiện khi người dùng bắt đầu vuốt/chạm lướt trang) */}
       <MusicController />
 
       {/* Navigation Bar */}
