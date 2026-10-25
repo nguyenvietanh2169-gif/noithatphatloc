@@ -1,5 +1,5 @@
 import React from 'react';
-import { Play, Pause } from 'lucide-react';
+import { Pause } from 'lucide-react';
 import { useAudio } from '../context/AudioContext';
 
 export const MusicController: React.FC = () => {
@@ -16,7 +16,7 @@ export const MusicController: React.FC = () => {
     >
       <button
         onClick={togglePlay}
-        className={`flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 rounded-full cursor-pointer backdrop-blur-md transition-all duration-300 border shadow-lg ${
+        className={`flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 rounded-full cursor-pointer backdrop-blur-md transition-all duration-300 border shadow-lg p-0 ${
           isPlaying
             ? 'bg-black/75 hover:bg-black border-[#00D0E8]/40 text-[#00D0E8] ring-2 ring-[#00D0E8]/20 shadow-cyan-500/10'
             : 'bg-black/65 hover:bg-black/85 border-white/10 text-white/70 hover:text-white'
@@ -27,7 +27,19 @@ export const MusicController: React.FC = () => {
         {isPlaying ? (
           <Pause className="w-4 h-4 sm:w-4.5 sm:h-4.5 fill-current stroke-[2]" />
         ) : (
-          <Play className="w-4 h-4 sm:w-4.5 sm:h-4.5 fill-current translate-x-0.5 stroke-[2]" />
+          /* SVG Play được cân đối toạ độ tâm tuyệt đối (cách đều lề trái/phải 5px, trên/dưới 3px chuẩn tâm hình tròn) */
+          <svg
+            className="w-4 h-4 sm:w-4.5 sm:h-4.5 fill-current"
+            viewBox="0 0 24 24"
+          >
+            <polygon
+              points="5 3 19 12 5 21 5 3"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
         )}
       </button>
     </div>

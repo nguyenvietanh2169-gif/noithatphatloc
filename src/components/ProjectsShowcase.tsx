@@ -407,6 +407,118 @@ const PROJECTS_3D: ProjectItem[] = [
   },
 ];
 
+interface RealProjectCardProps {
+  project: ProjectItem;
+  index: number;
+  onOpenLightbox: () => void;
+}
+
+const RealProjectCard: React.FC<RealProjectCardProps> = ({ project, index, onOpenLightbox }) => {
+  const cardRef = useRef<HTMLElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const el = cardRef.current;
+    if (!el) return;
+
+    if (typeof window === 'undefined' || !('IntersectionObserver' in window)) {
+      setIsVisible(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsVisible(true);
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.08,
+        rootMargin: '0px 0px -40px 0px',
+      }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [project.id]);
+
+  // Hiệu ứng cascade so le (stagger) 90ms mỗi ảnh trong từng đợt 6 ảnh
+  const staggerDelay = `${(index % 6) * 90}ms`;
+
+  return (
+    <article
+      ref={cardRef}
+      onClick={onOpenLightbox}
+      style={{
+        transitionDelay: isVisible ? staggerDelay : '0ms',
+      }}
+      className={`group bg-white rounded-xs border border-black/8 hover:border-[#00A8BC]/40 shadow-xs hover:shadow-2xl flex flex-col overflow-hidden cursor-pointer transform transition-all duration-700 ease-out will-change-transform ${
+        isVisible
+          ? 'opacity-100 translate-y-0 scale-100'
+          : 'opacity-0 translate-y-16 scale-[0.97]'
+      }`}
+    >
+      {/* Khung ảnh nguyên bản 3:4 (Không crop trần/sàn, trọn vẹn kiến trúc kịch trần) */}
+      <div className="aspect-[3/4] relative bg-[#EDEBE6] overflow-hidden">
+        <img
+          src={project.image}
+          alt={project.title}
+          className="w-full h-full object-cover transform transition-transform duration-700 ease-out group-hover:scale-104 pointer-events-none"
+          loading="lazy"
+        />
+
+        {/* Lớp phủ điện ảnh nhẹ khi hover */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+
+        {/* Nút phóng to Lightbox nghệ thuật */}
+        <div className="absolute top-2.5 right-2.5 sm:top-3.5 sm:right-3.5 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/20 hover:bg-white text-white hover:text-black backdrop-blur-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-1 group-hover:translate-y-0 shadow-md">
+          <Maximize2 className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+        </div>
+
+        {/* Huy hiệu danh mục không gian */}
+        <div className="absolute bottom-2.5 left-2.5 sm:bottom-3.5 sm:left-3.5 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+          <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-xs bg-[#00A8BC] text-white text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider font-mono-num shadow-sm">
+            {project.roomCategory}
+          </span>
+        </div>
+      </div>
+
+      {/* Thẻ chú thích kiến trúc bên dưới ảnh (Architectural Museum Index Plaque) */}
+      <div className="p-2.5 sm:p-4 lg:p-5 flex-1 flex flex-col justify-between bg-white border-t border-black/5">
+        <div>
+          <div className="flex items-center justify-between text-[8.5px] sm:text-[10px] md:text-[10.5px] font-mono text-[#8C8980] mb-1 uppercase tracking-wider">
+            <span className="truncate max-w-[85px] sm:max-w-none">{project.roomCategory}</span>
+            <span className="truncate max-w-[65px] sm:max-w-none">{project.location}</span>
+          </div>
+
+          <h3 className="font-heading text-xs sm:text-sm md:text-[15px] font-bold text-[#141414] group-hover:text-[#00A8BC] transition-colors line-clamp-1 sm:line-clamp-2 leading-snug">
+            {project.title}
+          </h3>
+        </div>
+
+        {/* Thông số kỹ thuật vật liệu & phụ kiện may đo */}
+        <div className="mt-2 sm:mt-3 pt-2 sm:pt-3 border-t border-black/6 flex flex-col gap-1">
+          <div className="flex items-center justify-between text-[9px] sm:text-[10.5px] text-[#55565B] font-light">
+            <span className="text-[#8C8980] text-[8.5px] sm:text-[10px] font-mono uppercase tracking-wider">Vật liệu:</span>
+            <span className="font-medium text-[#222] truncate max-w-[95px] sm:max-w-[210px] text-right">
+              {project.spec?.split('•')[0] || 'MDF chống ẩm An Cường'}
+            </span>
+          </div>
+          <div className="flex items-center justify-between text-[9px] sm:text-[10.5px] text-[#55565B] font-light">
+            <span className="text-[#8C8980] text-[8.5px] sm:text-[10px] font-mono uppercase tracking-wider">Gia công:</span>
+            <span className="text-[#00A8BC] font-mono-num font-medium text-[8.5px] sm:text-[10.5px]">
+              Xưởng Phát Lộc
+            </span>
+          </div>
+        </div>
+      </div>
+    </article>
+  );
+};
+
 export const ProjectsShowcase: React.FC = () => {
   // 1. CHẾ ĐỘ HIỂN THỊ DUAL-MODE CHO ẢNH 3D: 'runway' (3D Carousel kiểu LOWT) vs 'moodboard' (Lưới)
   const [displayMode, setDisplayMode] = useState<'runway' | 'moodboard'>('runway');
@@ -984,66 +1096,12 @@ export const ProjectsShowcase: React.FC = () => {
           {/* LƯỚI TẠP CHÍ KIẾN TRÚC EDITORIAL (2 CỘT DỌC TRÊN MOBILE, TỶ LỆ 3:4 CHUẨN MỰC) */}
           <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5 lg:gap-7">
             {displayedRealList.map((project, idx) => (
-              <article
+              <RealProjectCard
                 key={project.id}
-                onClick={() => setLightboxData({ list: filteredRealList, index: idx })}
-                className="group bg-white rounded-xs border border-black/8 hover:border-[#00A8BC]/40 shadow-xs hover:shadow-2xl transition-all duration-500 flex flex-col overflow-hidden cursor-pointer"
-              >
-                {/* Khung ảnh nguyên bản 3:4 (Không crop trần/sàn, trọn vẹn kiến trúc kịch trần) */}
-                <div className="aspect-[3/4] relative bg-[#EDEBE6] overflow-hidden">
-                  <img
-                    src={project.image}
-                    alt={project.title}
-                    className="w-full h-full object-cover transform transition-transform duration-700 ease-out group-hover:scale-104 pointer-events-none"
-                    loading="lazy"
-                  />
-
-                  {/* Lớp phủ điện ảnh nhẹ khi hover */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-
-                  {/* Nút phóng to Lightbox nghệ thuật */}
-                  <div className="absolute top-2.5 right-2.5 sm:top-3.5 sm:right-3.5 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/20 hover:bg-white text-white hover:text-black backdrop-blur-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-1 group-hover:translate-y-0 shadow-md">
-                    <Maximize2 className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-                  </div>
-
-                  {/* Huy hiệu danh mục không gian */}
-                  <div className="absolute bottom-2.5 left-2.5 sm:bottom-3.5 sm:left-3.5 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
-                    <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-xs bg-[#00A8BC] text-white text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider font-mono-num shadow-sm">
-                      {project.roomCategory}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Thẻ chú thích kiến trúc bên dưới ảnh (Architectural Museum Index Plaque) */}
-                <div className="p-2.5 sm:p-4 lg:p-5 flex-1 flex flex-col justify-between bg-white border-t border-black/5">
-                  <div>
-                    <div className="flex items-center justify-between text-[8.5px] sm:text-[10px] md:text-[10.5px] font-mono text-[#8C8980] mb-1 uppercase tracking-wider">
-                      <span className="truncate max-w-[85px] sm:max-w-none">{project.roomCategory}</span>
-                      <span className="truncate max-w-[65px] sm:max-w-none">{project.location}</span>
-                    </div>
-
-                    <h3 className="font-heading text-xs sm:text-sm md:text-[15px] font-bold text-[#141414] group-hover:text-[#00A8BC] transition-colors line-clamp-1 sm:line-clamp-2 leading-snug">
-                      {project.title}
-                    </h3>
-                  </div>
-
-                  {/* Thông số kỹ thuật vật liệu & phụ kiện may đo */}
-                  <div className="mt-2 sm:mt-3 pt-2 sm:pt-3 border-t border-black/6 flex flex-col gap-1">
-                    <div className="flex items-center justify-between text-[9px] sm:text-[10.5px] text-[#55565B] font-light">
-                      <span className="text-[#8C8980] text-[8.5px] sm:text-[10px] font-mono uppercase tracking-wider">Vật liệu:</span>
-                      <span className="font-medium text-[#222] truncate max-w-[95px] sm:max-w-[210px] text-right">
-                        {project.spec?.split('•')[0] || 'MDF chống ẩm An Cường'}
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between text-[9px] sm:text-[10.5px] text-[#55565B] font-light">
-                      <span className="text-[#8C8980] text-[8.5px] sm:text-[10px] font-mono uppercase tracking-wider">Gia công:</span>
-                      <span className="text-[#00A8BC] font-mono-num font-medium text-[8.5px] sm:text-[10.5px]">
-                        Xưởng Phát Lộc
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </article>
+                project={project}
+                index={idx}
+                onOpenLightbox={() => setLightboxData({ list: filteredRealList, index: idx })}
+              />
             ))}
           </div>
 
