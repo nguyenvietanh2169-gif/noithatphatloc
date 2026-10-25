@@ -238,21 +238,28 @@ export const PriceEstimatorModal: React.FC<PriceEstimatorModalProps> = ({ isOpen
             </a>
           </div>
 
-          {/* Bottom row: Quick Call Lợi & Lộc side-by-side */}
-          <div className="grid grid-cols-2 gap-2 mt-2.5 pt-2 border-t border-black/6">
+          {/* Bottom row: Quick Call Lợi, Lộc & Huân */}
+          <div className="grid grid-cols-3 gap-1.5 sm:gap-2 mt-2.5 pt-2 border-t border-black/6">
             <a
               href="tel:0585338339"
-              className="py-1.5 px-2 bg-[#141414] hover:bg-[#00A8BC] text-white font-medium text-[10px] sm:text-xs uppercase tracking-wider transition-colors flex items-center justify-center gap-1 rounded-xs"
+              className="py-1.5 px-1 bg-[#141414] hover:bg-[#00A8BC] text-white font-medium text-[9px] sm:text-[11px] uppercase tracking-wider transition-colors flex items-center justify-center gap-1 rounded-xs"
             >
-              <Phone className="w-3 h-3 text-[#00D0E8]" />
-              <span className="truncate">Gọi mr LỢI</span>
+              <Phone className="w-2.5 h-2.5 text-[#00D0E8] shrink-0" />
+              <span className="truncate">mr LỢI</span>
             </a>
             <a
               href="tel:08360847193"
-              className="py-1.5 px-2 bg-[#141414] hover:bg-[#00A8BC] text-white font-medium text-[10px] sm:text-xs uppercase tracking-wider transition-colors flex items-center justify-center gap-1 rounded-xs"
+              className="py-1.5 px-1 bg-[#141414] hover:bg-[#00A8BC] text-white font-medium text-[9px] sm:text-[11px] uppercase tracking-wider transition-colors flex items-center justify-center gap-1 rounded-xs"
             >
-              <Phone className="w-3 h-3 text-[#00D0E8]" />
-              <span className="truncate">Gọi mr LỘC</span>
+              <Phone className="w-2.5 h-2.5 text-[#00D0E8] shrink-0" />
+              <span className="truncate">mr LỘC</span>
+            </a>
+            <a
+              href="tel:0908938297"
+              className="py-1.5 px-1 bg-[#141414] hover:bg-[#00A8BC] text-white font-medium text-[9px] sm:text-[11px] uppercase tracking-wider transition-colors flex items-center justify-center gap-1 rounded-xs"
+            >
+              <Phone className="w-2.5 h-2.5 text-[#00D0E8] shrink-0" />
+              <span className="truncate">mr HUÂN</span>
             </a>
           </div>
 

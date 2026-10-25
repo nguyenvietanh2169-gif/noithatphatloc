@@ -126,6 +126,12 @@ export const Footer: React.FC<FooterProps> = ({ onOpenEstimator, onOpenContact }
                         0836 084 7193
                       </a>
                     </div>
+                    <div>
+                      <span className="text-white/60">mr HUÂN:</span>{' '}
+                      <a href="tel:0908938297" className="hover:text-[#00D0E8] font-semibold tracking-wide text-white transition-colors">
+                        090 893 8297
+                      </a>
+                    </div>
                   </div>
                 </div>
               </li>

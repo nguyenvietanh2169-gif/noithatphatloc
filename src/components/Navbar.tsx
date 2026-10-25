@@ -193,20 +193,27 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenEstimator, onOpenContact }
             >
               Báo giá & Dự toán
             </button>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-3 gap-2">
               <a
                 href="tel:0585338339"
-                className="py-3 text-center text-xs uppercase tracking-[0.14em] font-semibold bg-[#141414] text-white flex items-center justify-center gap-1.5"
+                className="py-3 text-center text-xs uppercase tracking-[0.12em] font-semibold bg-[#141414] text-white flex items-center justify-center gap-1"
               >
-                <Phone className="w-3.5 h-3.5 text-[#00D0E8]" />
+                <Phone className="w-3 h-3 text-[#00D0E8] shrink-0" />
                 <span>mr LỢI</span>
               </a>
               <a
                 href="tel:08360847193"
-                className="py-3 text-center text-xs uppercase tracking-[0.14em] font-semibold bg-[#141414] text-white flex items-center justify-center gap-1.5"
+                className="py-3 text-center text-xs uppercase tracking-[0.12em] font-semibold bg-[#141414] text-white flex items-center justify-center gap-1"
               >
-                <Phone className="w-3.5 h-3.5 text-[#00D0E8]" />
+                <Phone className="w-3 h-3 text-[#00D0E8] shrink-0" />
                 <span>mr LỘC</span>
+              </a>
+              <a
+                href="tel:0908938297"
+                className="py-3 text-center text-xs uppercase tracking-[0.12em] font-semibold bg-[#141414] text-white flex items-center justify-center gap-1"
+              >
+                <Phone className="w-3 h-3 text-[#00D0E8] shrink-0" />
+                <span>mr HUÂN</span>
               </a>
             </div>
           </div>

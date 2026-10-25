@@ -51,6 +51,13 @@ export const ContactModal: React.FC<ContactModalProps> = ({
       tel: 'tel:08360847193',
       zalo: 'https://zalo.me/08360847193',
     },
+    {
+      id: 'huan',
+      name: 'mr Huân',
+      phone: '090 893 8297',
+      tel: 'tel:0908938297',
+      zalo: 'https://zalo.me/0908938297',
+    },
   ];
 
   return (
