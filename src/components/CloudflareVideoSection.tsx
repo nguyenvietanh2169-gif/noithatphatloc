@@ -157,6 +157,7 @@ export const CloudflareVideoSection: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const playlistContainerRef = useRef<HTMLDivElement>(null);
   const activeItemRef = useRef<HTMLDivElement>(null);
+  const isInitialMount = useRef<boolean>(true);
 
   useEffect(() => {
     if (videoRef.current) {
@@ -164,12 +165,20 @@ export const CloudflareVideoSection: React.FC = () => {
       videoRef.current.play().then(() => setIsPlaying(true)).catch(() => {});
     }
 
-    // Cuộn mượt dải danh sách ngang đến video đang phát trên mobile
+    // Không tự động cuộn khi mount lần đầu để tránh việc trình duyệt bị nhảy trang xuống giữa
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+
+    // Cuộn mượt dải danh sách ngang nội bộ đến video đang chọn (KHÔNG dùng scrollIntoView vì sẽ làm giật cuộn cả trang window)
     if (activeItemRef.current && playlistContainerRef.current) {
-      activeItemRef.current.scrollIntoView({
+      const container = playlistContainerRef.current;
+      const activeEl = activeItemRef.current;
+      const targetScrollLeft = activeEl.offsetLeft - container.offsetWidth / 2 + activeEl.offsetWidth / 2;
+      container.scrollTo({
+        left: targetScrollLeft,
         behavior: 'smooth',
-        block: 'nearest',
-        inline: 'center',
       });
     }
   }, [selectedVideo]);

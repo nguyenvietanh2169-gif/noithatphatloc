@@ -18,6 +18,14 @@ function MainApp() {
   const [isEstimatorOpen, setIsEstimatorOpen] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
 
+  // Đảm bảo mỗi khi truy cập trang hoặc tải lại, luôn đưa về đỉnh trang chủ
+  React.useEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, []);
+
   React.useEffect(() => {
     let ticking = false;
     let prevShow = false;

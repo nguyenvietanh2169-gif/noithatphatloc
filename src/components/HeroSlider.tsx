@@ -84,6 +84,8 @@ export const HeroSlider: React.FC = () => {
 
   // Robust Autoplay using timestamp diff - immune to timer freezing or background tab suspension
   useEffect(() => {
+    setCurrentIndex(0);
+    setProgress(0);
     lastChangeTimeRef.current = Date.now();
 
     const interval = setInterval(() => {
