@@ -319,11 +319,11 @@ export const CloudflareVideoSection: React.FC = () => {
             <div className="flex items-center justify-between w-full max-w-[320px] sm:max-w-[360px] mt-3 px-1">
               <button
                 onClick={handlePrevVideo}
-                className="flex items-center gap-1.5 text-xs text-white/70 hover:text-white transition-colors cursor-pointer py-1.5 px-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 active:scale-95"
+                className="w-8 h-8 rounded-full flex items-center justify-center text-white/70 hover:text-white transition-colors cursor-pointer bg-white/5 hover:bg-white/10 border border-white/10 active:scale-95"
                 title="Thước phim trước"
+                aria-label="Thước phim trước"
               >
-                <ChevronLeft className="w-3.5 h-3.5" />
-                <span className="text-[11px] font-mono-num">Trước</span>
+                <ChevronLeft className="w-4 h-4" />
               </button>
 
               <span className="text-[11px] font-mono-num text-[#00D0E8] tracking-wider font-semibold">
@@ -332,11 +332,11 @@ export const CloudflareVideoSection: React.FC = () => {
 
               <button
                 onClick={handleNextVideo}
-                className="flex items-center gap-1.5 text-xs text-white/70 hover:text-white transition-colors cursor-pointer py-1.5 px-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 active:scale-95"
+                className="w-8 h-8 rounded-full flex items-center justify-center text-white/70 hover:text-white transition-colors cursor-pointer bg-white/5 hover:bg-white/10 border border-white/10 active:scale-95"
                 title="Thước phim tiếp theo"
+                aria-label="Thước phim tiếp theo"
               >
-                <span className="text-[11px] font-mono-num">Tiếp</span>
-                <ChevronRight className="w-3.5 h-3.5" />
+                <ChevronRight className="w-4 h-4" />
               </button>
             </div>
 
@@ -353,16 +353,6 @@ export const CloudflareVideoSection: React.FC = () => {
 
           {/* Right: Playlist of Vertical Reel Cards */}
           <div className="lg:col-span-7 flex flex-col gap-3 w-full min-w-0">
-            <div className="pb-2 border-b border-white/10 flex items-center justify-between">
-              <span className="text-xs font-mono-num text-white/70 tracking-wider uppercase">
-                DANH SÁCH THƯỚC PHIM CÔNG TRÌNH ({videoPlaylist.length} VIDEO)
-              </span>
-              <span className="text-[11px] font-mono-num text-[#00D0E8]/90 lg:text-white/40">
-                <span className="lg:hidden">VUỐT NGANG ĐỂ CHỌN →</span>
-                <span className="hidden lg:inline">CHẠM ĐỂ CHỌN PHÁT</span>
-              </span>
-            </div>
-
             {/* Dải cuộn ngang trên Mobile (không bẫy cuộn dọc trang, cao chỉ ~85px) & Lưới 2 cột trên Desktop */}
             <div
               ref={playlistContainerRef}
