@@ -233,6 +233,37 @@
         history.scrollRestoration = 'manual';
       }
       window.scrollTo(0, 0);
+
+      // Chống soi code: Vô hiệu hóa chuột phải (contextmenu)
+      document.addEventListener('contextmenu', function (e) {
+        e.preventDefault();
+      });
+
+      // Chống soi code: Chặn phím tắt mở DevTools (F12, Ctrl+Shift+I/J/C, Ctrl+U xem source, Ctrl+S lưu trang)
+      document.addEventListener('keydown', function (e) {
+        // F12
+        if (e.key === 'F12' || e.keyCode === 123) {
+          e.preventDefault();
+          return false;
+        }
+        // Ctrl+Shift+I / Cmd+Option+I (Inspect)
+        // Ctrl+Shift+J / Cmd+Option+J (Console)
+        // Ctrl+Shift+C / Cmd+Option+C (Elements)
+        if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) {
+          e.preventDefault();
+          return false;
+        }
+        // Ctrl+U / Cmd+Option+U (View Source)
+        if ((e.ctrlKey || e.metaKey) && (e.key === 'u' || e.key === 'U')) {
+          e.preventDefault();
+          return false;
+        }
+        // Ctrl+S / Cmd+S (Save Page)
+        if ((e.ctrlKey || e.metaKey) && (e.key === 's' || e.key === 'S')) {
+          e.preventDefault();
+          return false;
+        }
+      });
     </script>
   </head>
   <body style="background-color: #F8F7F4;" class="text-[#141414] antialiased selection:bg-[#00D0E8] selection:text-white">
