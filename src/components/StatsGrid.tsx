@@ -19,7 +19,7 @@ export const StatsGrid: React.FC = () => {
 
             <div className="pt-6 border-t border-black/10">
               <p className="text-sm md:text-base text-[#4A4B4F] leading-relaxed max-w-xl font-light">
-                Tại <strong>Nội thất Phát Lộc</strong>, chúng tôi quan niệm không gian sống không đơn thuần là sự lấp đầy bằng đồ vật, mà là sự hài hòa tinh tế giữa ánh sáng, tỷ lệ kiến trúc và sự chân thật của vật liệu. Từng món đồ xuất xưởng đều được kiểm soát nghiêm ngặt từ phôi gỗ đến lớp hoàn thiện cuối cùng.
+                Tại <strong>Nội thất Phát Lộc</strong>, chúng tôi tự hào là xưởng chuyên sâu <strong>nội thất Biên Hòa</strong> và <strong>nội thất Đồng Nai</strong> uy tín. Với xưởng sản xuất trực tiếp khép kín, Phát Lộc mang đến các sản phẩm <strong>nội thất giá xưởng, nội thất giá gốc</strong> chuẩn xác từng milimet theo bản vẽ 3D, tối ưu 20-30% chi phí trung gian cho mọi gia đình.
               </p>
 
               <div className="mt-8 flex items-center gap-6">

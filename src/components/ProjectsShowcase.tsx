@@ -653,18 +653,21 @@ export const ProjectsShowcase: React.FC = () => {
     };
   };
 
-  // Tự động cuộn dải thumbnail nội bộ (KHÔNG dùng scrollIntoView để tránh giật cuộn trang)
+  // Tự động cuộn dải thumbnail nội bộ (chỉ cuộn khi thực sự tràn và cố định trục dọc)
   useEffect(() => {
     if (thumbnailStripRef.current && displayMode === 'runway') {
       const container = thumbnailStripRef.current;
-      const activeElement = container.children[active3DIndex] as HTMLElement;
-      if (activeElement) {
-        const targetScrollLeft =
-          activeElement.offsetLeft - container.offsetWidth / 2 + activeElement.offsetWidth / 2;
-        container.scrollTo({
-          left: targetScrollLeft,
-          behavior: 'smooth',
-        });
+      // Chỉ kích hoạt cuộn khi dải thumbnail có thanh tràn ngang
+      if (container.scrollWidth > container.clientWidth + 8) {
+        const activeElement = container.children[active3DIndex] as HTMLElement;
+        if (activeElement) {
+          const targetScrollLeft =
+            activeElement.offsetLeft - container.clientWidth / 2 + activeElement.clientWidth / 2;
+          container.scrollTo({
+            left: targetScrollLeft,
+            behavior: 'smooth',
+          });
+        }
       }
     }
   }, [active3DIndex, displayMode]);
@@ -767,23 +770,34 @@ export const ProjectsShowcase: React.FC = () => {
       <section id="concept-3d" className="py-12 sm:py-20 bg-[#07080A] text-white border-b border-white/10 overflow-hidden relative">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 md:px-10 relative z-10">
           
-          {/* HEADER TỐI GIẢN — TIÊU ĐỀ & ĐIỀU KHIỂN CHẾ ĐỘ XEM */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 pb-3 border-b border-white/10 gap-3">
-            <div className="flex items-center gap-3">
-              <h2 className="font-heading text-lg sm:text-2xl font-black tracking-tight text-white uppercase">
-                BẢN VẼ 3D NỘI THẤT
-              </h2>
-              <span className="text-xs font-mono-num text-white/40">
-                ({active3DIndex + 1} / {filtered3DList.length})
-              </span>
+          {/* HEADER ĐỒNG BỘ CÁC HẠNG MỤC — TIÊU ĐỀ LỚN & ĐIỀU KHIỂN CHẾ ĐỘ XEM */}
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-8 pb-6 border-b border-white/10 gap-6">
+            <div className="max-w-2xl">
+              <div className="flex items-center gap-2 mb-2.5">
+                <span className="w-2 h-2 rounded-full bg-[#00D0E8]" />
+                <span className="text-[11px] uppercase tracking-[0.24em] font-semibold text-[#00A8BC] font-mono-num">
+                  THIẾT KẾ PHỐI CẢNH 3D • ĐỘC BẢN KIẾN TRÚC
+                </span>
+              </div>
+              <div className="flex items-baseline gap-3">
+                <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white uppercase leading-[1.2]">
+                  BẢN VẼ 3D NỘI THẤT.
+                </h2>
+                <span className="text-xs sm:text-sm font-mono-num text-white/40">
+                  ({active3DIndex + 1} / {filtered3DList.length})
+                </span>
+              </div>
+              <p className="mt-3 text-xs sm:text-sm text-white/70 font-light leading-relaxed">
+                Phối cảnh 3D trực quan, đo ni đóng giày từng công năng và chỉ định vật liệu thực tế có thể gia công xuất xưởng.
+              </p>
             </div>
 
             {/* DUAL MODE SWITCHER */}
-            <div className="flex items-center gap-2 self-start sm:self-auto">
+            <div className="flex items-center gap-2 self-start lg:self-auto shrink-0">
               <div className="p-0.5 rounded-full bg-white/5 border border-white/15 flex items-center">
                 <button
                   onClick={() => setDisplayMode('runway')}
-                  className={`px-3.5 py-1 rounded-full text-xs font-semibold tracking-wider uppercase transition-all cursor-pointer ${
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase transition-all cursor-pointer ${
                     displayMode === 'runway'
                       ? 'bg-white text-black shadow-sm'
                       : 'text-white/60 hover:text-white'
@@ -793,7 +807,7 @@ export const ProjectsShowcase: React.FC = () => {
                 </button>
                 <button
                   onClick={() => setDisplayMode('moodboard')}
-                  className={`px-3.5 py-1 rounded-full text-xs font-semibold tracking-wider uppercase transition-all cursor-pointer ${
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase transition-all cursor-pointer ${
                     displayMode === 'moodboard'
                       ? 'bg-white text-black shadow-sm'
                       : 'text-white/60 hover:text-white'
@@ -913,10 +927,10 @@ export const ProjectsShowcase: React.FC = () => {
                 </div>
               </div>
 
-              {/* DẢI THUMBNAIL PHÍA DƯỚI (TỐI GIẢN, KHÔNG CHỮ THỪA) */}
+              {/* DẢI THUMBNAIL PHÍA DƯỚI (CỐ ĐỊNH KÍCH THƯỚC TRIỆT ĐỂ, CHỐNG GIẬT MÀN HÌNH) */}
               <div
                 ref={thumbnailStripRef}
-                className="flex items-center gap-2 overflow-x-auto py-2 scroll-smooth scrollbar-none justify-start sm:justify-center"
+                className="h-14 sm:h-16 flex items-center gap-2 overflow-x-auto scrollbar-none justify-start sm:justify-center px-1"
               >
                 {filtered3DList.map((project, idx) => {
                   const isActive = idx === active3DIndex;
@@ -924,10 +938,10 @@ export const ProjectsShowcase: React.FC = () => {
                     <button
                       key={project.id}
                       onClick={() => handleSelectCard(idx)}
-                      className={`flex-shrink-0 relative group rounded-lg overflow-hidden transition-all duration-300 cursor-pointer ${
+                      className={`w-16 sm:w-20 h-10 sm:h-12 flex-shrink-0 relative group rounded-lg overflow-hidden transition-all duration-300 cursor-pointer ${
                         isActive
-                          ? 'w-20 sm:w-24 h-13 sm:h-16 ring-1.5 ring-white scale-105 shadow-xl'
-                          : 'w-16 sm:w-20 h-11 sm:h-14 opacity-35 hover:opacity-90 border border-white/10'
+                          ? 'ring-2 ring-[#00D0E8] scale-105 opacity-100 shadow-lg z-10'
+                          : 'opacity-35 hover:opacity-85 border border-white/10 scale-100'
                       }`}
                       title={project.title}
                     >
@@ -1030,7 +1044,7 @@ export const ProjectsShowcase: React.FC = () => {
                   ARCHITECTURAL LOOKBOOK • HỒ SƠ THI CÔNG NGUYÊN BẢN
                 </span>
               </div>
-              <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-[#141414] leading-[1.14] uppercase">
+              <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-[#141414] leading-[1.2] uppercase">
                 HÌNH ẢNH NỘI THẤT THỰC TẾ.
               </h2>
             </div>

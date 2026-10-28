@@ -40,7 +40,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenEstimator, onOpenContact }
     { label: 'BẢN VẼ 3D', href: '#concept-3d' },
     { label: 'ẢNH THỰC TẾ', href: '#projects' },
     { label: 'XƯỞNG GỖ', href: '#workshop' },
-    { label: 'VIDEO', href: '#video' },
+    { label: 'TIÊU CHUẨN', href: '#standards' },
     { label: 'QUY TRÌNH', href: '#process' },
   ];
 
@@ -114,7 +114,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenEstimator, onOpenContact }
             <button
               onClick={() => (onOpenContact ? onOpenContact('phone') : (window.location.href = 'tel:0585338339'))}
               className="flex items-center gap-1.5 px-3.5 xl:px-4 py-2 text-[10.5px] xl:text-[11px] uppercase tracking-[0.12em] font-semibold bg-[#141414] text-white hover:bg-[#00D0E8] hover:text-black transition-colors whitespace-nowrap cursor-pointer"
-              title="Hotline hỗ trợ mr LỢI & mr LỘC"
+              title="Hotline hỗ trợ Mr. Lợi & Mr. Lộc"
             >
               <Phone className="w-3.5 h-3.5" />
               <span>Liên hệ</span>
@@ -182,6 +182,14 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenEstimator, onOpenContact }
               <a href="mailto:noithatphatloc2025@gmail.com" className="block text-[10.5px] text-[#00A8BC] hover:underline font-medium">
                 Email: noithatphatloc2025@gmail.com
               </a>
+              <a
+                href="https://www.facebook.com/noithatphatloc1"
+                target="_blank"
+                rel="noreferrer"
+                className="block text-[10.5px] text-[#00A8BC] hover:underline font-medium"
+              >
+                Facebook: facebook.com/noithatphatloc1
+              </a>
             </div>
 
             <button
@@ -193,27 +201,27 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenEstimator, onOpenContact }
             >
               Báo giá & Dự toán
             </button>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
               <a
                 href="tel:0585338339"
-                className="py-3 text-center text-xs uppercase tracking-[0.12em] font-semibold bg-[#141414] text-white flex items-center justify-center gap-1"
+                className="py-2.5 text-center text-[11px] sm:text-xs uppercase tracking-[0.1em] font-semibold bg-[#141414] text-white flex items-center justify-center gap-1 rounded-xs"
               >
                 <Phone className="w-3 h-3 text-[#00D0E8] shrink-0" />
-                <span>mr LỢI</span>
+                <span>Mr. Lợi</span>
               </a>
               <a
-                href="tel:08360847193"
-                className="py-3 text-center text-xs uppercase tracking-[0.12em] font-semibold bg-[#141414] text-white flex items-center justify-center gap-1"
+                href="tel:0836084719"
+                className="py-2.5 text-center text-[11px] sm:text-xs uppercase tracking-[0.1em] font-semibold bg-[#141414] text-white flex items-center justify-center gap-1 rounded-xs"
               >
                 <Phone className="w-3 h-3 text-[#00D0E8] shrink-0" />
-                <span>mr LỘC</span>
+                <span>Mr. Lộc</span>
               </a>
               <a
                 href="tel:0908938297"
-                className="py-3 text-center text-xs uppercase tracking-[0.12em] font-semibold bg-[#141414] text-white flex items-center justify-center gap-1"
+                className="py-2.5 text-center text-[11px] sm:text-xs uppercase tracking-[0.1em] font-semibold bg-[#141414] text-white flex items-center justify-center gap-1 rounded-xs"
               >
                 <Phone className="w-3 h-3 text-[#00D0E8] shrink-0" />
-                <span>mr HUÂN</span>
+                <span>Mr. Huân</span>
               </a>
             </div>
           </div>

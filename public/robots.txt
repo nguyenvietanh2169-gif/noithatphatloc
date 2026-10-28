@@ -1,0 +1,40 @@
+# robots.txt for noithatphatloc.com
+# Cho phép tất cả các công cụ tìm kiếm và AI Search Bots truy cập
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /private/
+
+# Google Search
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /
+
+# OpenAI / ChatGPT Search Bots
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+# Các AI Crawler & Search Engine khác
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Sitemap Index
+Sitemap: https://noithatphatloc.com/sitemap.xml

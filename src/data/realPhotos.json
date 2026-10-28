@@ -140,11 +140,25 @@
     "location": "Bình Dương"
   },
   {
-    "id": "rp-30",
-    "image": "/assets/real-projects/real-30.webp",
-    "title": "Hệ Tủ Bếp Gỗ Chống Ẩm Hoàn Thiện Đồng Bộ Bàn Đảo Tiện Nghi",
+    "id": "rp-37",
+    "image": "/assets/real-projects/real-37.webp",
+    "title": "Hệ Tủ Bếp Nhôm Cánh Kính Cao Cấp Tích Hợp Đèn LED Âm Tủ",
     "category": "Tủ Bếp & Đảo Bếp",
-    "location": "Bình Dương"
+    "location": "Biên Hòa"
+  },
+  {
+    "id": "rp-38",
+    "image": "/assets/real-projects/real-38.webp",
+    "title": "Chi Tiết Cánh Kính Khung Nhôm Anode & Phụ Kiện Giảm Chấn Thông Minh",
+    "category": "Tủ Bếp & Đảo Bếp",
+    "location": "Đồng Nai"
+  },
+  {
+    "id": "rp-39",
+    "image": "/assets/real-projects/real-39.webp",
+    "title": "Tổng Thể Không Gian Bếp Nhôm Cánh Kính Hiện Đại Chống Nước Tuyệt Đối",
+    "category": "Tủ Bếp & Đảo Bếp",
+    "location": "Biên Hòa"
   },
   {
     "id": "rp-1",
@@ -159,13 +173,6 @@
     "title": "Bộ Bàn Ghế Gỗ Phòng Ăn Liền Kề Hệ Tủ Kệ Trưng Bày Đèn LED",
     "category": "Phòng Bếp & Ăn",
     "location": "TP. Hồ Chí Minh"
-  },
-  {
-    "id": "rp-14",
-    "image": "/assets/real-projects/real-14.webp",
-    "title": "Không Gian Tủ Rượu Cánh Kính Đèn LED & Bàn Ghế Gỗ Phòng Ăn",
-    "category": "Phòng Bếp & Ăn",
-    "location": "Đồng Nai"
   },
   {
     "id": "rp-13",

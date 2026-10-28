@@ -55,6 +55,44 @@ export const Footer: React.FC<FooterProps> = ({ onOpenEstimator, onOpenContact }
           </div>
         </div>
 
+        {/* Bản đồ Google Maps chỉ đường tới Trụ sở & Xưởng (Nằm lên trên các dòng thông tin) */}
+        <div className="pb-16 mb-16 border-b border-white/10">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 mb-6 border-b border-white/10 gap-3">
+            <div>
+              <span className="text-[10.5px] uppercase font-mono-num tracking-[0.2em] text-[#00D0E8] block mb-1">
+                BẢN ĐỒ ĐỊNH VỊ GOOGLE MAPS
+              </span>
+              <h3 className="font-heading text-lg sm:text-xl font-bold text-white uppercase">
+                VỊ TRÍ TRỤ SỞ & XƯỞNG SẢN XUẤT PHÁT LỘC
+              </h3>
+            </div>
+            <a
+              href="https://www.google.com/maps/dir/?api=1&destination=C%C3%B4ng+ty+TNHH+N%E1%BB%99i+Th%E1%BA%A5t+Ph%C3%A1t+L%E1%BB%99c%2C+28C%2F88+Khu+ph%E1%BB%91+13%2C+Ph%C6%B0%E1%BB%9Dng+Long+B%C3%ACnh%2C+Th%C3%A0nh+ph%E1%BB%91+Bi%C3%AAn+H%C3%B2a%2C+%C4%90%E1%BB%93ng+Nai"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 hover:bg-[#00D0E8] text-white hover:text-black border border-white/10 hover:border-transparent text-xs font-medium uppercase tracking-wider transition-all self-start sm:self-auto shrink-0 group cursor-pointer shadow-lg hover:scale-105 active:scale-95"
+            >
+              <MapPin className="w-3.5 h-3.5 text-[#00D0E8] group-hover:text-black transition-colors" />
+              <span>Chỉ đường trên Google Maps</span>
+              <ArrowUpRight className="w-3.5 h-3.5" />
+            </a>
+          </div>
+
+          <div className="w-full h-72 sm:h-80 md:h-[360px] rounded-2xl overflow-hidden border border-white/10 relative shadow-2xl bg-[#1A1A1E]">
+            <iframe
+              title="Bản đồ Google Maps - Vị trí Công ty TNHH Nội Thất Phát Lộc"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d70103.05637832002!2d106.82311593211381!3d10.941928471569337!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3174dd13a9734f37%3A0xe8340db4a3dd2d9d!2zQ8O0bmcgdHkgVE5ISCBO4buZaSBUaOG6pXQgUGjDoXQgTOG7mWM!5e1!3m2!1svi!2sus!4v1793004202886!5m2!1svi!2sus"
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="strict-origin-when-cross-origin"
+              className="w-full h-full"
+            />
+          </div>
+        </div>
+
         {/* 4 Columns Information */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-16 border-b border-white/10">
           {/* Col 1: Brand Info */}
@@ -88,9 +126,11 @@ export const Footer: React.FC<FooterProps> = ({ onOpenEstimator, onOpenContact }
               </p>
             </div>
 
-            <div className="flex items-center gap-2 text-xs text-white/60 font-mono-num">
-              <Shield className="w-4 h-4 text-[#00D0E8]" />
-              <span>Cam kết bảo hành 5 năm & Bảo trì trọn đời</span>
+            <div className="flex flex-col gap-2.5 pt-1">
+              <div className="flex items-center gap-2 text-xs text-white/60 font-mono-num">
+                <Shield className="w-4 h-4 text-[#00D0E8]" />
+                <span>Cam kết bảo hành 5 năm & Bảo trì trọn đời</span>
+              </div>
             </div>
           </div>
 
@@ -105,7 +145,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenEstimator, onOpenContact }
                 <div>
                   <span className="text-[10px] text-white/50 font-mono-num uppercase block">ĐỊA CHỈ DOANH NGHIỆP:</span>
                   <span className="text-white font-medium leading-relaxed">
-                    28C/88, Khu phố 13, Phường Long Bình, Tỉnh Đồng Nai, Việt Nam
+                    28C/88, Khu phố 13, Phường Long Bình, Thành phố Biên Hòa, Tỉnh Đồng Nai, Việt Nam
                   </span>
                 </div>
               </li>
@@ -115,19 +155,19 @@ export const Footer: React.FC<FooterProps> = ({ onOpenEstimator, onOpenContact }
                   <span className="text-[10px] text-white/50 font-mono-num uppercase block">HOTLINE / ZALO TƯ VẤN:</span>
                   <div className="flex flex-col gap-1 text-xs">
                     <div>
-                      <span className="text-white/60">mr LỢI:</span>{' '}
+                      <span className="text-white/60">Mr. Lợi:</span>{' '}
                       <a href="tel:0585338339" className="hover:text-[#00D0E8] font-semibold tracking-wide text-white transition-colors">
                         0585 338 339
                       </a>
                     </div>
                     <div>
-                      <span className="text-white/60">mr LỘC:</span>{' '}
-                      <a href="tel:08360847193" className="hover:text-[#00D0E8] font-semibold tracking-wide text-white transition-colors">
-                        0836 084 7193
+                      <span className="text-white/60">Mr. Lộc:</span>{' '}
+                      <a href="tel:0836084719" className="hover:text-[#00D0E8] font-semibold tracking-wide text-white transition-colors">
+                        0836 084 719
                       </a>
                     </div>
                     <div>
-                      <span className="text-white/60">mr HUÂN:</span>{' '}
+                      <span className="text-white/60">Mr. Huân:</span>{' '}
                       <a href="tel:0908938297" className="hover:text-[#00D0E8] font-semibold tracking-wide text-white transition-colors">
                         090 893 8297
                       </a>
@@ -144,6 +184,25 @@ export const Footer: React.FC<FooterProps> = ({ onOpenEstimator, onOpenContact }
                     className="text-[#00D0E8] hover:text-white font-medium transition-colors"
                   >
                     noithatphatloc2025@gmail.com
+                  </a>
+                </div>
+              </li>
+              <li className="flex items-center gap-3">
+                <div className="w-4 h-4 flex items-center justify-center flex-shrink-0">
+                  <svg className="w-4 h-4 fill-[#00D0E8]" viewBox="0 0 24 24">
+                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                  </svg>
+                </div>
+                <div>
+                  <span className="text-[10px] text-white/50 font-mono-num uppercase block">FANPAGE FACEBOOK:</span>
+                  <a
+                    href="https://www.facebook.com/noithatphatloc1"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-[#00D0E8] hover:text-white font-medium transition-colors inline-flex items-center gap-1"
+                  >
+                    <span>facebook.com/noithatphatloc1</span>
+                    <ArrowUpRight className="w-3 h-3" />
                   </a>
                 </div>
               </li>

@@ -1,39 +1,38 @@
 import React, { useState } from 'react';
-import { X, Calculator, Check, ArrowRight, Phone, MessageSquare } from 'lucide-react';
+import { X, Check, Send, ShieldCheck, ClipboardList } from 'lucide-react';
 
 interface PriceEstimatorModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-interface PriceItem {
+interface EstimateItem {
   id: string;
   category: string;
   name: string;
   unit: string;
   defaultQty: number;
-  unitPrice: number; // in VNĐ
-  desc: string;
+  material: string;
 }
 
-const PRICING_DATA: PriceItem[] = [
+const ESTIMATE_ITEMS: EstimateItem[] = [
   // Phòng khách
-  { id: 'pk1', category: 'Phòng khách', name: 'Kệ Tivi treo tường MDF chống ẩm', unit: 'md', defaultQty: 2.2, unitPrice: 2200000, desc: 'MDF lõi xanh chống ẩm phủ Melamine' },
-  { id: 'pk2', category: 'Phòng khách', name: 'Vách ốp than tre nano kết hợp lam sóng', unit: 'm²', defaultQty: 8, unitPrice: 1250000, desc: 'Tấm than tre vân đá chống trầy' },
-  { id: 'pk3', category: 'Phòng khách', name: 'Tủ giày kết hợp ghế ngồi thông minh', unit: 'm²', defaultQty: 2.5, unitPrice: 2400000, desc: 'Cánh CNC soi tay nắm âm' },
-  { id: 'pk4', category: 'Phòng khách', name: 'Tủ rượu cánh kính đèn LED âm tủ', unit: 'm²', defaultQty: 3, unitPrice: 3800000, desc: 'Khung nhôm Slim, kính xám khói cường lực' },
+  { id: 'pk1', category: 'Phòng khách', name: 'Kệ Tivi treo tường MDF chống ẩm', unit: 'md', defaultQty: 2.2, material: 'MDF lõi xanh chống ẩm phủ Melamine cao cấp' },
+  { id: 'pk2', category: 'Phòng khách', name: 'Vách ốp than tre nano kết hợp lam sóng', unit: 'm²', defaultQty: 8, material: 'Tấm than tre vân đá / kim loại chống trầy' },
+  { id: 'pk3', category: 'Phòng khách', name: 'Tủ giày kịch trần kết hợp ghế ngồi', unit: 'm²', defaultQty: 2.5, material: 'Cánh CNC soi tay nắm âm, đợt để giày thông minh' },
+  { id: 'pk4', category: 'Phòng khách', name: 'Tủ rượu cánh kính đèn LED âm tủ', unit: 'm²', defaultQty: 3, material: 'Khung nhôm Slim, kính cường lực xám khói sang trọng' },
 
   // Phòng bếp
-  { id: 'pb1', category: 'Phòng bếp', name: 'Tủ bếp trên thùng MDF cánh Acrylic bóng gương', unit: 'md', defaultQty: 3, unitPrice: 3200000, desc: 'Chống ẩm mốc, dễ vệ sinh dầu mỡ' },
-  { id: 'pb2', category: 'Phòng bếp', name: 'Tủ bếp dưới thùng Picomat kháng nước 100%', unit: 'md', defaultQty: 3, unitPrice: 3600000, desc: 'Bảo hành không cong vênh mối mọt' },
-  { id: 'pb3', category: 'Phòng bếp', name: 'Mặt đá bếp Vicostone / Đá nung kết cao cấp', unit: 'md', defaultQty: 3, unitPrice: 1800000, desc: 'Chống ố, chống xước công nghệ nano' },
-  { id: 'pb4', category: 'Phòng bếp', name: 'Bàn đảo bếp rời đa năng', unit: 'md', defaultQty: 1.6, unitPrice: 3500000, desc: 'Kết hợp ngăn chứa đồ khô' },
+  { id: 'pb1', category: 'Phòng bếp', name: 'Tủ bếp trên thùng MDF cánh Acrylic bóng gương', unit: 'md', defaultQty: 3, material: 'Chống ẩm mốc, công nghệ dán nẹp không đường line' },
+  { id: 'pb2', category: 'Phòng bếp', name: 'Tủ bếp dưới thùng Picomat kháng nước 100%', unit: 'md', defaultQty: 3, material: 'Nhựa Picomat siêu chịu nước, chống mối mọt trọn đời' },
+  { id: 'pb3', category: 'Phòng bếp', name: 'Mặt đá bếp đá nung kết / Vicostone', unit: 'md', defaultQty: 3, material: 'Chống trầy, chống ố nhiệt và chống thấm nước' },
+  { id: 'pb4', category: 'Phòng bếp', name: 'Bàn đảo bếp rời tích hợp lưu trữ', unit: 'md', defaultQty: 1.6, material: 'Mặt đá đồng bộ, kết hợp ngăn kéo đa năng' },
 
   // Phòng ngủ Master
-  { id: 'pn1', category: 'Phòng ngủ', name: 'Giường ngủ thông minh 1m8 x 2m có ngăn kéo', unit: 'bộ', defaultQty: 1, unitPrice: 7500000, desc: 'Gỗ MDF phủ melamine, thang dát hộp kẽm' },
-  { id: 'pn2', category: 'Phòng ngủ', name: 'Tủ quần áo kịch trần cánh lùa / mở', unit: 'm²', defaultQty: 5.5, unitPrice: 2600000, desc: 'Phụ kiện Ivan / Hafele giảm chấn' },
-  { id: 'pn3', category: 'Phòng ngủ', name: 'Bàn trang điểm gương LED cảm ứng', unit: 'bộ', defaultQty: 1, unitPrice: 3200000, desc: 'Gương viền LED 3 chế độ ánh sáng' },
-  { id: 'pn4', category: 'Phòng ngủ', name: 'Vách ốp đầu giường nẹp nhôm mạ PVD', unit: 'm²', defaultQty: 6, unitPrice: 1100000, desc: 'Tạo điểm nhấn sang trọng' },
+  { id: 'pn1', category: 'Phòng ngủ', name: 'Giường ngủ thông minh có ngăn kéo để đồ', unit: 'bộ', defaultQty: 1, material: 'Gỗ MDF phủ Melamine, khung thang dát hộp kẽm kiên cố' },
+  { id: 'pn2', category: 'Phòng ngủ', name: 'Tủ quần áo kịch trần cánh kính Slim / mở', unit: 'm²', defaultQty: 5.5, material: 'Cánh kính khung nhôm xám khói, ray giảm chấn Hafele' },
+  { id: 'pn3', category: 'Phòng ngủ', name: 'Bàn trang điểm gương LED cảm ứng', unit: 'bộ', defaultQty: 1, material: 'Gỗ MDF chống ẩm, gương viền LED đổi màu cảm biến' },
+  { id: 'pn4', category: 'Phòng ngủ', name: 'Vách ốp đầu giường nẹp nhôm mạ PVD', unit: 'm²', defaultQty: 6, material: 'Ốp đệm da / nẹp chỉ kim loại tạo điểm nhấn sang trọng' },
 ];
 
 export const PriceEstimatorModal: React.FC<PriceEstimatorModalProps> = ({ isOpen, onClose }) => {
@@ -55,6 +54,7 @@ export const PriceEstimatorModal: React.FC<PriceEstimatorModalProps> = ({ isOpen
 
   const [customerName, setCustomerName] = useState('');
   const [customerPhone, setCustomerPhone] = useState('');
+  const [customerAddress, setCustomerAddress] = useState('');
 
   if (!isOpen) return null;
 
@@ -73,42 +73,50 @@ export const PriceEstimatorModal: React.FC<PriceEstimatorModalProps> = ({ isOpen
     }));
   };
 
-  const totalPrice = selectedItems.reduce((sum, id) => {
-    const item = PRICING_DATA.find((i) => i.id === id);
-    if (!item) return sum;
-    const qty = quantities[id] || item.defaultQty;
-    return sum + item.unitPrice * qty;
-  }, 0);
-
-  const formatVND = (num: number) => {
-    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(num);
-  };
-
   const selectPreset = (type: 'canho' | 'nhapho' | 'full') => {
     if (type === 'canho') {
       setSelectedItems(['pk1', 'pk2', 'pb1', 'pb2', 'pb3', 'pn1', 'pn2']);
     } else if (type === 'nhapho') {
       setSelectedItems(['pk1', 'pk2', 'pk3', 'pk4', 'pb1', 'pb2', 'pb3', 'pb4', 'pn1', 'pn2', 'pn4']);
     } else {
-      setSelectedItems(PRICING_DATA.map((i) => i.id));
+      setSelectedItems(ESTIMATE_ITEMS.map((i) => i.id));
     }
+  };
+
+  // Tạo nội dung gửi qua Zalo
+  const handleSendZalo = (e: React.FormEvent) => {
+    e.preventDefault();
+    const selectedItemNames = ESTIMATE_ITEMS
+      .filter((item) => selectedItems.includes(item.id))
+      .map((item) => `${item.name} (${quantities[item.id] || item.defaultQty} ${item.unit})`)
+      .join(', ');
+
+    const nameText = customerName.trim() ? `Tên: ${customerName.trim()}` : '';
+    const phoneText = customerPhone.trim() ? `SĐT/Zalo: ${customerPhone.trim()}` : '';
+    const addrText = customerAddress.trim() ? `Khu vực: ${customerAddress.trim()}` : '';
+    const infoText = [nameText, phoneText, addrText].filter(Boolean).join(' - ');
+
+    const message = `Chào Nội Thất Phát Lộc, tôi muốn nhận báo giá xưởng cho ${selectedItems.length} hạng mục: ${selectedItemNames}.${infoText ? ` Thông tin của tôi: ${infoText}.` : ''} Nhờ xưởng tư vấn báo giá chi tiết giúp tôi.`;
+
+    const zaloUrl = `https://zalo.me/0585338339?text=${encodeURIComponent(message)}`;
+    window.open(zaloUrl, '_blank');
   };
 
   return (
     <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-6 animate-in fade-in">
       <div className="relative w-full max-w-4xl h-[92vh] sm:h-auto sm:max-h-[90vh] bg-[#F8F7F4] text-[#141414] overflow-hidden flex flex-col rounded-t-2xl sm:rounded-none border border-black/20 shadow-2xl">
         {/* Header */}
-        <div className="px-4 py-3 sm:p-5 bg-white border-b border-black/10 flex items-center justify-between">
+        <div className="px-4 py-3.5 sm:p-5 bg-white border-b border-black/10 flex items-center justify-between">
           <div className="flex items-center gap-2.5 sm:gap-3">
             <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#00D0E8]/15 flex items-center justify-center text-[#00A8BC] shrink-0">
-              <Calculator className="w-4 h-4 sm:w-5 sm:h-5" />
+              <ClipboardList className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
             <div>
               <h3 className="font-heading text-sm sm:text-lg font-bold tracking-tight text-[#141414] uppercase leading-tight">
-                BẢNG DỰ TOÁN THI CÔNG NỘI THẤT
+                YÊU CẦU DỰ TOÁN BÁO GIÁ XƯỞNG
               </h3>
               <span className="text-[10px] sm:text-[11px] text-[#71706A] font-mono-num block">
-                NỘI THẤT PHÁT LỘC • ĐƠN GIÁ XƯỞNG 2026
+                NỘI THẤT PHÁT LỘC • BÁO GIÁ TRỰC TIẾP TẠI XƯỞNG KHÔNG QUA TRUNG GIAN
               </span>
             </div>
           </div>
@@ -121,9 +129,9 @@ export const PriceEstimatorModal: React.FC<PriceEstimatorModalProps> = ({ isOpen
           </button>
         </div>
 
-        {/* Preset Packages (Cuộn ngang 1 dòng gọn gàng trên mobile, không bị vỡ 3-4 dòng) */}
+        {/* Preset Packages */}
         <div className="px-3 py-2 sm:px-6 sm:py-2.5 bg-[#EFECE6] border-b border-black/8 flex items-center gap-2 overflow-x-auto scrollbar-none whitespace-nowrap text-xs">
-          <span className="font-semibold text-[#505156] text-[10px] sm:text-xs shrink-0">Gợi ý nhanh:</span>
+          <span className="font-semibold text-[#505156] text-[10px] sm:text-xs shrink-0">Chọn nhanh mô hình:</span>
           <button
             onClick={() => selectPreset('canho')}
             className="px-2.5 py-1 bg-white hover:bg-black hover:text-white border border-black/15 text-[11px] sm:text-xs shrink-0 transition-colors cursor-pointer rounded-xs"
@@ -144,12 +152,11 @@ export const PriceEstimatorModal: React.FC<PriceEstimatorModalProps> = ({ isOpen
           </button>
         </div>
 
-        {/* Body Items List (Không gian cuộn rộng rãi, thoáng mắt) */}
-        <div className="flex-1 overflow-y-auto p-3 sm:p-5 space-y-2 sm:space-y-3">
-          {PRICING_DATA.map((item) => {
+        {/* Body Items List */}
+        <div className="flex-1 overflow-y-auto p-3 sm:p-5 space-y-2 sm:space-y-2.5">
+          {ESTIMATE_ITEMS.map((item) => {
             const isChecked = selectedItems.includes(item.id);
             const qty = quantities[item.id] || item.defaultQty;
-            const subtotal = item.unitPrice * qty;
 
             return (
               <div
@@ -177,19 +184,19 @@ export const PriceEstimatorModal: React.FC<PriceEstimatorModalProps> = ({ isOpen
                     <h4 className="font-medium text-xs sm:text-sm text-[#141414] leading-snug">
                       {item.name}
                     </h4>
-                    <p className="text-[11px] sm:text-xs text-[#7A7973] font-light mt-0.5 line-clamp-1 sm:line-clamp-none">
-                      {item.desc}
+                    <p className="text-[11px] sm:text-xs text-[#7A7973] font-light mt-0.5">
+                      {item.material}
                     </p>
                   </div>
                 </div>
 
-                {/* Quantity and Price */}
+                {/* Ước tính số lượng & Nhãn báo giá xưởng */}
                 <div
-                  className="flex items-center justify-between sm:justify-end gap-3 sm:gap-6 pt-2 sm:pt-0 border-t sm:border-t-0 border-black/6"
+                  className="flex items-center justify-between sm:justify-end gap-3 sm:gap-5 pt-2 sm:pt-0 border-t sm:border-t-0 border-black/6"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <div className="flex items-center gap-1.5 sm:gap-2">
-                    <span className="text-[11px] sm:text-xs text-[#8A8982]">SL ({item.unit}):</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[11px] text-[#8A8982]">SL dự kiến:</span>
                     <input
                       type="number"
                       step="0.1"
@@ -198,14 +205,12 @@ export const PriceEstimatorModal: React.FC<PriceEstimatorModalProps> = ({ isOpen
                       onChange={(e) => handleQtyChange(item.id, parseFloat(e.target.value) || 1)}
                       className="w-14 sm:w-16 px-1.5 py-0.5 sm:py-1 bg-[#F8F7F4] border border-black/20 text-xs font-mono-num text-center focus:outline-hidden focus:border-[#00D0E8]"
                     />
+                    <span className="text-[11px] text-[#8A8982] font-mono-num">{item.unit}</span>
                   </div>
 
-                  <div className="text-right min-w-[110px] sm:min-w-[130px]">
-                    <span className="text-[10px] sm:text-xs text-[#8A8982] block">
-                      {formatVND(item.unitPrice)} / {item.unit}
-                    </span>
-                    <span className="font-mono-num font-bold text-xs sm:text-sm text-[#141414]">
-                      {formatVND(subtotal)}
+                  <div className="text-right">
+                    <span className="inline-block px-2 py-0.5 bg-[#00D0E8]/15 text-[#008A9B] text-[10px] sm:text-[11px] font-semibold uppercase font-mono-num rounded-xs">
+                      Báo giá gốc xưởng
                     </span>
                   </div>
                 </div>
@@ -214,64 +219,57 @@ export const PriceEstimatorModal: React.FC<PriceEstimatorModalProps> = ({ isOpen
           })}
         </div>
 
-        {/* Footer Summary & Contact Action (Gọn gàng tối đa trên mobile, không chiếm diện tích) */}
+        {/* Footer Gated Lead Form */}
         <div className="p-3 sm:p-5 bg-white border-t border-black/10 shadow-[0_-10px_20px_-5px_rgba(0,0,0,0.06)]">
-          {/* Top row: Total Price & Zalo Button */}
-          <div className="flex items-center justify-between gap-3">
-            <div>
-              <span className="text-[9px] sm:text-[11px] uppercase tracking-wider text-[#8A8982] block font-mono-num">
-                TỔNG DỰ TOÁN ({selectedItems.length} HẠNG MỤC)
-              </span>
-              <div className="font-mono-num text-lg sm:text-2xl font-bold text-[#00A8BC] leading-none mt-1">
-                {formatVND(totalPrice)}
+          <form onSubmit={handleSendZalo} className="space-y-3">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+              <div>
+                <span className="text-[10px] sm:text-[11px] uppercase tracking-wider text-[#00A8BC] block font-mono-num font-bold">
+                  ĐÃ CHỌN {selectedItems.length} HẠNG MỤC THI CÔNG
+                </span>
+                <span className="text-xs text-[#525357] block mt-0.5">
+                  Nhập số điện thoại / Zalo để nhận file báo giá bóc tách chi tiết:
+                </span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <input
+                  type="tel"
+                  required
+                  placeholder="Nhập SĐT / Zalo của bạn *"
+                  value={customerPhone}
+                  onChange={(e) => setCustomerPhone(e.target.value)}
+                  className="px-3 py-2 bg-[#F8F7F4] border border-black/20 text-xs text-[#141414] focus:outline-hidden focus:border-[#00D0E8] w-full sm:w-56 rounded-xs font-mono-num"
+                />
+                <button
+                  type="submit"
+                  className="px-4 py-2 sm:py-2.5 bg-[#00D0E8] hover:bg-[#141414] hover:text-white text-black font-semibold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 shrink-0 rounded-xs cursor-pointer shadow-md"
+                >
+                  <Send className="w-3.5 h-3.5" />
+                  <span>Nhận Báo Giá Zalo</span>
+                </button>
               </div>
             </div>
 
-            <a
-              href={`https://zalo.me/0585338339?text=Xin%20chao%20Noi%20That%20Phat%20Loc,%20toi%20muon%20tu%20van%20du%20toan%20uoc%20tinh%20${totalPrice}%20VND`}
-              target="_blank"
-              rel="noreferrer"
-              className="px-3.5 py-2.5 sm:px-5 sm:py-3 bg-[#00D0E8] hover:bg-[#141414] hover:text-white text-black font-semibold text-[11px] sm:text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 shrink-0 rounded-xs"
-            >
-              <MessageSquare className="w-3.5 h-3.5" />
-              <span>Gửi Zalo</span>
-            </a>
-          </div>
+            {/* Thông tin hỗ trợ & bảo mật */}
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-2 pt-2 border-t border-black/6 text-[10.5px] text-[#717277]">
+              <div className="flex items-center gap-1.5 text-[#00A8BC] font-medium">
+                <ShieldCheck className="w-3.5 h-3.5" />
+                <span>Cam kết bảo mật thông tin khách hàng</span>
+              </div>
 
-          {/* Bottom row: Quick Call Lợi, Lộc & Huân */}
-          <div className="grid grid-cols-3 gap-1.5 sm:gap-2 mt-2.5 pt-2 border-t border-black/6">
-            <a
-              href="tel:0585338339"
-              className="py-1.5 px-1 bg-[#141414] hover:bg-[#00A8BC] text-white font-medium text-[9px] sm:text-[11px] uppercase tracking-wider transition-colors flex items-center justify-center gap-1 rounded-xs"
-            >
-              <Phone className="w-2.5 h-2.5 text-[#00D0E8] shrink-0" />
-              <span className="truncate">mr LỢI</span>
-            </a>
-            <a
-              href="tel:08360847193"
-              className="py-1.5 px-1 bg-[#141414] hover:bg-[#00A8BC] text-white font-medium text-[9px] sm:text-[11px] uppercase tracking-wider transition-colors flex items-center justify-center gap-1 rounded-xs"
-            >
-              <Phone className="w-2.5 h-2.5 text-[#00D0E8] shrink-0" />
-              <span className="truncate">mr LỘC</span>
-            </a>
-            <a
-              href="tel:0908938297"
-              className="py-1.5 px-1 bg-[#141414] hover:bg-[#00A8BC] text-white font-medium text-[9px] sm:text-[11px] uppercase tracking-wider transition-colors flex items-center justify-center gap-1 rounded-xs"
-            >
-              <Phone className="w-2.5 h-2.5 text-[#00D0E8] shrink-0" />
-              <span className="truncate">mr HUÂN</span>
-            </a>
-          </div>
-
-          <div className="mt-2 pt-1.5 text-center text-[10px] text-[#717277] font-mono-num flex flex-wrap items-center justify-center gap-x-2 gap-y-0.5">
-            <span className="font-semibold text-[#141414]">CÔNG TY TNHH NỘI THẤT PHÁT LỘC</span>
-            <span>•</span>
-            <span>MST: 3604065485</span>
-            <span>•</span>
-            <a href="mailto:noithatphatloc2025@gmail.com" className="text-[#00A8BC] hover:underline">
-              noithatphatloc2025@gmail.com
-            </a>
-          </div>
+              <div className="flex items-center gap-3">
+                <span className="text-[#8C8A84]">Hotline tư vấn nhanh:</span>
+                <a href="tel:0585338339" className="font-bold text-[#141414] hover:text-[#00A8BC] transition-colors">
+                  Mr. Lợi: 0585 338 339
+                </a>
+                <span>•</span>
+                <a href="tel:0836084719" className="font-bold text-[#141414] hover:text-[#00A8BC] transition-colors">
+                  Mr. Lộc: 0836 084 719
+                </a>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>

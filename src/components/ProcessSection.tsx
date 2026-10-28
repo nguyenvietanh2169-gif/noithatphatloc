@@ -87,11 +87,6 @@ export const ProcessSection: React.FC = () => {
                   {step.description}
                 </p>
               </div>
-
-              <div className="mt-6 pt-4 border-t border-black/6 flex items-center justify-between text-[11px] font-mono-num text-[#84827D]">
-                <span>TIÊU CHUẨN PHÁT LỘC</span>
-                <span className="w-2 h-2 rounded-full bg-[#00D0E8] opacity-0 group-hover:opacity-100 transition-opacity" />
-              </div>
             </div>
           ))}
         </div>

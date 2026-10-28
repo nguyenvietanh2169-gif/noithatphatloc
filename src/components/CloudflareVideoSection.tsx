@@ -14,8 +14,19 @@ export interface VideoReelItem {
 }
 
 export const CloudflareVideoSection: React.FC = () => {
-  // Danh sách toàn bộ 12 thước phim công trình (chuẩn xác 100% nội dung video thực tế)
+  // Danh sách thước phim công trình (chuẩn xác 100% nội dung video thực tế)
   const videoPlaylist: VideoReelItem[] = [
+    {
+      id: 'v13',
+      title: 'TỦ BẾP NHÔM CÁNH KÍNH CAO CẤP',
+      subtitle: 'Khung nhôm anode, cánh kính cường lực xám khói & đèn LED âm tủ sang trọng',
+      duration: '0:35',
+      src: '/assets/videos/reel-13.mp4',
+      cfId: '',
+      cfUrl: '',
+      thumb: '/assets/videos/thumbs/reel-13.webp',
+      badge: 'Bếp Nhôm Cánh Kính',
+    },
     {
       id: 'v1',
       title: 'VÁCH TRANG TRÍ PHÒNG KHÁCH & KỆ TIVI BỆT',
@@ -136,17 +147,6 @@ export const CloudflareVideoSection: React.FC = () => {
       cfUrl: '',
       thumb: '/assets/videos/thumbs/reel-11.webp',
       badge: 'Nghiệm Thu Thực Tế',
-    },
-    {
-      id: 'v12',
-      title: 'TỔNG THỂ HỆ VÁCH KỆ TIVI & LAM GỖ TRANG TRÍ',
-      subtitle: 'Toàn cảnh không gian vách tivi bo cong và hệ lam gỗ hoàn thiện',
-      duration: '0:05',
-      src: '/assets/videos/reel-12.mp4',
-      cfId: '',
-      cfUrl: '',
-      thumb: '/assets/videos/thumbs/reel-12.webp',
-      badge: 'Vách Tivi Hoàn Thiện',
     },
   ];
 

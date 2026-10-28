@@ -79,7 +79,7 @@ export const WorkshopSection: React.FC = () => {
               XƯỞNG GỖ NỘI THẤT SẢN XUẤT TRỰC TIẾP.
             </h2>
             <p className="text-sm md:text-base text-[#525357] font-light leading-relaxed mb-8">
-              Khác với những đơn vị chỉ làm thương mại thiết kế rồi thuê xưởng ngoài gia công, <strong>Nội thất Phát Lộc</strong> tự chủ 100% dây chuyền sản xuất đồ gỗ. Nhờ đó, sản phẩm khi lắp ráp lên thực tế chuẩn xác từng góc cạnh so với bản vẽ 3D với mức giá tại xưởng tốt nhất khu vực.
+              Khác với những đơn vị chỉ làm thương mại thiết kế rồi thuê xưởng ngoài gia công, <strong>Nội thất Phát Lộc</strong> tự chủ 100% dây chuyền sản xuất đồ gỗ tại Biên Hòa, Đồng Nai. Nhờ đó, chúng tôi cam kết cung cấp <strong>nội thất giá xưởng, nội thất giá gốc</strong> chuẩn xác từng góc cạnh so với bản vẽ 3D với mức giá tốt nhất khu vực.
             </p>
 
             {/* Value checklist */}

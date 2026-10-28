@@ -17,12 +17,12 @@ const AudioContext = createContext<AudioContextType | undefined>(undefined);
 export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [isMuted, setIsMuted] = useState<boolean>(false);
-  const [volume, setVolumeState] = useState<number>(0.55);
+  const [volume, setVolumeState] = useState<number>(0.44);
   const [hasStarted, setHasStarted] = useState<boolean>(false);
   
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const fadeIntervalRef = useRef<NodeJS.Timeout | null>(null);
-  const targetVolumeRef = useRef<number>(0.55);
+  const targetVolumeRef = useRef<number>(0.44);
   const hasStartedRef = useRef<boolean>(false);
 
   // Keep targetVolumeRef in sync
@@ -35,7 +35,7 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       try {
         navigator.mediaSession.metadata = new MediaMetadata({
           title: 'Nội Thất Phát Lộc',
-          artist: 'mr LỢI (0585 338 339) • mr LỘC (0836 084 7193)',
+          artist: 'Mr. Lợi (0585 338 339) • Mr. Lộc (0836 084 719) • Mr. Huân (090 893 8297)',
           album: 'Thiết Kế & Thi Công Nội Thất Đương Đại',
           artwork: [
             {
@@ -66,7 +66,7 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     // Initialize audio element with high reliability
     const audio = new Audio('/assets/audio/background-music.m4a');
     audio.loop = true;
-    audio.volume = 0.55;
+    audio.volume = 0.44;
     audio.preload = 'auto';
 
     audio.addEventListener('play', () => {

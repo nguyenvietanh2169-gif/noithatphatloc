@@ -9,11 +9,12 @@ import { DesignServices } from './components/DesignServices';
 import { ProjectsShowcase } from './components/ProjectsShowcase';
 import { CloudflareVideoSection } from './components/CloudflareVideoSection';
 import { WorkshopSection } from './components/WorkshopSection';
+import { StandardsSection } from './components/StandardsSection';
 import { ProcessSection } from './components/ProcessSection';
 import { Footer } from './components/Footer';
 import { PriceEstimatorModal } from './components/PriceEstimatorModal';
 import { ContactModal } from './components/ContactModal';
-import { Calculator, MessageCircle, Phone, ArrowUp } from 'lucide-react';
+import { Calculator, Phone, ArrowUp, Send } from 'lucide-react';
 
 function MainApp() {
   const [isEstimatorOpen, setIsEstimatorOpen] = useState(false);
@@ -90,6 +91,9 @@ function MainApp() {
         {/* Direct In-house Workshop & CNC Manufacturing */}
         <WorkshopSection />
 
+        {/* 6 Core Quality Standards of Phát Lộc */}
+        <StandardsSection />
+
         {/* 4-Step Structured Process */}
         <ProcessSection />
       </main>
@@ -106,53 +110,72 @@ function MainApp() {
         onClose={() => setIsEstimatorOpen(false)}
       />
 
-      {/* Contact Choice Modal (Lựa chọn 2 hotline mr LỢI & mr LỘC khi gọi điện hoặc chat Zalo) */}
+      {/* Contact Choice Modal (Lựa chọn hotline Mr. Lợi, Mr. Lộc, Mr. Huân khi gọi điện hoặc chat Zalo) */}
       <ContactModal
         isOpen={contactModal.isOpen}
         onClose={() => setContactModal((prev) => ({ ...prev, isOpen: false }))}
         initialTab={contactModal.tab}
       />
 
-      {/* Floating Action Buttons (Sticky Right Corner) */}
-      <div className="fixed bottom-6 right-6 z-40 flex flex-col gap-3">
+      {/* Floating Action Buttons (Thiết kế Pill Dark Sang Trọng chuẩn theo ảnh mẫu) */}
+      <div className="fixed bottom-6 right-4 sm:right-6 z-40 flex flex-col items-end gap-2.5 select-none">
         {/* Quick Estimator Button */}
         <button
           onClick={() => setIsEstimatorOpen(true)}
-          className="group flex items-center gap-2.5 px-4 py-3 bg-[#00D0E8] hover:bg-black hover:text-white text-black font-semibold text-xs uppercase tracking-wider rounded-full shadow-lg hover:shadow-cyan-500/25 transition-all cursor-pointer"
+          className="group flex items-center gap-2.5 px-4 py-2.5 bg-[#00D0E8] hover:bg-white text-black font-semibold text-xs sm:text-[13px] tracking-wide rounded-full shadow-2xl hover:shadow-cyan-500/25 transition-all cursor-pointer hover:scale-105 active:scale-95"
           title="Dự toán chi phí thi công"
         >
-          <Calculator className="w-4 h-4" />
-          <span className="hidden md:inline">Báo giá nhanh</span>
+          <Calculator className="w-4 h-4 stroke-[2]" />
+          <span>Báo giá nhanh</span>
         </button>
 
-        {/* Zalo Contact (Mở popup lựa chọn 2 hotline mr LỢI / mr LỘC) */}
+        {/* Facebook Page Button (Chuẩn thiết kế Capsule Dark + Outline Icon) */}
+        <a
+          href="https://www.facebook.com/noithatphatloc1"
+          target="_blank"
+          rel="noreferrer"
+          className="group flex items-center gap-2.5 px-4 py-2.5 bg-[#1F2024]/90 hover:bg-[#2A2B30] backdrop-blur-md border border-white/10 hover:border-white/25 text-[#E4E5E8] hover:text-white font-medium text-xs sm:text-[13px] tracking-wide rounded-full shadow-2xl transition-all cursor-pointer hover:scale-105 active:scale-95"
+          title="Ghé thăm Fanpage Facebook Nội Thất Phát Lộc"
+        >
+          <svg
+            className="w-4 h-4 stroke-current fill-none stroke-[2] transition-transform group-hover:scale-110"
+            viewBox="0 0 24 24"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+          </svg>
+          <span>Facebook</span>
+        </a>
+
+        {/* Zalo Chat Button (Chuẩn thiết kế Capsule Dark + Paper Plane Outline Icon) */}
         <button
           onClick={() => setContactModal({ isOpen: true, tab: 'zalo' })}
-          className="w-12 h-12 rounded-full bg-[#0068FF] hover:bg-[#0052cc] text-white flex items-center justify-center shadow-lg hover:scale-110 transition-transform cursor-pointer"
-          title="Chat Zalo với mr LỢI (0585 338 339) hoặc mr LỘC (0836 084 7193)"
-          aria-label="Chat Zalo với Phát Lộc"
+          className="group flex items-center gap-2.5 px-4 py-2.5 bg-[#1F2024]/90 hover:bg-[#2A2B30] backdrop-blur-md border border-white/10 hover:border-white/25 text-[#E4E5E8] hover:text-white font-medium text-xs sm:text-[13px] tracking-wide rounded-full shadow-2xl transition-all cursor-pointer hover:scale-105 active:scale-95"
+          title="Chat Zalo với Phát Lộc"
         >
-          <MessageCircle className="w-6 h-6 fill-current" />
+          <Send className="w-4 h-4 stroke-current fill-none stroke-[2] transition-transform group-hover:scale-110 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+          <span>Zalo Chat</span>
         </button>
 
-        {/* Direct Call (Mở popup lựa chọn 2 hotline mr LỢI / mr LỘC) */}
+        {/* Hotline Button (Đồng bộ Capsule Dark + Phone Outline Icon) */}
         <button
           onClick={() => setContactModal({ isOpen: true, tab: 'phone' })}
-          className="w-12 h-12 rounded-full bg-[#141414] text-white flex items-center justify-center shadow-lg hover:bg-[#00D0E8] hover:text-black transition-colors cursor-pointer"
-          title="Gọi Hotline mr LỢI (0585 338 339) hoặc mr LỘC (0836 084 7193)"
-          aria-label="Gọi điện thoại hotline Phát Lộc"
+          className="group flex items-center gap-2.5 px-4 py-2.5 bg-[#1F2024]/90 hover:bg-[#2A2B30] backdrop-blur-md border border-white/10 hover:border-white/25 text-[#E4E5E8] hover:text-white font-medium text-xs sm:text-[13px] tracking-wide rounded-full shadow-2xl transition-all cursor-pointer hover:scale-105 active:scale-95"
+          title="Gọi Hotline Phát Lộc"
         >
-          <Phone className="w-5 h-5 fill-current" />
+          <Phone className="w-4 h-4 stroke-current fill-none stroke-[2] transition-transform group-hover:scale-110" />
+          <span>Hotline</span>
         </button>
 
         {/* Back to top */}
         {showBackToTop && (
           <button
             onClick={scrollToTop}
-            className="w-12 h-12 rounded-full bg-white text-black border border-black/10 flex items-center justify-center shadow-md hover:bg-black hover:text-white transition-all cursor-pointer animate-in fade-in"
+            className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#1F2024]/90 hover:bg-white hover:text-black backdrop-blur-md text-[#E4E5E8] border border-white/10 hover:border-white/30 flex items-center justify-center shadow-xl transition-all cursor-pointer animate-in fade-in hover:scale-110 active:scale-95"
             title="Lên đầu trang"
           >
-            <ArrowUp className="w-5 h-5" />
+            <ArrowUp className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2]" />
           </button>
         )}
       </div>

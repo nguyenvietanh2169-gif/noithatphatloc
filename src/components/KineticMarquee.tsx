@@ -2,21 +2,21 @@ import React from 'react';
 
 export const KineticMarquee: React.FC = () => {
   const itemsLine1 = [
-    'THIẾT KẾ NỘI THẤT HIỆN ĐẠI',
+    'NỘI THẤT BIÊN HÒA — ĐỒNG NAI',
+    'NỘI THẤT GIÁ XƯỞNG GIÁ GỐC 100%',
     'XƯỞNG SẢN XUẤT TRỰC TIẾP',
-    'VẬT LIỆU CAO CẤP CHÍNH HÃNG',
-    'THI CÔNG TRỌN GÓI CHÌA KHÓA TRAO TAY',
-    'CHUẨN XÁC 100% THEO PHỐI CẢNH 3D',
+    'THIẾT KẾ NỘI THẤT ĐỒNG NAI',
+    'THI CÔNG NỘI THẤT BIÊN HÒA',
     'BẢO HÀNH 5 NĂM & BẢO TRÌ TRỌN ĐỜI',
   ];
 
   const itemsLine2 = [
-    'NỘI THẤT PHÁT LỘC',
-    'THI CÔNG BIỆT THỰ & CĂN HỘ CAO CẤP',
-    'HỆ CÁNH KÍNH & VÁCH THAN TRE',
-    'MÁY MÓC HIỆN ĐẠI ĐỒNG BỘ',
-    'ĐỘI NGŨ THỢ MỘC GIÀU TÂM HUYẾT',
-    'TỐI ƯU CÔNG NĂNG & CHI PHÍ THI CÔNG',
+    'XƯỞNG GỖ NỘI THẤT PHÁT LỘC',
+    'NỘI THẤT GIÁ GỐC KHÔNG QUA TRUNG GIAN',
+    'TỦ BẾP MDF • TỦ ÁO CÁNH KÍNH • VÁCH TIVI',
+    'MÁY MÓC CNC HIỆN ĐẠI ĐỒNG BỘ',
+    'ĐỘI NGŨ THỢ MỘC BIÊN HÒA GIÀU KINH NGHIỆM',
+    'TIẾT KIỆM 20-30% CHI PHÍ THI CÔNG',
   ];
 
   return (

@@ -79,6 +79,10 @@
   perspective: 1200px;
   transform-style: preserve-3d;
   touch-action: pan-y;
+  contain: layout paint;
+  isolation: isolate;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .carousel-3d-track {
@@ -90,6 +94,7 @@
   align-items: center;
   transform-style: preserve-3d;
   touch-action: pan-y;
+  contain: layout;
 }
 
 .carousel-3d-card {
