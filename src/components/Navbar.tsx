@@ -37,10 +37,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenEstimator, onOpenContact }
   const navLinks = [
     { label: 'TRIẾT LÝ', href: '#philosophy' },
     { label: 'DỊCH VỤ', href: '#services' },
-    { label: 'BẢN VẼ 3D', href: '#concept-3d' },
+    { label: 'ALBUM KHÁCH HÀNG', href: '#customer-albums' },
     { label: 'ẢNH THỰC TẾ', href: '#projects' },
+    { label: 'BẢN VẼ 3D', href: '#concept-3d' },
     { label: 'XƯỞNG GỖ', href: '#workshop' },
-    { label: 'TIÊU CHUẨN', href: '#standards' },
     { label: 'QUY TRÌNH', href: '#process' },
   ];
 

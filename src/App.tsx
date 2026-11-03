@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AudioProvider } from './context/AudioContext';
 import { MusicController } from './components/MusicController';
 import { Navbar } from './components/Navbar';
@@ -6,6 +6,7 @@ import { HeroSlider } from './components/HeroSlider';
 import { KineticMarquee } from './components/KineticMarquee';
 import { StatsGrid } from './components/StatsGrid';
 import { DesignServices } from './components/DesignServices';
+import { CustomerAlbumsSection } from './components/CustomerAlbumsSection';
 import { ProjectsShowcase } from './components/ProjectsShowcase';
 import { CloudflareVideoSection } from './components/CloudflareVideoSection';
 import { WorkshopSection } from './components/WorkshopSection';
@@ -14,22 +15,48 @@ import { ProcessSection } from './components/ProcessSection';
 import { Footer } from './components/Footer';
 import { PriceEstimatorModal } from './components/PriceEstimatorModal';
 import { ContactModal } from './components/ContactModal';
+import { AdminPanelModal } from './components/AdminPanelModal';
+import { CustomerAlbum } from './types/album';
+import { getAlbums } from './utils/albumStorage';
 import { Calculator, Phone, ArrowUp, Send } from 'lucide-react';
 
 function MainApp() {
   const [isEstimatorOpen, setIsEstimatorOpen] = useState(false);
+  const [isAdminOpen, setIsAdminOpen] = useState(false);
+  const [albums, setAlbums] = useState<CustomerAlbum[]>([]);
   const [contactModal, setContactModal] = useState<{ isOpen: boolean; tab: 'phone' | 'zalo' }>({
     isOpen: false,
     tab: 'phone',
   });
   const [showBackToTop, setShowBackToTop] = useState(false);
 
+  // Tải danh sách album từ IndexedDB
+  useEffect(() => {
+    getAlbums().then((loadedAlbums) => {
+      setAlbums(loadedAlbums);
+    });
+  }, []);
+
+  // Lắng nghe URL hash '#admin' để mở Admin panel trực tiếp
+  useEffect(() => {
+    const checkHash = () => {
+      if (window.location.hash === '#admin') {
+        setIsAdminOpen(true);
+      }
+    };
+    checkHash();
+    window.addEventListener('hashchange', checkHash);
+    return () => window.removeEventListener('hashchange', checkHash);
+  }, []);
+
   // Đảm bảo mỗi khi truy cập trang hoặc tải lại, luôn đưa về đỉnh trang chủ
   React.useEffect(() => {
     if ('scrollRestoration' in window.history) {
       window.history.scrollRestoration = 'manual';
     }
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    if (window.location.hash !== '#admin') {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    }
   }, []);
 
   React.useEffect(() => {
@@ -82,6 +109,12 @@ function MainApp() {
         {/* Design Services */}
         <DesignServices />
 
+        {/* Album Khách Hàng Thực Tế (Dạng Album Nhiều Ảnh) */}
+        <CustomerAlbumsSection
+          albums={albums}
+          onOpenContact={(tab) => setContactModal({ isOpen: true, tab })}
+        />
+
         {/* Selected Projects with Horizontal Sliding Gallery */}
         <ProjectsShowcase />
 
@@ -102,12 +135,26 @@ function MainApp() {
       <Footer
         onOpenEstimator={() => setIsEstimatorOpen(true)}
         onOpenContact={(tab) => setContactModal({ isOpen: true, tab })}
+        onOpenAdmin={() => setIsAdminOpen(true)}
       />
 
       {/* Interactive Quotation & Cost Estimator Modal */}
       <PriceEstimatorModal
         isOpen={isEstimatorOpen}
         onClose={() => setIsEstimatorOpen(false)}
+      />
+
+      {/* Admin Panel Modal (Đăng & Tự Động Nén Album Ảnh Khách Hàng) */}
+      <AdminPanelModal
+        isOpen={isAdminOpen}
+        onClose={() => {
+          setIsAdminOpen(false);
+          if (window.location.hash === '#admin') {
+            window.history.replaceState(null, '', window.location.pathname);
+          }
+        }}
+        albums={albums}
+        onAlbumsUpdated={setAlbums}
       />
 
       {/* Contact Choice Modal (Lựa chọn hotline Mr. Lợi, Mr. Lộc, Mr. Huân khi gọi điện hoặc chat Zalo) */}

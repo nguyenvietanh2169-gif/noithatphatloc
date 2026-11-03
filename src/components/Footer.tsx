@@ -4,9 +4,10 @@ import { ArrowUpRight, MapPin, Phone, Mail, Clock, CreditCard, Shield } from 'lu
 interface FooterProps {
   onOpenEstimator: () => void;
   onOpenContact?: (tab: 'phone' | 'zalo') => void;
+  onOpenAdmin?: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onOpenEstimator, onOpenContact }) => {
+export const Footer: React.FC<FooterProps> = ({ onOpenEstimator, onOpenContact, onOpenAdmin }) => {
   return (
     <footer className="bg-[#121316] text-white pt-24 pb-12 border-t border-white/10">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
@@ -256,6 +257,15 @@ export const Footer: React.FC<FooterProps> = ({ onOpenEstimator, onOpenContact }
           <div className="flex items-center gap-6">
             <a href="#" className="hover:text-white transition-colors">CHÍNH SÁCH BẢO MẬT</a>
             <a href="#" className="hover:text-white transition-colors">ĐIỀU KHOẢN DỊCH VỤ</a>
+            {onOpenAdmin && (
+              <button
+                onClick={onOpenAdmin}
+                className="text-white/40 hover:text-[#00D0E8] transition-colors cursor-pointer flex items-center gap-1 font-mono-num uppercase tracking-wider"
+                title="Đăng nhập bảng quản trị nội bộ"
+              >
+                <span>QUẢN TRỊ HỆ THỐNG</span>
+              </button>
+            )}
             <a href="#root" className="hover:text-[#00D0E8] transition-colors">VỀ ĐẦU TRANG ↑</a>
           </div>
         </div>
