@@ -8,7 +8,6 @@ import {
   Sparkles,
   Layers,
   ChevronRight,
-  ShieldCheck,
 } from 'lucide-react';
 import { CustomerAlbum } from '../types/album';
 import { CustomerAlbumModal } from './CustomerAlbumModal';
@@ -160,30 +159,6 @@ export const CustomerAlbumsSection: React.FC<CustomerAlbumsSectionProps> = ({
               </div>
             </div>
           ))}
-        </div>
-
-        {/* Cam kết cuối section */}
-        <div className="mt-16 p-6 sm:p-8 rounded-2xl bg-[#16171B] border border-white/10 flex flex-col sm:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-[#00D0E8]/10 border border-[#00D0E8]/20 flex items-center justify-center text-[#00D0E8] shrink-0">
-              <ShieldCheck className="w-6 h-6" />
-            </div>
-            <div>
-              <h4 className="text-base font-bold text-white">
-                100% Ảnh Chụp Thực Tế Tại Công Trình Của Phát Lộc
-              </h4>
-              <p className="text-xs sm:text-sm text-[#A0A2A8]">
-                Không dùng ảnh mạng trôi nổi. Khách hàng có thể ghé trực tiếp xưởng sản xuất hoặc công trình đang thi công để kiểm chứng.
-              </p>
-            </div>
-          </div>
-
-          <button
-            onClick={() => onOpenContact('phone')}
-            className="w-full sm:w-auto px-6 py-3 bg-[#00D0E8] hover:bg-white text-black font-semibold text-xs sm:text-sm rounded-xl transition-all cursor-pointer whitespace-nowrap shadow-lg shadow-cyan-500/20"
-          >
-            Đăng Ký Tham Quan Công Trình
-          </button>
         </div>
       </div>
 
