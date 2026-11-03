@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   X,
   Upload,
@@ -14,6 +14,7 @@ import {
 import { CustomerAlbum, AlbumPhoto } from '../types/album';
 import { compressImage, extractVideoThumbnail, formatFileSize } from '../utils/imageCompressor';
 import { saveAlbum, deleteAlbum } from '../utils/albumStorage';
+import { isCloudEnabled, fetchAlbumsFromCloud, syncAllAlbumsToCloud } from '../utils/cloudSync';
 
 interface AdminPanelModalProps {
   isOpen: boolean;
@@ -206,10 +207,33 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
     }
   };
 
+  // Tự động kiểm tra và đồng bộ danh sách hiện tại lên Cloud nếu Cloud đang trống
+  useEffect(() => {
+    if (isAuthenticated && isCloudEnabled() && albums.length > 0) {
+      fetchAlbumsFromCloud().then((cloudList) => {
+        if (!cloudList || cloudList.length === 0) {
+          syncAllAlbumsToCloud(albums).catch((err) =>
+            console.warn('Auto sync cloud error:', err)
+          );
+        }
+      });
+    }
+  }, [isAuthenticated, albums]);
+
   const handleDeleteAlbum = async (id: string) => {
-    if (window.confirm('Xóa album này?')) {
-      const updated = await deleteAlbum(id);
-      onAlbumsUpdated(updated);
+    if (window.confirm('Bạn có chắc chắn muốn xóa album này khỏi trang web?')) {
+      setIsProcessing(true);
+      setStatusMessage('Đang xóa album và tự động đồng bộ...');
+      try {
+        const updated = await deleteAlbum(id);
+        onAlbumsUpdated(updated);
+        setStatusMessage('Đã xóa album thành công');
+      } catch (err: any) {
+        console.error(err);
+        alert('Lỗi khi xóa album: ' + (err.message || 'Thử lại'));
+      } finally {
+        setIsProcessing(false);
+      }
     }
   };
 
@@ -550,36 +574,42 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
               ) : (
                 /* Tab Danh sách Album */
                 <div className="space-y-2.5 max-w-2xl mx-auto">
-                  {albums.map((album) => (
-                    <div
-                      key={album.id}
-                      className="bg-white/5 p-3.5 rounded-xl border border-white/5 flex items-center justify-between gap-3"
-                    >
-                      <div className="flex items-center gap-3 min-w-0">
-                        <img
-                          src={album.coverImage || album.photos[0]?.thumbnail || album.photos[0]?.url}
-                          alt=""
-                          className="w-12 h-12 rounded-lg object-cover border border-white/10 shrink-0"
-                        />
-                        <div className="min-w-0">
-                          <h4 className="text-xs font-semibold text-white truncate">
-                            {album.customerName} — {album.projectTitle}
-                          </h4>
-                          <p className="text-[11px] text-[#8E9096] mt-0.5">
-                            {album.location} • {album.photos.length} tệp
-                          </p>
-                        </div>
-                      </div>
-
-                      <button
-                        onClick={() => handleDeleteAlbum(album.id)}
-                        className="p-1.5 rounded-lg text-white/40 hover:text-red-400 transition-colors cursor-pointer shrink-0"
-                        title="Xóa"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+                  {albums.length === 0 ? (
+                    <div className="py-12 text-center text-[#8E9096] text-xs">
+                      Chưa có album nào. Hãy chuyển sang tab "Thêm Album" để tạo mới!
                     </div>
-                  ))}
+                  ) : (
+                    albums.map((album) => (
+                      <div
+                        key={album.id}
+                        className="bg-white/5 p-3.5 rounded-xl border border-white/5 flex items-center justify-between gap-3 hover:border-white/10 transition-colors"
+                      >
+                        <div className="flex items-center gap-3 min-w-0">
+                          <img
+                            src={album.coverImage || album.photos[0]?.thumbnail || album.photos[0]?.url}
+                            alt=""
+                            className="w-12 h-12 rounded-lg object-cover border border-white/10 shrink-0"
+                          />
+                          <div className="min-w-0">
+                            <h4 className="text-xs font-semibold text-white truncate">
+                              {album.customerName} — {album.projectTitle}
+                            </h4>
+                            <p className="text-[11px] text-[#8E9096] mt-0.5">
+                              {album.location} • {album.photos.length} tệp
+                            </p>
+                          </div>
+                        </div>
+
+                        <button
+                          onClick={() => handleDeleteAlbum(album.id)}
+                          className="p-2 rounded-lg text-white/40 hover:text-red-400 hover:bg-red-500/10 transition-all cursor-pointer shrink-0"
+                          title="Xóa album này"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ))
+                  )}
                 </div>
               )}
             </div>

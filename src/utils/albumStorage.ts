@@ -6,6 +6,7 @@ import {
   saveAlbumToCloud,
   deleteAlbumFromCloud,
   uploadToSupabaseStorage,
+  syncAllAlbumsToCloud,
 } from './cloudSync';
 
 const DB_NAME = 'PhatLocInteriorDB';
@@ -187,17 +188,45 @@ export async function saveAlbum(
 }
 
 /**
- * Xóa 1 album
+ * Xóa 1 album và đồng bộ tức thì lên Cloud
  */
 export async function deleteAlbum(albumId: string): Promise<CustomerAlbum[]> {
   if (isCloudEnabled()) {
-    await deleteAlbumFromCloud(albumId);
+    try {
+      await deleteAlbumFromCloud(albumId);
+    } catch (err) {
+      console.warn('Lỗi khi xóa trên cloud:', err);
+    }
   }
 
   const currentAlbums = await getAlbums();
   const updated = currentAlbums.filter((a) => a.id !== albumId);
   await saveLocalAlbums(updated);
+
+  // Đồng bộ lại Cloud để đảm bảo Cloud không giữ album cũ và luôn đồng nhất với Local
+  if (isCloudEnabled()) {
+    try {
+      await syncAllAlbumsToCloud(updated);
+    } catch (err) {
+      console.warn('Lỗi đồng bộ Cloud sau khi xóa:', err);
+    }
+  }
+
   return updated;
+}
+
+/**
+ * Đồng bộ toàn bộ danh sách Album lên Supabase Cloud và lưu cache Local
+ */
+export async function syncAlbums(
+  albums: CustomerAlbum[],
+  onProgress?: (msg: string) => void
+): Promise<CustomerAlbum[]> {
+  if (isCloudEnabled()) {
+    await syncAllAlbumsToCloud(albums, onProgress);
+  }
+  await saveLocalAlbums(albums);
+  return albums;
 }
 
 /**

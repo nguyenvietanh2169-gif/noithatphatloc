@@ -234,6 +234,44 @@ export async function deleteAlbumFromCloud(albumId: string): Promise<void> {
 }
 
 /**
+ * Đồng bộ toàn bộ danh sách Album lên Supabase Cloud:
+ * 1. Xóa các album trên Cloud không còn trong danh sách local
+ * 2. Lưu/Cập nhật các album hiện tại lên Cloud
+ */
+export async function syncAllAlbumsToCloud(
+  albums: CustomerAlbum[],
+  onProgress?: (msg: string) => void
+): Promise<void> {
+  const config = getCloudConfig();
+  if (!config) throw new Error('Chưa cấu hình Supabase');
+
+  onProgress?.('Đang kết nối Supabase Cloud...');
+
+  // 1. Lấy danh sách ID trên Cloud
+  const cloudAlbums = await fetchAlbumsFromCloud();
+  const currentCloudIds = new Set(cloudAlbums.map((a) => a.id));
+  const activeIds = new Set(albums.map((a) => a.id));
+
+  // 2. Xóa các album trên Cloud mà ở giao diện quản trị đã bị xoá
+  const toDelete = Array.from(currentCloudIds).filter((id) => !activeIds.has(id));
+  if (toDelete.length > 0) {
+    onProgress?.(`Đang gỡ ${toDelete.length} album đã xóa trên Cloud...`);
+    for (const id of toDelete) {
+      await deleteAlbumFromCloud(id);
+    }
+  }
+
+  // 3. Đẩy/Cập nhật từng album lên Cloud
+  for (let i = 0; i < albums.length; i++) {
+    const album = albums[i];
+    onProgress?.(`Đang lưu album (${i + 1}/${albums.length}): ${album.customerName}...`);
+    await saveAlbumToCloud(album);
+  }
+
+  onProgress?.('Đã đồng bộ thành công lên Cloud!');
+}
+
+/**
  * Kiểm tra kết nối thử tới Supabase
  */
 export async function testCloudConnection(config: CloudConfig): Promise<{ success: boolean; message: string }> {
