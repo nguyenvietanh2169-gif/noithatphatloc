@@ -72,6 +72,19 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Tự động kiểm tra và đồng bộ danh sách hiện tại lên Cloud nếu Cloud đang trống
+  useEffect(() => {
+    if (isOpen && isAuthenticated && isCloudEnabled() && albums.length > 0) {
+      fetchAlbumsFromCloud().then((cloudList) => {
+        if (!cloudList || cloudList.length === 0) {
+          syncAllAlbumsToCloud(albums).catch((err) =>
+            console.warn('Auto sync cloud error:', err)
+          );
+        }
+      });
+    }
+  }, [isOpen, isAuthenticated, albums]);
+
   if (!isOpen) return null;
 
   const handleVerifyPin = (e: React.FormEvent) => {
@@ -206,19 +219,6 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
       setIsProcessing(false);
     }
   };
-
-  // Tự động kiểm tra và đồng bộ danh sách hiện tại lên Cloud nếu Cloud đang trống
-  useEffect(() => {
-    if (isAuthenticated && isCloudEnabled() && albums.length > 0) {
-      fetchAlbumsFromCloud().then((cloudList) => {
-        if (!cloudList || cloudList.length === 0) {
-          syncAllAlbumsToCloud(albums).catch((err) =>
-            console.warn('Auto sync cloud error:', err)
-          );
-        }
-      });
-    }
-  }, [isAuthenticated, albums]);
 
   const handleDeleteAlbum = async (id: string) => {
     if (window.confirm('Bạn có chắc chắn muốn xóa album này khỏi trang web?')) {
