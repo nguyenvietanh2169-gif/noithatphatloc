@@ -68,7 +68,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenEstimator, onOpenContact, 
               </h3>
             </div>
             <a
-              href="https://www.google.com/maps/dir/?api=1&destination=C%C3%B4ng+ty+TNHH+N%E1%BB%99i+Th%E1%BA%A5t+Ph%C3%A1t+L%E1%BB%99c%2C+28C%2F88+Khu+ph%E1%BB%91+13%2C+Ph%C6%B0%E1%BB%9Dng+Long+B%C3%ACnh%2C+Th%C3%A0nh+ph%E1%BB%91+Bi%C3%AAn+H%C3%B2a%2C+%C4%90%E1%BB%93ng+Nai"
+              href="https://www.google.com/maps/dir/?api=1&destination=C%C3%B4ng+ty+TNHH+N%E1%BB%99i+Th%E1%BA%A5t+Ph%C3%A1t+L%E1%BB%99c%2C+28C%2F88+Khu+ph%E1%BB%91+13%2C+Tam+Hi%E1%BB%87p%2C+%C4%90%E1%BB%93ng+Nai"
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 hover:bg-[#00D0E8] text-white hover:text-black border border-white/10 hover:border-transparent text-xs font-medium uppercase tracking-wider transition-all self-start sm:self-auto shrink-0 group cursor-pointer shadow-lg hover:scale-105 active:scale-95"
@@ -146,7 +146,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenEstimator, onOpenContact, 
                 <div>
                   <span className="text-[10px] text-white/50 font-mono-num uppercase block">ĐỊA CHỈ DOANH NGHIỆP:</span>
                   <span className="text-white font-medium leading-relaxed">
-                    28C/88, Khu phố 13, Phường Long Bình, Thành phố Biên Hòa, Tỉnh Đồng Nai, Việt Nam
+                    28C/88, Khu phố 13, Tam Hiệp, Thành phố Biên Hòa, Tỉnh Đồng Nai, Việt Nam
                   </span>
                 </div>
               </li>
