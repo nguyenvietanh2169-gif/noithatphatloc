@@ -3,13 +3,55 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://noithatphatloc.com/</loc>
-    <lastmod>2026-10-28</lastmod>
-    <changefreq>weekly</changefreq>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <image:image>
       <image:loc>https://noithatphatloc.com/assets/logo/phatloc-og-banner.jpg</image:loc>
       <image:title>Công ty TNHH Nội Thất Phát Lộc - Thiết kế thi công nội thất Biên Hòa Đồng Nai</image:title>
       <image:caption>Xưởng sản xuất nội thất trực tiếp tại Biên Hòa, Đồng Nai chuyên tủ bếp MDF, tủ áo cánh kính, vách tivi</image:caption>
     </image:image>
+  </url>
+  <url>
+    <loc>https://noithatphatloc.com/dich-vu/thi-cong-noi-that-bien-hoa/</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://noithatphatloc.com/dich-vu/dong-tu-bep-bien-hoa/</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://noithatphatloc.com/dich-vu/thiet-ke-noi-that-dong-nai/</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://noithatphatloc.com/quy-trinh-bao-gia/</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://noithatphatloc.com/du-an/</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://noithatphatloc.com/gioi-thieu/</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://noithatphatloc.com/chinh-sach-bao-hanh/</loc>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
 </urlset>
