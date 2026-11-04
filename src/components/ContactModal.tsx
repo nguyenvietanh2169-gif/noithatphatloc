@@ -105,12 +105,9 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                 onClick={onClose}
                 className="flex items-center justify-between p-3 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] hover:border-white/20 transition-all duration-150 group cursor-pointer active:scale-[0.98]"
               >
-                <div className="flex flex-col">
+                <div className="flex items-center">
                   <span className="font-heading font-semibold text-sm text-white group-hover:text-[#00D0E8] transition-colors">
                     {c.phone} — {c.name}
-                  </span>
-                  <span className="text-[11px] text-white/60 tracking-wide mt-0.5">
-                    {isPhone ? 'Hotline tư vấn kỹ thuật trực tiếp' : 'Tư vấn trao đổi bản vẽ & báo giá'}
                   </span>
                 </div>
 
