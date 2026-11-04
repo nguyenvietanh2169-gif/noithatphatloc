@@ -36,7 +36,7 @@ export const StandardsSection: React.FC = () => {
       number: '06',
       title: 'An tâm dịch vụ',
       badge: 'Bảo hành 5 năm • Hỗ trợ kỹ thuật 24h',
-      desc: 'Chính sách bảo hành kết cấu 5 năm, xử lý phát sinh nhanh chóng trong 24h và đồng hành bảo trì định kỳ trọn đời, mang đến sự an tâm tuyệt đối cho mọi gia chủ.',
+      desc: 'Chính sách bảo hành kết cấu 5 năm, xử lý phát sinh nhanh chóng trong 24h, mang đến sự an tâm tuyệt đối cho mọi gia chủ.',
     },
   ];
 

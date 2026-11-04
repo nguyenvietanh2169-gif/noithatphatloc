@@ -130,7 +130,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenEstimator, onOpenContact, 
             <div className="flex flex-col gap-2.5 pt-1">
               <div className="flex items-center gap-2 text-xs text-white/60 font-mono-num">
                 <Shield className="w-4 h-4 text-[#00D0E8]" />
-                <span>Cam kết bảo hành 5 năm & Bảo trì trọn đời</span>
+                <span>Cam kết bảo hành kết cấu 5 năm</span>
               </div>
             </div>
           </div>

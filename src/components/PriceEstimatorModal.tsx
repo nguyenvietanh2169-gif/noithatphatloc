@@ -24,7 +24,7 @@ const ESTIMATE_ITEMS: EstimateItem[] = [
 
   // Phòng bếp
   { id: 'pb1', category: 'Phòng bếp', name: 'Tủ bếp trên thùng MDF cánh Acrylic bóng gương', unit: 'md', defaultQty: 3, material: 'Chống ẩm mốc, công nghệ dán nẹp không đường line' },
-  { id: 'pb2', category: 'Phòng bếp', name: 'Tủ bếp dưới thùng Picomat kháng nước 100%', unit: 'md', defaultQty: 3, material: 'Nhựa Picomat siêu chịu nước, chống mối mọt trọn đời' },
+  { id: 'pb2', category: 'Phòng bếp', name: 'Tủ bếp dưới thùng Picomat kháng nước 100%', unit: 'md', defaultQty: 3, material: 'Nhựa Picomat siêu chịu nước, chống ẩm mốc kháng nước tuyệt đối' },
   { id: 'pb3', category: 'Phòng bếp', name: 'Mặt đá bếp đá nung kết / Vicostone', unit: 'md', defaultQty: 3, material: 'Chống trầy, chống ố nhiệt và chống thấm nước' },
   { id: 'pb4', category: 'Phòng bếp', name: 'Bàn đảo bếp rời tích hợp lưu trữ', unit: 'md', defaultQty: 1.6, material: 'Mặt đá đồng bộ, kết hợp ngăn kéo đa năng' },
 

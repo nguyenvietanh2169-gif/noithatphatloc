@@ -70,7 +70,7 @@ const SERVICES: ServiceItem[] = [
     subTitle: 'DÀN MÁY CNC & BẢO HÀNH 5 NĂM',
     description: 'Gia công toàn bộ hệ giường ngủ, bàn làm việc, tủ giày, tủ rượu, bàn trang điểm đồng bộ chất liệu và tone màu. Cam kết chứng chỉ nguồn gốc gỗ minh bạch và bảo hành dài hạn.',
     image: '/assets/workshop/workshop-6.webp',
-    features: ['Máy CNC cắt mộng chuẩn xác milimet', 'Keo dán nhiệt PUR kháng ẩm bền bỉ', 'Bảo hành 5 năm & Bảo trì định kỳ'],
+    features: ['Máy CNC cắt mộng chuẩn xác milimet', 'Keo dán nhiệt PUR kháng ẩm bền bỉ', 'Bảo hành kết cấu 5 năm'],
     icon: Building2,
   },
 ];

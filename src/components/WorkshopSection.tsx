@@ -20,7 +20,7 @@ export const WorkshopSection: React.FC = () => {
     },
     {
       icon: Clock,
-      title: 'Bảo Hành 5 Năm & Bảo Trì Định Kỳ',
+      title: 'Bảo Hành Kết Cấu 5 Năm',
       desc: 'Hỗ trợ thay thế phụ kiện bản lề, ray kéo và hiệu chỉnh cánh tủ nhanh chóng trong vòng 24h.',
     },
   ];

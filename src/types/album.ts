@@ -12,7 +12,7 @@ export interface AlbumPhoto {
 export interface CustomerAlbum {
   id: string;
   customerName: string; // Ví dụ: "Gia đình Anh Minh"
-  projectTitle: string; // Ví dụ: "Hoàn thiện trọn gói Biệt thự Lovera Park"
+  projectTitle: string; // Ví dụ: "Hoàn thiện trọn gói Nhà phố Biên Hòa"
   location: string; // "Bình Chánh, TP.HCM"
   completedDate: string; // "Tháng 10/2024"
   coverImage: string; // Ảnh đại diện album

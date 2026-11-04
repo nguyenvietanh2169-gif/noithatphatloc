@@ -7,7 +7,7 @@ export const KineticMarquee: React.FC = () => {
     'XƯỞNG SẢN XUẤT TRỰC TIẾP',
     'THIẾT KẾ NỘI THẤT ĐỒNG NAI',
     'THI CÔNG NỘI THẤT BIÊN HÒA',
-    'BẢO HÀNH 5 NĂM & BẢO TRÌ TRỌN ĐỜI',
+    'BẢO HÀNH KẾT CẤU 5 NĂM',
   ];
 
   const itemsLine2 = [

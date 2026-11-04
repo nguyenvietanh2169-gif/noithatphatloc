@@ -378,7 +378,7 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
                         type="text"
                         value={projectTitle}
                         onChange={(e) => setProjectTitle(e.target.value)}
-                        placeholder="Thi công trọn gói Biệt thự Lovera Park"
+                        placeholder="Thi công trọn gói Nhà phố Biên Hòa"
                         className="w-full px-3 py-2 bg-black/40 border border-white/10 rounded-lg text-white text-xs focus:border-[#00D0E8] focus:outline-none"
                         required
                       />
