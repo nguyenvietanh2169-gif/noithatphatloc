@@ -253,12 +253,14 @@ export const Footer: React.FC<FooterProps> = ({ onOpenEstimator, onOpenContact, 
         <div className="py-6 border-b border-white/10 flex flex-wrap items-center justify-between gap-y-3 gap-x-6 text-xs font-medium uppercase tracking-wider text-white/70">
           <span className="text-[10px] text-[#00D0E8] font-mono-num">DANH MỤC DỊCH VỤ & CHÍNH SÁCH:</span>
           <a href="/gioi-thieu/" className="hover:text-[#00D0E8] transition-colors">Giới Thiệu Xưởng</a>
-          <a href="/dich-vu/thi-cong-noi-that-bien-hoa/" className="hover:text-[#00D0E8] transition-colors">Thi Công Biên Hòa</a>
-          <a href="/dich-vu/thiet-ke-noi-that-dong-nai/" className="hover:text-[#00D0E8] transition-colors">Thiết Kế 3D</a>
-          <a href="/dich-vu/dong-tu-bep-bien-hoa/" className="hover:text-[#00D0E8] transition-colors">Đóng Tủ Bếp</a>
+          <a href="/dich-vu/thiet-ke-noi-that-dong-nai/" className="hover:text-[#00D0E8] transition-colors">Thiết Kế Nội Thất</a>
+          <a href="/dich-vu/thi-cong-noi-that-bien-hoa/" className="hover:text-[#00D0E8] transition-colors">Thi Công Trọn Gói</a>
+          <a href="/dich-vu/dong-tu-bep-bien-hoa/" className="hover:text-[#00D0E8] transition-colors">Tủ Bếp & Tủ Quần Áo</a>
+          <a href="/dich-vu/thi-cong-noi-that-bien-hoa/#phong-ngu-ke-tivi" className="hover:text-[#00D0E8] transition-colors">Giường Ngủ & Kệ Tivi</a>
+          <a href="/dich-vu/dong-tu-bep-bien-hoa/#da-bep-vach-trang-tri" className="hover:text-[#00D0E8] transition-colors">Đá Bếp & Vách Trang Trí</a>
           <a href="/du-an/" className="hover:text-[#00D0E8] transition-colors">Dự Án Thực Tế</a>
           <a href="/quy-trinh-bao-gia/" className="hover:text-[#00D0E8] transition-colors">Quy Trình Báo Giá</a>
-          <a href="/chinh-sach-bao-hanh/" className="hover:text-[#00D0E8] transition-colors">Bảo Hành 5 Năm</a>
+          <a href="/chinh-sach-bao-hanh/" className="hover:text-[#00D0E8] transition-colors">Bảo Hành</a>
         </div>
 
         {/* Bottom Credits */}

@@ -605,3 +605,211 @@ a {
   font-size: 13px;
   text-transform: uppercase;
 }
+
+/* =====================================================================
+   HEADER DROPDOWN & INTERACTIVE HOTLINE MODAL
+   ===================================================================== */
+
+/* Navigation Dropdown */
+.nav-item-dropdown {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+.nav-item-dropdown .dropdown-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+.dropdown-chevron {
+  transition: transform 0.2s ease;
+}
+.nav-item-dropdown:hover .dropdown-chevron {
+  transform: rotate(180deg);
+}
+.nav-item-dropdown .dropdown-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  min-width: 220px;
+  background: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 6px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  padding: 8px 0;
+  display: none;
+  z-index: 100;
+  animation: fadeInDown 0.15s ease-out;
+}
+.nav-item-dropdown:hover .dropdown-menu {
+  display: block;
+}
+.dropdown-menu a {
+  display: block;
+  padding: 9px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: normal;
+  color: #2A2B2E;
+  transition: all 0.15s;
+}
+.dropdown-menu a:hover {
+  background: #F4F7F6;
+  color: var(--accent-teal);
+  padding-left: 22px;
+}
+
+/* Mobile Submenu */
+.mobile-submenu-group {
+  margin: 4px 0;
+  padding-left: 8px;
+  border-left: 2px solid var(--accent-teal);
+}
+.mobile-submenu-header {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--accent-teal);
+  margin-bottom: 6px;
+}
+.mobile-submenu-items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.mobile-submenu-items a {
+  font-size: 13px;
+  color: #505156;
+  text-decoration: none;
+  display: block;
+  padding: 4px 0;
+}
+.mobile-submenu-items a:hover {
+  color: #141414;
+}
+
+/* Hotline Modal Overlay */
+.hotline-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 9999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.hotline-modal-overlay.active {
+  display: flex;
+}
+.hotline-modal-card {
+  width: 100%;
+  max-width: 380px;
+  background: #141416;
+  color: #FFFFFF;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  position: relative;
+  animation: modalFadeIn 0.2s ease-out;
+}
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+.hotline-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+}
+.hotline-modal-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 13.5px;
+  text-transform: uppercase;
+  color: #FFFFFF;
+}
+.hotline-modal-close {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: color 0.15s;
+}
+.hotline-modal-close:hover {
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.1);
+}
+.hotline-modal-desc {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+.hotline-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.hotline-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 10px 14px;
+  transition: background 0.15s;
+}
+.hotline-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(0, 208, 232, 0.3);
+}
+.hotline-info {
+  display: flex;
+  flex-direction: column;
+}
+.hotline-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #FFFFFF;
+}
+.hotline-number {
+  font-size: 13px;
+  color: #00D0E8;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  margin-top: 2px;
+}
+.btn-call-item {
+  background: #00A8BC;
+  color: #FFFFFF;
+  padding: 7px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+.btn-call-item:hover {
+  background: #00D0E8;
+  color: #000000;
+}

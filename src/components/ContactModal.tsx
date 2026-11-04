@@ -106,22 +106,28 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                 className="flex items-center justify-between p-3 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] hover:border-white/20 transition-all duration-150 group cursor-pointer active:scale-[0.98]"
               >
                 <div className="flex flex-col">
-                  <span className="font-heading font-medium text-sm text-white group-hover:text-[#00D0E8] transition-colors">
-                    {c.name}
+                  <span className="font-heading font-semibold text-sm text-white group-hover:text-[#00D0E8] transition-colors">
+                    {c.phone} — {c.name}
                   </span>
-                  <span className="font-mono-num text-xs text-white/60 tracking-wider mt-0.5">
-                    {c.phone}
+                  <span className="text-[11px] text-white/60 tracking-wide mt-0.5">
+                    {isPhone ? 'Hotline tư vấn kỹ thuật trực tiếp' : 'Tư vấn trao đổi bản vẽ & báo giá'}
                   </span>
                 </div>
 
                 <div
-                  className="w-9 h-9 rounded-full bg-[#1F2024] group-hover:bg-[#2A2B30] border border-white/10 group-hover:border-white/30 text-[#E4E5E8] group-hover:text-white flex items-center justify-center transition-all duration-150 group-hover:scale-105 shadow-md shrink-0"
-                  title={isPhone ? `Gọi ${c.name}` : `Chat Zalo với ${c.name}`}
+                  className="px-3 py-1.5 rounded-lg bg-[#00A8BC] group-hover:bg-[#00D0E8] text-white group-hover:text-black font-semibold text-xs flex items-center gap-1.5 transition-all shadow-md shrink-0"
+                  title={isPhone ? `Gọi ${c.name}: ${c.phone}` : `Chat Zalo với ${c.name}`}
                 >
                   {isPhone ? (
-                    <Phone className="w-4 h-4 stroke-current fill-none stroke-[2]" />
+                    <>
+                      <Phone className="w-3.5 h-3.5 fill-none stroke-[2.2]" />
+                      <span>Gọi ngay</span>
+                    </>
                   ) : (
-                    <Send className="w-4 h-4 stroke-current fill-none stroke-[2] group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
+                    <>
+                      <Send className="w-3.5 h-3.5 fill-none stroke-[2.2]" />
+                      <span>Nhắn Zalo</span>
+                    </>
                   )}
                 </div>
               </a>

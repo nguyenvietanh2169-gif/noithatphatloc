@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, ArrowUpRight, Phone, Play, Pause } from 'lucide-react';
+import { Menu, X, ArrowUpRight, Phone, Play, Pause, ChevronDown } from 'lucide-react';
 import { useAudio } from '../context/AudioContext';
 
 interface NavbarProps {
@@ -34,14 +34,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenEstimator, onOpenContact }
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navLinks = [
-    { label: 'TRIẾT LÝ', href: '#philosophy' },
-    { label: 'DỊCH VỤ', href: '#services' },
-    { label: 'ALBUM KHÁCH HÀNG', href: '#customer-albums' },
-    { label: 'ẢNH THỰC TẾ', href: '#projects' },
-    { label: 'BẢN VẼ 3D', href: '#concept-3d' },
-    { label: 'XƯỞNG GỖ', href: '#workshop' },
-    { label: 'QUY TRÌNH', href: '#process' },
+  const productSubmenu = [
+    { label: 'Tủ bếp', href: '/dich-vu/dong-tu-bep-bien-hoa/' },
+    { label: 'Tủ quần áo', href: '/dich-vu/thi-cong-noi-that-bien-hoa/#tu-quan-ao' },
+    { label: 'Giường ngủ', href: '/dich-vu/thi-cong-noi-that-bien-hoa/#giuong-ngu' },
+    { label: 'Kệ tivi', href: '/dich-vu/thi-cong-noi-that-bien-hoa/#ke-tivi' },
+    { label: 'Đá bếp, đá trang trí', href: '/dich-vu/dong-tu-bep-bien-hoa/#da-bep' },
+    { label: 'Vách ngăn, vách trang trí', href: '/dich-vu/thi-cong-noi-that-bien-hoa/#vach-trang-tri' },
   ];
 
   return (
@@ -55,7 +54,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenEstimator, onOpenContact }
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 xl:px-10 flex items-center justify-between gap-4">
           {/* Brand Logo - Gọn gàng, sang trọng, không chiếm quá nhiều bề ngang */}
-          <a href="#" className="flex items-center gap-2.5 sm:gap-3.5 flex-shrink-0 group">
+          <a href="/" className="flex items-center gap-2.5 sm:gap-3.5 flex-shrink-0 group">
             <img
               src="/assets/logo/logo-turquoise-clean.png"
               alt="Công ty TNHH Nội Thất Phát Lộc Logo"
@@ -72,16 +71,66 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenEstimator, onOpenContact }
           </a>
 
           {/* Desktop Navigation - Thoáng đãng, không bị ngắt dòng chữ */}
-          <nav className="hidden lg:flex items-center gap-3.5 xl:gap-5 2xl:gap-7 text-[11px] xl:text-[12px] uppercase tracking-[0.1em] xl:tracking-[0.14em] font-medium text-[#2A2B2E]">
-            {navLinks.map((item) => (
+          <nav className="hidden lg:flex items-center gap-2.5 xl:gap-4 2xl:gap-5 text-[10.5px] xl:text-[11.5px] uppercase tracking-[0.06em] xl:tracking-[0.1em] font-medium text-[#2A2B2E]">
+            <a
+              href="/gioi-thieu/"
+              className="whitespace-nowrap hover:text-[#00A8BC] transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1.5px] after:bg-[#00A8BC] hover:after:w-full after:transition-all"
+            >
+              Giới Thiệu
+            </a>
+            <a
+              href="/dich-vu/thi-cong-noi-that-bien-hoa/"
+              className="whitespace-nowrap hover:text-[#00A8BC] transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1.5px] after:bg-[#00A8BC] hover:after:w-full after:transition-all"
+            >
+              Thi Công Nội Thất
+            </a>
+            <a
+              href="/dich-vu/thiet-ke-noi-that-dong-nai/"
+              className="whitespace-nowrap hover:text-[#00A8BC] transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1.5px] after:bg-[#00A8BC] hover:after:w-full after:transition-all"
+            >
+              Thiết Kế Nội Thất
+            </a>
+
+            {/* Dropdown Sản Phẩm Nội Thất */}
+            <div className="relative group py-1">
               <a
-                key={item.label}
-                href={item.href}
-                className="whitespace-nowrap hover:text-[#00A8BC] transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1.5px] after:bg-[#00A8BC] hover:after:w-full after:transition-all"
+                href="/dich-vu/dong-tu-bep-bien-hoa/"
+                className="inline-flex items-center gap-1 whitespace-nowrap hover:text-[#00A8BC] transition-colors cursor-pointer"
               >
-                {item.label}
+                <span>Sản Phẩm Nội Thất</span>
+                <ChevronDown className="w-3 h-3 group-hover:rotate-180 transition-transform duration-200" />
               </a>
-            ))}
+              <div className="absolute top-full left-0 w-56 bg-white border border-black/8 rounded-lg shadow-xl py-2 hidden group-hover:block animate-in fade-in zoom-in-95 duration-150 z-50">
+                {productSubmenu.map((sub) => (
+                  <a
+                    key={sub.label}
+                    href={sub.href}
+                    className="block px-4 py-2 text-xs normal-case tracking-normal text-[#2A2B2E] hover:bg-[#F4F7F6] hover:text-[#00A8BC] transition-colors"
+                  >
+                    {sub.label}
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            <a
+              href="/du-an/"
+              className="whitespace-nowrap hover:text-[#00A8BC] transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1.5px] after:bg-[#00A8BC] hover:after:w-full after:transition-all"
+            >
+              Dự Án
+            </a>
+            <a
+              href="/quy-trinh-bao-gia/"
+              className="whitespace-nowrap hover:text-[#00A8BC] transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1.5px] after:bg-[#00A8BC] hover:after:w-full after:transition-all"
+            >
+              Báo Giá
+            </a>
+            <a
+              href="/chinh-sach-bao-hanh/"
+              className="whitespace-nowrap hover:text-[#00A8BC] transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1.5px] after:bg-[#00A8BC] hover:after:w-full after:transition-all"
+            >
+              Bảo Hành
+            </a>
           </nav>
 
           {/* Right Action Buttons */}
@@ -114,10 +163,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenEstimator, onOpenContact }
             <button
               onClick={() => (onOpenContact ? onOpenContact('phone') : (window.location.href = 'tel:0585338339'))}
               className="flex items-center gap-1.5 px-3.5 xl:px-4 py-2 text-[10.5px] xl:text-[11px] uppercase tracking-[0.12em] font-semibold bg-[#141414] text-white hover:bg-[#00D0E8] hover:text-black transition-colors whitespace-nowrap cursor-pointer"
-              title="Hotline hỗ trợ Mr. Lợi & Mr. Lộc"
+              title="Hotline tư vấn trực tiếp 24/7"
             >
               <Phone className="w-3.5 h-3.5" />
-              <span>Liên hệ</span>
+              <span>Hotline</span>
               <ArrowUpRight className="w-3.5 h-3.5" />
             </button>
           </div>
@@ -136,20 +185,79 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenEstimator, onOpenContact }
       {/* Mobile Drawer */}
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-40 bg-[#F8F7F4] pt-24 px-6 pb-8 flex flex-col justify-between overflow-y-auto lg:hidden animate-in fade-in duration-200">
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-4">
             <span className="text-[11px] uppercase tracking-[0.2em] text-[#8C8980]">
               Menu điều hướng
             </span>
-            {navLinks.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="font-heading text-2xl tracking-tight text-[#141414] hover:text-[#00A8BC] transition-colors"
-              >
-                {item.label}
-              </a>
-            ))}
+            <a
+              href="/"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="font-heading text-xl tracking-tight text-[#141414] hover:text-[#00A8BC] transition-colors"
+            >
+              Trang Chủ
+            </a>
+            <a
+              href="/gioi-thieu/"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="font-heading text-xl tracking-tight text-[#141414] hover:text-[#00A8BC] transition-colors"
+            >
+              Giới Thiệu
+            </a>
+            <a
+              href="/dich-vu/thi-cong-noi-that-bien-hoa/"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="font-heading text-xl tracking-tight text-[#141414] hover:text-[#00A8BC] transition-colors"
+            >
+              Thi Công Nội Thất
+            </a>
+            <a
+              href="/dich-vu/thiet-ke-noi-that-dong-nai/"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="font-heading text-xl tracking-tight text-[#141414] hover:text-[#00A8BC] transition-colors"
+            >
+              Thiết Kế Nội Thất
+            </a>
+
+            {/* Sản phẩm nội thất mobile submenu */}
+            <div className="pl-3 border-l-2 border-[#00A8BC] py-1">
+              <span className="text-xs uppercase font-bold text-[#00A8BC] block mb-2">
+                Sản Phẩm Nội Thất
+              </span>
+              <div className="flex flex-col gap-2">
+                {productSubmenu.map((sub) => (
+                  <a
+                    key={sub.label}
+                    href={sub.href}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="text-sm text-[#55565B] hover:text-[#141414]"
+                  >
+                    • {sub.label}
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            <a
+              href="/du-an/"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="font-heading text-xl tracking-tight text-[#141414] hover:text-[#00A8BC] transition-colors"
+            >
+              Dự Án Thực Tế
+            </a>
+            <a
+              href="/quy-trinh-bao-gia/"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="font-heading text-xl tracking-tight text-[#141414] hover:text-[#00A8BC] transition-colors"
+            >
+              Quy Trình Báo Giá
+            </a>
+            <a
+              href="/chinh-sach-bao-hanh/"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="font-heading text-xl tracking-tight text-[#141414] hover:text-[#00A8BC] transition-colors"
+            >
+              Chính Sách Bảo Hành
+            </a>
           </div>
 
           <div className="flex flex-col gap-3 pt-6 border-t border-black/10 mt-6">
