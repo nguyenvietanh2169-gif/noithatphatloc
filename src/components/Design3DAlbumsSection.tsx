@@ -61,14 +61,9 @@ export const Design3DAlbumsSection: React.FC<Design3DAlbumsSectionProps> = ({
             <div className="text-[11px] uppercase tracking-[0.2em] font-semibold text-[#00D0E8] font-mono mb-1.5">
               THIẾT KẾ PHỐI CẢNH 3D
             </div>
-            <div className="flex items-baseline gap-3">
-              <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-white uppercase">
-                ALBUM BẢN VẼ <span className="text-[#00D0E8]">3D NỘI THẤT</span>
-              </h2>
-              <span className="text-xs font-mono text-neutral-400">
-                ({filteredAlbums.length} album)
-              </span>
-            </div>
+            <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-white uppercase">
+              ALBUM BẢN VẼ <span className="text-[#00D0E8]">3D NỘI THẤT</span>
+            </h2>
           </div>
 
           <p className="text-xs text-neutral-400 max-w-md font-light leading-relaxed">
@@ -151,7 +146,7 @@ export const Design3DAlbumsSection: React.FC<Design3DAlbumsSectionProps> = ({
                       )}
 
                       {/* Tiêu đề ngắn gọn, rõ ràng */}
-                      <h3 className="text-base font-bold text-white group-hover:text-[#00D0E8] transition-colors line-clamp-2 leading-snug">
+                      <h3 className="text-base font-bold text-white line-clamp-2 leading-snug">
                         {album.projectTitle}
                       </h3>
 

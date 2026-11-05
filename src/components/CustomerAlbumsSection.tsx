@@ -47,15 +47,16 @@ export const CustomerAlbumsSection: React.FC<CustomerAlbumsSectionProps> = ({
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
-        <div className="mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#00D0E8]/10 border border-[#00D0E8]/20 text-[#00D0E8] text-xs font-semibold uppercase tracking-wider mb-3">
-            <FolderArchive className="w-3.5 h-3.5" />
-            <span>Nhật Ký Thi Công & Bàn Giao Khách Hàng</span>
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 pb-4 border-b border-white/10 gap-4">
+          <div>
+            <div className="text-[11px] uppercase tracking-[0.2em] font-semibold text-[#00D0E8] font-mono mb-1.5">
+              NHẬT KÝ THI CÔNG & BÀN GIAO KHÁCH HÀNG
+            </div>
+            <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-white uppercase">
+              ALBUM CÔNG TRÌNH <span className="text-[#00D0E8]">THỰC TẾ</span>
+            </h2>
           </div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-white uppercase font-sans">
-            Album Công Trình <span className="text-[#00D0E8]">Thực Tế</span>
-          </h2>
-          <p className="mt-3 text-[#A0A2A8] text-sm sm:text-base max-w-2xl">
+          <p className="text-xs text-neutral-400 max-w-md font-light leading-relaxed">
             Mỗi gia đình là một câu chuyện may đo riêng biệt. Tổng hợp bộ sưu tập hình ảnh bàn giao trọn gói từng căn hộ, nhà phố và biệt thự đã hoàn thiện 100%.
           </p>
         </div>
@@ -122,7 +123,7 @@ export const CustomerAlbumsSection: React.FC<CustomerAlbumsSectionProps> = ({
                     </div>
                   )}
 
-                  <h3 className="text-base font-bold text-white group-hover:text-[#00D0E8] transition-colors line-clamp-2 leading-snug">
+                  <h3 className="text-base font-bold text-white line-clamp-2 leading-snug">
                     {album.projectTitle}
                   </h3>
 
