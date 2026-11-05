@@ -154,20 +154,37 @@ export async function fetchAlbumsFromCloud(): Promise<CustomerAlbum[]> {
 
   const rows = await res.json();
   // Map từ bảng database sang CustomerAlbum
-  return rows.map((r: any) => ({
-    id: r.id,
-    customerName: r.customer_name || r.customerName,
-    projectTitle: r.project_title || r.projectTitle,
-    location: r.location,
-    completedDate: r.completed_date || r.completedDate,
-    coverImage: r.cover_image || r.coverImage,
-    categories: r.categories || [],
-    photos: r.photos || [],
-    testimonial: r.testimonial,
-    materialNotes: r.material_notes || r.materialNotes,
-    videoUrl: r.video_url || r.videoUrl,
-    createdAt: r.created_at ? new Date(r.created_at).getTime() : Date.now(),
-  }));
+  return rows.map((r: any) => {
+    const is3D =
+      r.album_type === '3d' ||
+      r.albumType === '3d' ||
+      (Array.isArray(r.categories) &&
+        r.categories.some(
+          (c: string) =>
+            typeof c === 'string' &&
+            (c.toLowerCase().includes('3d') || c.toLowerCase().includes('phối cảnh'))
+        )) ||
+      (r.project_title &&
+        (r.project_title.toLowerCase().includes('3d') ||
+          r.project_title.toLowerCase().includes('phối cảnh'))) ||
+      (r.id && typeof r.id === 'string' && r.id.startsWith('album-3d-'));
+
+    return {
+      id: r.id,
+      customerName: r.customer_name || r.customerName,
+      projectTitle: r.project_title || r.projectTitle,
+      location: r.location,
+      completedDate: r.completed_date || r.completedDate,
+      coverImage: r.cover_image || r.coverImage,
+      categories: r.categories || [],
+      photos: r.photos || [],
+      albumType: (is3D ? '3d' : 'real') as 'real' | '3d',
+      testimonial: r.testimonial,
+      materialNotes: r.material_notes || r.materialNotes,
+      videoUrl: r.video_url || r.videoUrl,
+      createdAt: r.created_at ? new Date(r.created_at).getTime() : Date.now(),
+    };
+  });
 }
 
 /**
@@ -177,6 +194,11 @@ export async function saveAlbumToCloud(album: CustomerAlbum): Promise<void> {
   const config = getCloudConfig();
   if (!config) throw new Error('Chưa cấu hình Supabase');
 
+  const categories = [...(album.categories || [])];
+  if (album.albumType === '3d' && !categories.some((c) => c.toLowerCase().includes('3d'))) {
+    categories.unshift('Bản Vẽ 3D');
+  }
+
   const row = {
     id: album.id,
     customer_name: album.customerName,
@@ -184,7 +206,7 @@ export async function saveAlbumToCloud(album: CustomerAlbum): Promise<void> {
     location: album.location,
     completed_date: album.completedDate,
     cover_image: album.coverImage,
-    categories: album.categories,
+    categories,
     photos: album.photos,
     testimonial: album.testimonial,
     material_notes: album.materialNotes,

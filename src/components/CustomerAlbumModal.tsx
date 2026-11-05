@@ -23,6 +23,16 @@ interface CustomerAlbumModalProps {
   onOpenContact: (tab: 'phone' | 'zalo') => void;
 }
 
+function cleanCaption(caption?: string): string | null {
+  if (!caption || !caption.trim()) return null;
+  const trimmed = caption.trim();
+  // Bỏ các chuỗi số dài của tên tệp tải về từ điện thoại / Facebook / máy ảnh
+  if (/\d{6,}/.test(trimmed)) return null;
+  if (/^[\d\s-_.]+$/.test(trimmed)) return null;
+  if (/^(img|dsc|photo|video|file|screenshot|image)[\d\s-_.]*$/i.test(trimmed)) return null;
+  return trimmed;
+}
+
 export const CustomerAlbumModal: React.FC<CustomerAlbumModalProps> = ({
   album,
   onClose,
@@ -88,7 +98,7 @@ export const CustomerAlbumModal: React.FC<CustomerAlbumModalProps> = ({
                 {selectedPhotoIndex + 1} / {album.photos.length}
               </span>
               <p className="text-sm font-medium text-white/90 hidden sm:block truncate max-w-md">
-                {currentPhoto.caption || album.projectTitle}
+                {cleanCaption(currentPhoto.caption) || album.projectTitle}
               </p>
             </div>
             <button
@@ -301,16 +311,15 @@ export const CustomerAlbumModal: React.FC<CustomerAlbumModalProps> = ({
                     </div>
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3.5">
-                    <p className="text-xs text-white line-clamp-2 font-medium">
-                      {photo.caption || `Ảnh số ${idx + 1}`}
-                    </p>
-                    <div className="flex items-center gap-1.5 mt-2 text-[11px] text-[#00D0E8] font-semibold">
+                    {cleanCaption(photo.caption) && (
+                      <p className="text-xs text-white line-clamp-2 font-medium mb-1">
+                        {cleanCaption(photo.caption)}
+                      </p>
+                    )}
+                    <div className="flex items-center gap-1.5 text-[11px] text-[#00D0E8] font-semibold">
                       <Maximize2 className="w-3.5 h-3.5" />
                       <span>Xem toàn màn hình</span>
                     </div>
-                  </div>
-                  <div className="absolute top-2.5 right-2.5 px-2 py-0.5 bg-black/60 backdrop-blur-md rounded text-[10px] text-white/80 font-mono">
-                    #{idx + 1}
                   </div>
                 </div>
               ))}

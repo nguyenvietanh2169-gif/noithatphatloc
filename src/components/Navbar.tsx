@@ -329,7 +329,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenEstimator, onOpenContact }
                 className="py-2.5 text-center text-[11px] sm:text-xs uppercase tracking-[0.1em] font-semibold bg-[#141414] text-white flex items-center justify-center gap-1 rounded-xs"
               >
                 <Phone className="w-3 h-3 text-[#00D0E8] shrink-0" />
-                <span>Mr. Huân</span>
+                <span>Mr. Huấn</span>
               </a>
             </div>
           </div>

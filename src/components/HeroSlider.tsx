@@ -213,7 +213,7 @@ export const HeroSlider: React.FC = () => {
             {/* CTA Action Buttons */}
             <div className="flex flex-wrap items-center gap-4">
               <a
-                href="#projects"
+                href="#customer-albums"
                 className="px-6 py-3.5 bg-[#00D0E8] hover:bg-white text-[#121316] font-semibold text-xs uppercase tracking-[0.18em] transition-all duration-300 shadow-lg hover:shadow-cyan-500/20"
               >
                 Khám phá bộ sưu tập

@@ -9,7 +9,7 @@ import {
   Layers,
   ChevronRight,
 } from 'lucide-react';
-import { CustomerAlbum } from '../types/album';
+import { CustomerAlbum, is3DAlbum } from '../types/album';
 import { CustomerAlbumModal } from './CustomerAlbumModal';
 
 interface CustomerAlbumsSectionProps {
@@ -24,19 +24,23 @@ export const CustomerAlbumsSection: React.FC<CustomerAlbumsSectionProps> = ({
   const [selectedAlbum, setSelectedAlbum] = useState<CustomerAlbum | null>(null);
   const [activeCategory, setActiveCategory] = useState<string>('Tất cả');
 
+  // Lọc riêng album công trình thực tế
+  const realAlbums = albums.filter((a) => !is3DAlbum(a));
+
   // Lấy danh sách category duy nhất
   const allCategories = [
     'Tất cả',
-    ...Array.from(new Set(albums.flatMap((a) => a.categories))),
+    ...Array.from(new Set(realAlbums.flatMap((a) => a.categories))),
   ];
 
   const filteredAlbums =
     activeCategory === 'Tất cả'
-      ? albums
-      : albums.filter((a) => a.categories.includes(activeCategory));
+      ? realAlbums
+      : realAlbums.filter((a) => a.categories.includes(activeCategory));
 
   return (
     <section id="customer-albums" className="py-20 bg-[#0F1012] text-white relative overflow-hidden">
+      <div id="projects" className="absolute -top-10" />
       {/* Background Glow */}
       <div className="absolute top-1/2 left-0 w-96 h-96 bg-[#00D0E8]/5 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-[#FF6B00]/5 rounded-full blur-[120px] pointer-events-none" />
@@ -79,40 +83,46 @@ export const CustomerAlbumsSection: React.FC<CustomerAlbumsSectionProps> = ({
             <div
               key={album.id}
               onClick={() => setSelectedAlbum(album)}
-              className="group bg-[#16171B] rounded-2xl border border-white/10 hover:border-[#00D0E8]/50 overflow-hidden transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-[#00D0E8]/10 cursor-pointer flex flex-col"
+              className="group bg-[#16171B] rounded-2xl border border-white/10 hover:border-[#00D0E8]/50 overflow-hidden transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-[#00D0E8]/10 cursor-pointer flex flex-col isolate"
+              style={{ transform: 'translateZ(0)', WebkitBackfaceVisibility: 'hidden', backfaceVisibility: 'hidden' }}
             >
               {/* Cover Image & Badge */}
-              <div className="relative aspect-[16/10] overflow-hidden bg-black/50">
+              <div
+                className="relative aspect-[16/10] overflow-hidden bg-[#16171B] mb-[-1px] isolate"
+                style={{ transform: 'translateZ(0)', WebkitBackfaceVisibility: 'hidden', backfaceVisibility: 'hidden' }}
+              >
                 <img
                   src={album.coverImage || album.photos[0]?.url}
                   alt={album.projectTitle}
                   loading="lazy"
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  className="block w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  style={{ willChange: 'transform', transform: 'translateZ(0)' }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#16171B] via-transparent to-black/30" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#16171B] via-transparent to-black/30 pointer-events-none" />
 
                 {/* Badge số lượng ảnh trong Album */}
-                <div className="absolute top-3 right-3 flex items-center gap-1.5 px-3 py-1 bg-black/70 backdrop-blur-md rounded-full text-xs font-semibold text-white border border-white/10">
+                <div className="absolute top-3 right-3 flex items-center gap-1.5 px-3 py-1 bg-black/70 backdrop-blur-md rounded-full text-xs font-semibold text-white border border-white/10 pointer-events-none">
                   <ImageIcon className="w-3.5 h-3.5 text-[#00D0E8]" />
                   <span>{album.photos.length} Ảnh</span>
                 </div>
 
                 {/* Badge địa chỉ */}
-                <div className="absolute bottom-3 left-3 flex items-center gap-1.5 px-2.5 py-1 bg-[#16171B]/90 backdrop-blur-md rounded-lg text-[11px] text-[#A0A2A8] border border-white/10">
+                <div className="absolute bottom-3 left-3 flex items-center gap-1.5 px-2.5 py-1 bg-[#16171B]/90 backdrop-blur-md rounded-lg text-[11px] text-[#A0A2A8] border border-white/10 pointer-events-none">
                   <MapPin className="w-3 h-3 text-[#00D0E8]" />
                   <span>{album.location}</span>
                 </div>
               </div>
 
               {/* Album Body */}
-              <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
+              <div className="p-4 flex-1 flex flex-col justify-between space-y-3 bg-[#16171B] relative z-10">
                 <div>
-                  <div className="flex items-center justify-between text-xs text-[#00D0E8] font-mono mb-1.5">
-                    <span className="font-semibold uppercase">{album.customerName}</span>
-                    <span className="text-[#A0A2A8] text-[11px]">{album.completedDate}</span>
-                  </div>
+                  {album.customerName && (
+                    <div className="text-xs text-[#00D0E8] font-mono mb-1 font-semibold uppercase tracking-wide">
+                      {album.customerName}
+                    </div>
+                  )}
 
-                  <h3 className="text-base sm:text-lg font-bold text-white group-hover:text-[#00D0E8] transition-colors line-clamp-2 leading-snug">
+                  <h3 className="text-base font-bold text-white group-hover:text-[#00D0E8] transition-colors line-clamp-2 leading-snug">
                     {album.projectTitle}
                   </h3>
 

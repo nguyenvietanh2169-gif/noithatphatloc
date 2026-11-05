@@ -53,7 +53,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
     },
     {
       id: 'huan',
-      name: 'Mr. Huân',
+      name: 'Mr. Huấn',
       phone: '090 893 8297',
       tel: 'tel:0908938297',
       zalo: 'https://zalo.me/0908938297',
@@ -67,7 +67,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-[340px] bg-[#141416]/95 backdrop-blur-2xl border border-white/10 rounded-2xl p-4 shadow-2xl text-white animate-in zoom-in-95 duration-150"
+        className="w-full max-w-[400px] bg-[#141416]/95 backdrop-blur-2xl border border-white/10 rounded-2xl p-4 sm:p-5 shadow-2xl text-white animate-in zoom-in-95 duration-150"
       >
         {/* Header tối giản - đồng bộ outline icon */}
         <div className="flex items-center justify-between pb-3 mb-3 border-b border-white/10">
@@ -105,8 +105,8 @@ export const ContactModal: React.FC<ContactModalProps> = ({
                 onClick={onClose}
                 className="flex items-center justify-between p-3 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] hover:border-white/20 transition-all duration-150 group cursor-pointer active:scale-[0.98]"
               >
-                <div className="flex items-center">
-                  <span className="font-heading font-semibold text-sm text-white group-hover:text-[#00D0E8] transition-colors">
+                <div className="flex items-center min-w-0 pr-2">
+                  <span className="font-heading font-semibold text-sm text-white group-hover:text-[#00D0E8] transition-colors whitespace-nowrap">
                     {c.phone} — {c.name}
                   </span>
                 </div>

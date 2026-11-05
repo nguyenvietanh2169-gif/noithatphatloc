@@ -168,7 +168,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenEstimator, onOpenContact, 
                       </a>
                     </div>
                     <div>
-                      <span className="text-white/60">Mr. Huân:</span>{' '}
+                      <span className="text-white/60">Mr. Huấn:</span>{' '}
                       <a href="tel:0908938297" className="hover:text-[#00D0E8] font-semibold tracking-wide text-white transition-colors">
                         090 893 8297
                       </a>

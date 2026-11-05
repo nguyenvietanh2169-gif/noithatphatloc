@@ -7,7 +7,7 @@ import { KineticMarquee } from './components/KineticMarquee';
 import { StatsGrid } from './components/StatsGrid';
 import { DesignServices } from './components/DesignServices';
 import { CustomerAlbumsSection } from './components/CustomerAlbumsSection';
-import { ProjectsShowcase } from './components/ProjectsShowcase';
+import { Design3DAlbumsSection } from './components/Design3DAlbumsSection';
 import { CloudflareVideoSection } from './components/CloudflareVideoSection';
 import { WorkshopSection } from './components/WorkshopSection';
 import { StandardsSection } from './components/StandardsSection';
@@ -15,7 +15,7 @@ import { ProcessSection } from './components/ProcessSection';
 import { Footer } from './components/Footer';
 import { PriceEstimatorModal } from './components/PriceEstimatorModal';
 import { ContactModal } from './components/ContactModal';
-import { AdminPanelModal } from './components/AdminPanelModal';
+import { AdminDashboardPage } from './components/AdminDashboardPage';
 import { CustomerAlbum } from './types/album';
 import { getAlbums } from './utils/albumStorage';
 import { Calculator, Phone, ArrowUp, Send } from 'lucide-react';
@@ -37,24 +37,32 @@ function MainApp() {
     });
   }, []);
 
-  // Lắng nghe URL hash '#admin' để mở Admin panel trực tiếp
+  // Lắng nghe URL hash '#admin' hoặc đường dẫn '/admin' để mở Admin panel trực tiếp
   useEffect(() => {
     const checkHash = () => {
-      if (window.location.hash === '#admin') {
+      if (
+        window.location.hash === '#admin' ||
+        window.location.pathname === '/admin' ||
+        window.location.pathname === '/admin/'
+      ) {
         setIsAdminOpen(true);
       }
     };
     checkHash();
     window.addEventListener('hashchange', checkHash);
-    return () => window.removeEventListener('hashchange', checkHash);
+    window.addEventListener('popstate', checkHash);
+    return () => {
+      window.removeEventListener('hashchange', checkHash);
+      window.removeEventListener('popstate', checkHash);
+    };
   }, []);
 
-  // Đảm bảo mỗi khi truy cập trang hoặc tải lại, luôn đưa về đỉnh trang chủ
+  // Đảm bảo mỗi khi truy cập trang hoặc tải lại, luôn đưa về đỉnh trang chủ (trừ khi đang ở admin)
   React.useEffect(() => {
     if ('scrollRestoration' in window.history) {
       window.history.scrollRestoration = 'manual';
     }
-    if (window.location.hash !== '#admin') {
+    if (window.location.hash !== '#admin' && !window.location.pathname.includes('/admin')) {
       window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     }
   }, []);
@@ -84,6 +92,22 @@ function MainApp() {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  // NẾU ĐANG Ở TRANG ADMIN: RENDER TOÀN BỘ TRANG QUẢN TRỊ ĐỘC LẬP
+  if (isAdminOpen) {
+    return (
+      <AdminDashboardPage
+        albums={albums}
+        onAlbumsUpdated={setAlbums}
+        onExitAdmin={() => {
+          setIsAdminOpen(false);
+          if (window.location.hash === '#admin' || window.location.pathname.includes('/admin')) {
+            window.history.replaceState(null, '', '/');
+          }
+        }}
+      />
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#F8F7F4] text-[#141414] flex flex-col selection:bg-[#00D0E8] selection:text-black relative overflow-x-clip">
@@ -115,8 +139,11 @@ function MainApp() {
           onOpenContact={(tab) => setContactModal({ isOpen: true, tab })}
         />
 
-        {/* Selected Projects with Horizontal Sliding Gallery */}
-        <ProjectsShowcase />
+        {/* Album Bản Vẽ 3D Nội Thất (Dạng Album Nhiều Ảnh, thay cho ảnh chạy cũ) */}
+        <Design3DAlbumsSection
+          albums={albums}
+          onOpenContact={(tab) => setContactModal({ isOpen: true, tab })}
+        />
 
         {/* Cloudflare Video Showcase & Local Workshop Reels */}
         <CloudflareVideoSection />
@@ -135,7 +162,10 @@ function MainApp() {
       <Footer
         onOpenEstimator={() => setIsEstimatorOpen(true)}
         onOpenContact={(tab) => setContactModal({ isOpen: true, tab })}
-        onOpenAdmin={() => setIsAdminOpen(true)}
+        onOpenAdmin={() => {
+          setIsAdminOpen(true);
+          window.location.hash = '#admin';
+        }}
       />
 
       {/* Interactive Quotation & Cost Estimator Modal */}
@@ -144,20 +174,7 @@ function MainApp() {
         onClose={() => setIsEstimatorOpen(false)}
       />
 
-      {/* Admin Panel Modal (Đăng & Tự Động Nén Album Ảnh Khách Hàng) */}
-      <AdminPanelModal
-        isOpen={isAdminOpen}
-        onClose={() => {
-          setIsAdminOpen(false);
-          if (window.location.hash === '#admin') {
-            window.history.replaceState(null, '', window.location.pathname);
-          }
-        }}
-        albums={albums}
-        onAlbumsUpdated={setAlbums}
-      />
-
-      {/* Contact Choice Modal (Lựa chọn hotline Mr. Lợi, Mr. Lộc, Mr. Huân khi gọi điện hoặc chat Zalo) */}
+      {/* Contact Choice Modal (Lựa chọn hotline Mr. Lợi, Mr. Lộc, Mr. Huấn khi gọi điện hoặc chat Zalo) */}
       <ContactModal
         isOpen={contactModal.isOpen}
         onClose={() => setContactModal((prev) => ({ ...prev, isOpen: false }))}

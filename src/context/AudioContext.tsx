@@ -35,7 +35,7 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       try {
         navigator.mediaSession.metadata = new MediaMetadata({
           title: 'Nội Thất Phát Lộc',
-          artist: 'Mr. Lợi (0585 338 339) • Mr. Lộc (0836 084 719) • Mr. Huân (090 893 8297)',
+          artist: 'Mr. Lợi (0585 338 339) • Mr. Lộc (0836 084 719) • Mr. Huấn (090 893 8297)',
           album: 'Thiết Kế & Thi Công Nội Thất Đương Đại',
           artwork: [
             {

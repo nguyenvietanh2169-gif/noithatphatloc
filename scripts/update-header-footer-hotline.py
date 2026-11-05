@@ -42,7 +42,7 @@ hotline_modal_html = """  <!-- Hotline Interactive Modal -->
         </div>
         <div class="hotline-item">
           <div class="hotline-info">
-            <span class="hotline-name">Mr. Huân — Kỹ thuật Thi công & Bảo hành</span>
+            <span class="hotline-name">Mr. Huấn — Kỹ thuật Thi công & Bảo hành</span>
             <span class="hotline-number">090 893 8297</span>
           </div>
           <a href="tel:0908938297" class="btn-call-item">Gọi ngay</a>

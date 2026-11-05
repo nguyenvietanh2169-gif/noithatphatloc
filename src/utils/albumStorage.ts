@@ -1,4 +1,4 @@
-import { CustomerAlbum, AlbumPhoto } from '../types/album';
+import { CustomerAlbum, AlbumPhoto, is3DAlbum } from '../types/album';
 import { INITIAL_CUSTOMER_ALBUMS } from '../data/defaultAlbums';
 import {
   isCloudEnabled,
@@ -44,9 +44,17 @@ export async function getAlbums(): Promise<CustomerAlbum[]> {
     try {
       const cloudAlbums = await fetchAlbumsFromCloud();
       if (cloudAlbums && cloudAlbums.length > 0) {
+        // Nếu cloud chưa có album 3D, tự động gộp các album 3D mẫu để hiển thị đầy đủ
+        const has3D = cloudAlbums.some((a) => is3DAlbum(a));
+        let finalAlbums = cloudAlbums;
+        if (!has3D) {
+          const default3D = INITIAL_CUSTOMER_ALBUMS.filter((a) => is3DAlbum(a));
+          finalAlbums = [...cloudAlbums, ...default3D];
+        }
+        finalAlbums.sort((a, b) => b.createdAt - a.createdAt);
         // Cache lại vào IndexedDB để chạy siêu tốc
-        saveLocalAlbums(cloudAlbums).catch(() => {});
-        return cloudAlbums;
+        saveLocalAlbums(finalAlbums).catch(() => {});
+        return finalAlbums;
       }
     } catch (err) {
       console.warn('Lỗi đọc Cloud, fallback về offline cache:', err);
@@ -62,11 +70,18 @@ export async function getAlbums(): Promise<CustomerAlbum[]> {
       const request = store.getAll();
 
       request.onsuccess = async () => {
-        const albums = request.result as CustomerAlbum[];
+        let albums = request.result as CustomerAlbum[];
         if (!albums || albums.length === 0) {
           await saveLocalAlbums(INITIAL_CUSTOMER_ALBUMS);
           resolve(INITIAL_CUSTOMER_ALBUMS);
         } else {
+          // Nếu database cũ chưa có album 3D hoặc thiếu dữ liệu khởi tạo, tự động bổ sung album 3D mẫu
+          const has3D = albums.some((a) => is3DAlbum(a));
+          if (!has3D) {
+            const default3D = INITIAL_CUSTOMER_ALBUMS.filter((a) => is3DAlbum(a));
+            albums = [...albums, ...default3D];
+            saveLocalAlbums(albums).catch(() => {});
+          }
           albums.sort((a, b) => b.createdAt - a.createdAt);
           resolve(albums);
         }
