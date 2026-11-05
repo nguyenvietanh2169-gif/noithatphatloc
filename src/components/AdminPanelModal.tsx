@@ -10,6 +10,7 @@ import {
   FileCheck,
   Star,
   Play,
+  Pencil,
 } from 'lucide-react';
 import { CustomerAlbum, AlbumPhoto } from '../types/album';
 import { compressImage, extractVideoThumbnail, formatFileSize } from '../utils/imageCompressor';
@@ -46,6 +47,7 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
 
   // Tab: 'create' | 'manage'
   const [activeTab, setActiveTab] = useState<'create' | 'manage'>('create');
+  const [editingAlbumId, setEditingAlbumId] = useState<string | null>(null);
 
   // Form State
   const [customerName, setCustomerName] = useState('');
@@ -61,6 +63,41 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
   // Danh sách ảnh & video trong album hiện tại
   const [uploadedPhotos, setUploadedPhotos] = useState<AlbumPhoto[]>([]);
   const [coverPhotoIndex, setCoverPhotoIndex] = useState<number>(0);
+
+  // Reset form về trạng thái tạo mới
+  const resetForm = () => {
+    setEditingAlbumId(null);
+    setCustomerName('');
+    setProjectTitle('');
+    setLocation('Biên Hòa, Đồng Nai');
+    setCompletedDate('Tháng 11/2024');
+    setCategoriesInput('Tủ Bếp, Phòng Khách, Tủ Áo');
+    setMaterialNotes('MDF Lõi Xanh An Cường • Cánh Kính Slim Khung Nhôm Anode');
+    setTestimonial('');
+    setUploadedPhotos([]);
+    setCoverPhotoIndex(0);
+  };
+
+  // Kích hoạt chế độ chỉnh sửa album
+  const handleStartEdit = (album: CustomerAlbum) => {
+    setEditingAlbumId(album.id);
+    setCustomerName(album.customerName || '');
+    setProjectTitle(album.projectTitle || '');
+    setLocation(album.location || 'Biên Hòa, Đồng Nai');
+    setCompletedDate(album.completedDate || 'Tháng 11/2024');
+    setCategoriesInput(album.categories ? album.categories.join(', ') : '');
+    setMaterialNotes(album.materialNotes || '');
+    setTestimonial(album.testimonial || '');
+    setUploadedPhotos(album.photos || []);
+
+    const coverIdx = (album.photos || []).findIndex(
+      (p) => p.url === album.coverImage || (p.thumbnail && p.thumbnail === album.coverImage)
+    );
+    setCoverPhotoIndex(coverIdx >= 0 ? coverIdx : 0);
+
+    setActiveTab('create');
+    setStatusMessage(`Đang chỉnh sửa: ${album.customerName} — ${album.projectTitle}`);
+  };
 
   // Tiến trình xử lý
   const [isProcessing, setIsProcessing] = useState(false);
@@ -185,8 +222,12 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
         ? coverItem.thumbnail
         : coverItem.url;
 
-    const newAlbum: CustomerAlbum = {
-      id: 'album-' + Date.now(),
+    const existingAlbum = editingAlbumId
+      ? albums.find((a) => a.id === editingAlbumId)
+      : null;
+
+    const albumToSave: CustomerAlbum = {
+      id: editingAlbumId || 'album-' + Date.now(),
       customerName: customerName.trim(),
       projectTitle: projectTitle.trim(),
       location: location.trim(),
@@ -196,21 +237,23 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
       photos: uploadedPhotos,
       testimonial: testimonial.trim() || undefined,
       materialNotes: materialNotes.trim() || undefined,
-      createdAt: Date.now(),
+      createdAt: existingAlbum ? existingAlbum.createdAt : Date.now(),
     };
 
     setIsProcessing(true);
-    setStatusMessage('Đang lưu album...');
+    setStatusMessage(
+      editingAlbumId ? 'Đang cập nhật album...' : 'Đang lưu album...'
+    );
 
     try {
-      const updated = await saveAlbum(newAlbum, (msg) => setStatusMessage(msg));
+      const updated = await saveAlbum(albumToSave, (msg) => setStatusMessage(msg));
       onAlbumsUpdated(updated);
 
-      setCustomerName('');
-      setProjectTitle('');
-      setUploadedPhotos([]);
-      setTestimonial('');
-      setStatusMessage('Đã đăng album thành công');
+      const isEdit = Boolean(editingAlbumId);
+      resetForm();
+      setStatusMessage(
+        isEdit ? 'Đã cập nhật album thành công' : 'Đã đăng album thành công'
+      );
       setActiveTab('manage');
     } catch (err: any) {
       console.error(err);
@@ -227,6 +270,9 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
       try {
         const updated = await deleteAlbum(id);
         onAlbumsUpdated(updated);
+        if (editingAlbumId === id) {
+          resetForm();
+        }
         setStatusMessage('Đã xóa album thành công');
       } catch (err: any) {
         console.error(err);
@@ -297,30 +343,54 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
         ) : (
           <>
             {/* Tab Bar Tối Giản */}
-            <div className="px-6 border-b border-white/10 bg-[#16171B] flex items-center gap-6 shrink-0">
-              <button
-                onClick={() => setActiveTab('create')}
-                className={`py-3 text-xs font-semibold border-b-2 transition-all cursor-pointer flex items-center gap-1.5 ${
-                  activeTab === 'create'
-                    ? 'border-[#00D0E8] text-[#00D0E8]'
-                    : 'border-transparent text-[#8E9096] hover:text-white'
-                }`}
-              >
-                <Plus className="w-3.5 h-3.5" />
-                <span>Thêm Album</span>
-              </button>
+            <div className="px-6 border-b border-white/10 bg-[#16171B] flex items-center justify-between shrink-0">
+              <div className="flex items-center gap-6">
+                <button
+                  onClick={() => setActiveTab('create')}
+                  className={`py-3 text-xs font-semibold border-b-2 transition-all cursor-pointer flex items-center gap-1.5 ${
+                    activeTab === 'create'
+                      ? 'border-[#00D0E8] text-[#00D0E8]'
+                      : 'border-transparent text-[#8E9096] hover:text-white'
+                  }`}
+                >
+                  {editingAlbumId ? (
+                    <>
+                      <Pencil className="w-3.5 h-3.5" />
+                      <span>Sửa Album</span>
+                    </>
+                  ) : (
+                    <>
+                      <Plus className="w-3.5 h-3.5" />
+                      <span>Thêm Album</span>
+                    </>
+                  )}
+                </button>
 
-              <button
-                onClick={() => setActiveTab('manage')}
-                className={`py-3 text-xs font-semibold border-b-2 transition-all cursor-pointer flex items-center gap-1.5 ${
-                  activeTab === 'manage'
-                    ? 'border-[#00D0E8] text-[#00D0E8]'
-                    : 'border-transparent text-[#8E9096] hover:text-white'
-                }`}
-              >
-                <FileCheck className="w-3.5 h-3.5" />
-                <span>Danh Sách ({albums.length})</span>
-              </button>
+                <button
+                  onClick={() => setActiveTab('manage')}
+                  className={`py-3 text-xs font-semibold border-b-2 transition-all cursor-pointer flex items-center gap-1.5 ${
+                    activeTab === 'manage'
+                      ? 'border-[#00D0E8] text-[#00D0E8]'
+                      : 'border-transparent text-[#8E9096] hover:text-white'
+                  }`}
+                >
+                  <FileCheck className="w-3.5 h-3.5" />
+                  <span>Danh Sách ({albums.length})</span>
+                </button>
+              </div>
+
+              {editingAlbumId && activeTab === 'create' && (
+                <button
+                  onClick={() => {
+                    resetForm();
+                    setStatusMessage('Đã chuyển về tạo album mới');
+                  }}
+                  className="text-xs text-[#00D0E8] hover:text-white flex items-center gap-1 transition-colors cursor-pointer py-1 px-2.5 rounded-lg bg-white/5 hover:bg-white/10"
+                >
+                  <Plus className="w-3 h-3" />
+                  <span>Tạo Mới</span>
+                </button>
+              )}
             </div>
 
             {/* Thông báo trạng thái */}
@@ -340,6 +410,26 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
             <div className="flex-1 overflow-y-auto p-6 custom-scrollbar">
               {activeTab === 'create' ? (
                 <form onSubmit={handleSaveAlbum} className="space-y-5 max-w-2xl mx-auto">
+                  {editingAlbumId && (
+                    <div className="flex items-center justify-between px-3.5 py-2.5 bg-[#00D0E8]/10 border border-[#00D0E8]/20 rounded-xl text-xs">
+                      <div className="flex items-center gap-2 text-[#00D0E8] font-medium min-w-0">
+                        <Pencil className="w-3.5 h-3.5 shrink-0" />
+                        <span className="truncate">
+                          Đang sửa: <strong className="text-white">{projectTitle || 'Album'}</strong>
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          resetForm();
+                          setStatusMessage('Đã hủy chế độ sửa, chuyển về thêm mới');
+                        }}
+                        className="ml-2 px-2.5 py-1 bg-white/10 hover:bg-white/20 text-white rounded-lg text-[11px] font-medium transition-colors cursor-pointer shrink-0"
+                      >
+                        Hủy sửa
+                      </button>
+                    </div>
+                  )}
                   {/* Thông tin cơ bản */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                     <div>
@@ -560,14 +650,26 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
                   </div>
 
                   {/* Nút Submit */}
-                  <div className="pt-3">
+                  <div className="pt-3 flex items-center gap-2.5">
+                    {editingAlbumId && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          resetForm();
+                          setActiveTab('manage');
+                        }}
+                        className="px-4 py-3 bg-white/5 hover:bg-white/10 border border-white/10 text-[#8E9096] hover:text-white font-semibold text-xs tracking-wider rounded-xl transition-all cursor-pointer"
+                      >
+                        Hủy
+                      </button>
+                    )}
                     <button
                       type="submit"
                       disabled={isProcessing}
-                      className="w-full py-3 bg-[#00D0E8] hover:bg-white text-black font-semibold text-xs uppercase tracking-wider rounded-xl transition-all cursor-pointer disabled:opacity-50 flex items-center justify-center gap-2"
+                      className="flex-1 py-3 bg-[#00D0E8] hover:bg-white text-black font-semibold text-xs uppercase tracking-wider rounded-xl transition-all cursor-pointer disabled:opacity-50 flex items-center justify-center gap-2"
                     >
                       {isProcessing && <RefreshCw className="w-3.5 h-3.5 animate-spin" />}
-                      <span>Đăng Album</span>
+                      <span>{editingAlbumId ? 'Lưu Thay Đổi' : 'Đăng Album'}</span>
                     </button>
                   </div>
                 </form>
@@ -600,13 +702,23 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
                           </div>
                         </div>
 
-                        <button
-                          onClick={() => handleDeleteAlbum(album.id)}
-                          className="p-2 rounded-lg text-white/40 hover:text-red-400 hover:bg-red-500/10 transition-all cursor-pointer shrink-0"
-                          title="Xóa album này"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
+                        <div className="flex items-center gap-1 shrink-0">
+                          <button
+                            onClick={() => handleStartEdit(album)}
+                            className="p-2 rounded-lg text-white/50 hover:text-[#00D0E8] hover:bg-[#00D0E8]/10 transition-all cursor-pointer"
+                            title="Chỉnh sửa album này"
+                          >
+                            <Pencil className="w-4 h-4" />
+                          </button>
+
+                          <button
+                            onClick={() => handleDeleteAlbum(album.id)}
+                            className="p-2 rounded-lg text-white/40 hover:text-red-400 hover:bg-red-500/10 transition-all cursor-pointer"
+                            title="Xóa album này"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
                       </div>
                     ))
                   )}

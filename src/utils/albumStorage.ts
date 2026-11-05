@@ -162,8 +162,16 @@ export async function saveAlbum(
 
     // Cập nhật lại ảnh bìa nếu là dataURL
     if (preparedAlbum.coverImage.startsWith('data:')) {
-      const coverItem = preparedAlbum.photos[0];
-      preparedAlbum.coverImage = coverItem?.thumbnail || coverItem?.url || '';
+      const coverIdx = album.photos.findIndex(
+        (p) => p.url === album.coverImage || (p.thumbnail && p.thumbnail === album.coverImage)
+      );
+      if (coverIdx >= 0 && preparedAlbum.photos[coverIdx]) {
+        const coverItem = preparedAlbum.photos[coverIdx];
+        preparedAlbum.coverImage = coverItem.thumbnail || coverItem.url;
+      } else {
+        const coverItem = preparedAlbum.photos[0];
+        preparedAlbum.coverImage = coverItem?.thumbnail || coverItem?.url || '';
+      }
     }
 
     // Lưu vào Supabase Database

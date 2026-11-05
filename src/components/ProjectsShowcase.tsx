@@ -675,6 +675,21 @@ export const ProjectsShowcase: React.FC = () => {
   // Hỗ trợ phím mũi tên ← → trên máy tính
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      // Không can thiệp nếu người dùng đang nhập dữ liệu trong input, textarea hoặc contenteditable
+      const activeEl = document.activeElement;
+      const target = e.target as HTMLElement | null;
+      const isInput =
+        (target &&
+          (target.tagName === 'INPUT' ||
+            target.tagName === 'TEXTAREA' ||
+            target.isContentEditable)) ||
+        (activeEl &&
+          (activeEl.tagName === 'INPUT' ||
+            activeEl.tagName === 'TEXTAREA' ||
+            (activeEl as HTMLElement).isContentEditable));
+
+      if (isInput) return;
+
       if (lightboxData !== null) return;
       if (displayMode !== 'runway') return;
       if (e.key === 'ArrowRight') handleNext3D();
