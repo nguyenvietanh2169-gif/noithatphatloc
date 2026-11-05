@@ -398,9 +398,28 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
     return (
       <div className="min-h-screen bg-[#0A0B0E] text-white flex flex-col justify-between p-6">
         <header className="flex justify-between items-center">
-          <span className="text-xs uppercase tracking-wider text-neutral-400 font-semibold">
-            PHÁT LỘC ADMIN
-          </span>
+          <a
+            href="/"
+            onClick={(e) => {
+              e.preventDefault();
+              onExitAdmin();
+            }}
+            className="flex items-center gap-2.5 group cursor-pointer"
+          >
+            <img
+              src="/assets/logo/logo-turquoise-clean.png"
+              alt="Nội Thất Phát Lộc"
+              className="h-8 sm:h-9 w-auto object-contain transition-transform group-hover:scale-105"
+            />
+            <div className="flex flex-col justify-center">
+              <span className="font-heading text-sm sm:text-base font-black tracking-tight text-white leading-none">
+                PHÁT LỘC
+              </span>
+              <span className="text-[8.5px] uppercase tracking-[0.18em] text-[#00D0E8] font-bold mt-0.5 whitespace-nowrap">
+                ADMIN PANEL
+              </span>
+            </div>
+          </a>
           <button
             onClick={onExitAdmin}
             className="text-xs text-neutral-400 hover:text-white transition-colors cursor-pointer"
@@ -422,7 +441,6 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
                   setPinInput(e.target.value);
                   setPinError(false);
                 }}
-                placeholder="123456"
                 autoFocus
                 className="w-full bg-[#1A1C24] border border-white/[0.1] rounded-lg px-3 py-2 text-center text-sm font-mono tracking-widest text-white focus:outline-none focus:border-white/30"
               />
@@ -452,11 +470,28 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
     <div className="min-h-screen bg-[#0A0B0E] text-[#E4E6EA] flex flex-col font-sans">
       {/* HEADER */}
       <header className="sticky top-0 z-40 bg-[#0E0F14]/95 backdrop-blur-md border-b border-white/[0.07] px-4 sm:px-6 py-2.5 flex items-center justify-between gap-4">
-        <div className="flex items-center gap-2.5">
-          <span className="font-heading text-sm font-bold tracking-tight uppercase text-white">
-            Phát Lộc Admin
-          </span>
-        </div>
+        <a
+          href="/"
+          onClick={(e) => {
+            e.preventDefault();
+            onExitAdmin();
+          }}
+          className="flex items-center gap-2.5 group cursor-pointer"
+        >
+          <img
+            src="/assets/logo/logo-turquoise-clean.png"
+            alt="Nội Thất Phát Lộc"
+            className="h-7 sm:h-8 w-auto object-contain transition-transform group-hover:scale-105"
+          />
+          <div className="flex flex-col justify-center">
+            <span className="font-heading text-xs sm:text-sm font-black tracking-tight text-white leading-none">
+              PHÁT LỘC
+            </span>
+            <span className="text-[7.5px] sm:text-[8px] uppercase tracking-[0.18em] text-[#00D0E8] font-bold mt-0.5 whitespace-nowrap">
+              ADMIN PANEL
+            </span>
+          </div>
+        </a>
 
         <div className="flex items-center gap-2">
           <button
