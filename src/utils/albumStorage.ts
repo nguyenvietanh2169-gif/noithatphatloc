@@ -13,6 +13,30 @@ const DB_NAME = 'PhatLocInteriorDB';
 const DB_VERSION = 1;
 const STORE_NAME = 'customer_albums';
 const LOCAL_STORAGE_KEY = 'phat_loc_albums_backup';
+const DELETED_ALBUMS_KEY = 'phat_loc_deleted_album_ids';
+
+export function getDeletedAlbumIds(): Set<string> {
+  try {
+    const raw = localStorage.getItem(DELETED_ALBUMS_KEY);
+    return raw ? new Set(JSON.parse(raw)) : new Set();
+  } catch {
+    return new Set();
+  }
+}
+
+export function markAlbumAsDeleted(id: string): void {
+  const deleted = getDeletedAlbumIds();
+  deleted.add(id);
+  try {
+    localStorage.setItem(DELETED_ALBUMS_KEY, JSON.stringify(Array.from(deleted)));
+  } catch {
+    // Bỏ qua lỗi quota
+  }
+}
+
+export function clearDeletedAlbumIds(): void {
+  localStorage.removeItem(DELETED_ALBUMS_KEY);
+}
 
 function openDatabase(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
@@ -39,18 +63,15 @@ function openDatabase(): Promise<IDBDatabase> {
  * Lấy toàn bộ album (Ưu tiên đọc từ Cloud nếu đã kết nối, fallback IndexedDB)
  */
 export async function getAlbums(): Promise<CustomerAlbum[]> {
+  const deletedIds = getDeletedAlbumIds();
+
   // 1. Nếu có kết nối Cloud, thử tải từ Supabase trước
   if (isCloudEnabled()) {
     try {
       const cloudAlbums = await fetchAlbumsFromCloud();
       if (cloudAlbums && cloudAlbums.length > 0) {
-        // Nếu cloud chưa có album 3D, tự động gộp các album 3D mẫu để hiển thị đầy đủ
-        const has3D = cloudAlbums.some((a) => is3DAlbum(a));
-        let finalAlbums = cloudAlbums;
-        if (!has3D) {
-          const default3D = INITIAL_CUSTOMER_ALBUMS.filter((a) => is3DAlbum(a));
-          finalAlbums = [...cloudAlbums, ...default3D];
-        }
+        // Lọc bỏ triệt để các album mà admin đã bấm xóa
+        const finalAlbums = cloudAlbums.filter((a) => !deletedIds.has(a.id));
         finalAlbums.sort((a, b) => b.createdAt - a.createdAt);
         // Cache lại vào IndexedDB để chạy siêu tốc
         saveLocalAlbums(finalAlbums).catch(() => {});
@@ -72,29 +93,26 @@ export async function getAlbums(): Promise<CustomerAlbum[]> {
       request.onsuccess = async () => {
         let albums = request.result as CustomerAlbum[];
         if (!albums || albums.length === 0) {
-          await saveLocalAlbums(INITIAL_CUSTOMER_ALBUMS);
-          resolve(INITIAL_CUSTOMER_ALBUMS);
+          const initial = INITIAL_CUSTOMER_ALBUMS.filter((a) => !deletedIds.has(a.id));
+          await saveLocalAlbums(initial);
+          resolve(initial);
         } else {
-          // Nếu database cũ chưa có album 3D hoặc thiếu dữ liệu khởi tạo, tự động bổ sung album 3D mẫu
-          const has3D = albums.some((a) => is3DAlbum(a));
-          if (!has3D) {
-            const default3D = INITIAL_CUSTOMER_ALBUMS.filter((a) => is3DAlbum(a));
-            albums = [...albums, ...default3D];
-            saveLocalAlbums(albums).catch(() => {});
-          }
-          albums.sort((a, b) => b.createdAt - a.createdAt);
-          resolve(albums);
+          const filtered = albums.filter((a) => !deletedIds.has(a.id));
+          filtered.sort((a, b) => b.createdAt - a.createdAt);
+          resolve(filtered);
         }
       };
 
       request.onerror = () => {
         const cached = localStorage.getItem(LOCAL_STORAGE_KEY);
-        resolve(cached ? JSON.parse(cached) : INITIAL_CUSTOMER_ALBUMS);
+        const list: CustomerAlbum[] = cached ? JSON.parse(cached) : INITIAL_CUSTOMER_ALBUMS;
+        resolve(list.filter((a) => !deletedIds.has(a.id)));
       };
     });
   } catch {
     const cached = localStorage.getItem(LOCAL_STORAGE_KEY);
-    return cached ? JSON.parse(cached) : INITIAL_CUSTOMER_ALBUMS;
+    const list: CustomerAlbum[] = cached ? JSON.parse(cached) : INITIAL_CUSTOMER_ALBUMS;
+    return list.filter((a) => !deletedIds.has(a.id));
   }
 }
 
@@ -143,6 +161,17 @@ export async function saveAlbum(
   onProgress?: (msg: string) => void
 ): Promise<CustomerAlbum[]> {
   const preparedAlbum: CustomerAlbum = { ...album };
+
+  // Nếu album này từng bị đánh dấu xóa trước đó, gỡ bỏ khỏi danh sách đã xóa
+  const deleted = getDeletedAlbumIds();
+  if (deleted.has(preparedAlbum.id)) {
+    deleted.delete(preparedAlbum.id);
+    try {
+      localStorage.setItem(DELETED_ALBUMS_KEY, JSON.stringify(Array.from(deleted)));
+    } catch {
+      // Bỏ qua lỗi
+    }
+  }
 
   // 1. Nếu có Cloud, upload các file ảnh/video còn là dataURL lên Supabase Storage
   if (isCloudEnabled()) {
@@ -214,6 +243,10 @@ export async function saveAlbum(
  * Xóa 1 album và đồng bộ tức thì lên Cloud
  */
 export async function deleteAlbum(albumId: string): Promise<CustomerAlbum[]> {
+  // 1. Đánh dấu đã xóa vĩnh viễn
+  markAlbumAsDeleted(albumId);
+
+  // 2. Gửi lệnh xóa trực tiếp lên Cloud Supabase
   if (isCloudEnabled()) {
     try {
       await deleteAlbumFromCloud(albumId);
@@ -222,18 +255,10 @@ export async function deleteAlbum(albumId: string): Promise<CustomerAlbum[]> {
     }
   }
 
+  // 3. Xóa trong IndexedDB local
   const currentAlbums = await getAlbums();
   const updated = currentAlbums.filter((a) => a.id !== albumId);
   await saveLocalAlbums(updated);
-
-  // Đồng bộ lại Cloud để đảm bảo Cloud không giữ album cũ và luôn đồng nhất với Local
-  if (isCloudEnabled()) {
-    try {
-      await syncAllAlbumsToCloud(updated);
-    } catch (err) {
-      console.warn('Lỗi đồng bộ Cloud sau khi xóa:', err);
-    }
-  }
 
   return updated;
 }
@@ -256,6 +281,14 @@ export async function syncAlbums(
  * Reset về dữ liệu mẫu ban đầu
  */
 export async function resetToDefaultAlbums(): Promise<CustomerAlbum[]> {
+  clearDeletedAlbumIds();
   await saveLocalAlbums(INITIAL_CUSTOMER_ALBUMS);
+  if (isCloudEnabled()) {
+    try {
+      await syncAllAlbumsToCloud(INITIAL_CUSTOMER_ALBUMS);
+    } catch (err) {
+      console.warn('Lỗi sync default to cloud:', err);
+    }
+  }
   return INITIAL_CUSTOMER_ALBUMS;
 }
