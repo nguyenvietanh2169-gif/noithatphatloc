@@ -448,52 +448,49 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
           </button>
         </header>
 
-        <div className="w-full max-w-sm sm:max-w-md mx-auto my-auto py-8 px-2 sm:px-0">
-          <div className="bg-[#101117] border border-white/10 rounded-3xl p-6 sm:p-8 shadow-2xl shadow-cyan-500/5 backdrop-blur-xl">
-            <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-b from-[#00D0E8]/20 to-transparent border border-[#00D0E8]/30 flex items-center justify-center text-[#00D0E8] shadow-lg shadow-[#00D0E8]/10">
-              <Lock className="w-8 h-8" />
-            </div>
-
-            <h2 className="text-xl sm:text-2xl font-bold text-center text-white mb-1.5 tracking-tight">
+        <div className="w-full max-w-xs sm:max-w-sm mx-auto my-auto py-8 px-4">
+          <div className="flex flex-col items-center mb-6">
+            <Lock className="w-8 h-8 text-white stroke-[1.5] mb-4" />
+            <h2 className="text-xl sm:text-2xl font-semibold text-center text-white mb-1.5 tracking-tight">
               Mã PIN Quản Trị
             </h2>
-            <p className="text-xs sm:text-sm text-neutral-400 text-center mb-6">
+            <p className="text-xs text-neutral-400 text-center">
               Nhập mã bảo mật để truy cập bảng điều khiển
             </p>
-
-            <form onSubmit={handleVerifyPin} className="space-y-4">
-              <div className="relative">
-                <input
-                  type="password"
-                  inputMode="numeric"
-                  pattern="[0-9]*"
-                  maxLength={10}
-                  value={pinInput}
-                  onChange={(e) => {
-                    setPinInput(e.target.value);
-                    setPinError(false);
-                  }}
-                  autoFocus
-                  className="w-full h-14 sm:h-16 bg-[#161722] border-2 border-white/10 focus:border-[#00D0E8] rounded-2xl text-center text-2xl sm:text-3xl font-mono tracking-[0.4em] text-white focus:outline-none transition-all shadow-inner"
-                />
-              </div>
-
-              {pinError && (
-                <div className="flex items-center justify-center gap-1.5 text-xs text-rose-400 bg-rose-500/10 border border-rose-500/20 py-2.5 px-3 rounded-xl">
-                  <AlertCircle className="w-4 h-4 shrink-0" />
-                  <span>Mã PIN không chính xác, vui lòng thử lại</span>
-                </div>
-              )}
-
-              <button
-                type="submit"
-                className="w-full h-12 sm:h-14 bg-white hover:bg-neutral-100 text-black font-bold text-sm sm:text-base rounded-2xl transition-all cursor-pointer active:scale-[0.98] shadow-lg flex items-center justify-center gap-2"
-              >
-                <span>Mở khóa</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </form>
           </div>
+
+          <form onSubmit={handleVerifyPin} className="space-y-4">
+            <div className="relative">
+              <input
+                type="password"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                maxLength={10}
+                value={pinInput}
+                onChange={(e) => {
+                  setPinInput(e.target.value);
+                  setPinError(false);
+                }}
+                autoFocus
+                className="w-full h-14 bg-white/[0.04] border border-white/15 focus:border-white/40 rounded-xl text-center text-2xl font-mono tracking-[0.4em] text-white focus:outline-none transition-colors"
+              />
+            </div>
+
+            {pinError && (
+              <div className="flex items-center justify-center gap-1.5 text-xs text-rose-400 bg-rose-500/10 border border-rose-500/20 py-2.5 px-3 rounded-xl">
+                <AlertCircle className="w-4 h-4 shrink-0" />
+                <span>Mã PIN không chính xác, vui lòng thử lại</span>
+              </div>
+            )}
+
+            <button
+              type="submit"
+              className="w-full h-12 bg-white hover:bg-neutral-200 text-black font-medium text-sm rounded-xl transition-colors cursor-pointer active:scale-[0.98] flex items-center justify-center gap-2"
+            >
+              <span>Mở khóa</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </form>
         </div>
 
         <footer className="text-center text-[11px] text-neutral-500 py-2">
