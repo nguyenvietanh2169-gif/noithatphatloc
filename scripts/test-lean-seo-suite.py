@@ -122,9 +122,8 @@ for p in pages:
             schema_valid = False
 
     # 6. Address check
-    has_tam_hiep = 'Tam Hiệp' in html
-    # Check if Long Binh appears as address
     has_long_binh_addr = bool(re.search(r'(?:Khu phố 13|KP 13)[,\s]+(?:Phường\s+)?Long Bình', html))
+    has_tam_hiep_addr = bool(re.search(r'(?:Khu phố 13|KP 13)[,\s]+(?:Phường\s+)?Tam Hiệp', html))
 
     # 7. Contact CTA check
     has_tel = 'tel:0585338339' in html
@@ -149,8 +148,8 @@ for p in pages:
         'schema_types': schema_types,
         'schema_valid': schema_valid,
         'has_price': has_price,
-        'has_tam_hiep': has_tam_hiep,
         'has_long_binh_addr': has_long_binh_addr,
+        'has_tam_hiep_addr': has_tam_hiep_addr,
         'has_tel': has_tel,
         'has_zalo': has_zalo,
         'img_count': img_count,
@@ -166,6 +165,6 @@ for r in results:
     print(f"  * H1 (Số lượng: {r['h1_count']}): {r['h1_text']}")
     print(f"  * H2 (Số lượng: {r['h2_count']})")
     print(f"  * Schema JSON-LD: Types={r['schema_types']} | Hợp lệ={r['schema_valid']} | Có giá nội bộ={r['has_price']}")
-    print(f"  * Địa chỉ: Có Tam Hiệp={r['has_tam_hiep']} | Còn sót địa chỉ Long Bình={r['has_long_binh_addr']}")
+    print(f"  * Địa chỉ: Có Long Bình={r['has_long_binh_addr']} | Còn sót địa chỉ Tam Hiệp={r['has_tam_hiep_addr']}")
     print(f"  * Chức năng liên hệ: Hotline (0585 338 339)={r['has_tel']} | Zalo={r['has_zalo']}")
     print(f"  * Hình ảnh: Tổng số={r['img_count']} | Thiếu Alt={r['imgs_no_alt_count']}")

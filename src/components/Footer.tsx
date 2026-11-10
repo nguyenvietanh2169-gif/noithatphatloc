@@ -68,7 +68,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenEstimator, onOpenContact, 
               </h3>
             </div>
             <a
-              href="https://www.google.com/maps/dir/?api=1&destination=C%C3%B4ng+ty+TNHH+N%E1%BB%99i+Th%E1%BA%A5t+Ph%C3%A1t+L%E1%BB%99c%2C+28C%2F88+Khu+ph%E1%BB%91+13%2C+Tam+Hi%E1%BB%87p%2C+%C4%90%E1%BB%93ng+Nai"
+              href="https://www.google.com/maps/dir/?api=1&destination=C%C3%B4ng+ty+TNHH+N%E1%BB%99i+Th%E1%BA%A5t+Ph%C3%A1t+L%E1%BB%99c%2C+28C%2F88+Khu+ph%E1%BB%91+13%2C+Ph%C6%B0%E1%BB%9Dng+Long+B%C3%ACnh%2C+Th%C3%A0nh+ph%E1%BB%91+Bi%C3%AAn+H%C3%B2a%2C+%C4%90%E1%BB%93ng+Nai"
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 hover:bg-[#00D0E8] text-white hover:text-black border border-white/10 hover:border-transparent text-xs font-medium uppercase tracking-wider transition-all self-start sm:self-auto shrink-0 group cursor-pointer shadow-lg hover:scale-105 active:scale-95"
@@ -82,7 +82,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenEstimator, onOpenContact, 
           <div className="w-full h-72 sm:h-80 md:h-[360px] rounded-2xl overflow-hidden border border-white/10 relative shadow-2xl bg-[#1A1A1E]">
             <iframe
               title="Bản đồ Google Maps - Vị trí Công ty TNHH Nội Thất Phát Lộc"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d70103.05637832002!2d106.82311593211381!3d10.941928471569337!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3174dd13a9734f37%3A0xe8340db4a3dd2d9d!2zQ8O0bmcgdHkgVE5ISCBO4buZaSBUaOG6pXQgUGjDoXQgTOG7mWM!5e1!3m2!1svi!2sus!4v1793004202886!5m2!1svi!2sus"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4382.309307063762!2d106.81939317547582!3d10.88304045721725!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3174dd13a9734f37%3A0xe8340db4a3dd2d9d!2zQ8O0bmcgdHkgVE5ISCBO4buZaSBUaOG6pXQgUGjDoXQgTOG7mWM!5e1!3m2!1svi!2s!4v1794289359745!5m2!1svi!2s"
               width="100%"
               height="100%"
               style={{ border: 0 }}
@@ -146,7 +146,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenEstimator, onOpenContact, 
                 <div>
                   <span className="text-[10px] text-white/50 font-mono-num uppercase block">ĐỊA CHỈ DOANH NGHIỆP:</span>
                   <span className="text-white font-medium leading-relaxed">
-                    28C/88, Khu phố 13, Tam Hiệp, Thành phố Biên Hòa, Tỉnh Đồng Nai, Việt Nam
+                    28C/88, Khu phố 13, Phường Long Bình, Thành phố Biên Hòa, Tỉnh Đồng Nai, Việt Nam
                   </span>
                 </div>
               </li>

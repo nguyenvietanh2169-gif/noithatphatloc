@@ -285,7 +285,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenEstimator, onOpenContact }
               <span className="font-bold text-[#141414] block">CÔNG TY TNHH NỘI THẤT PHÁT LỘC</span>
               <span className="font-mono-num text-[#00A8BC] font-semibold block">MST: 3604065485</span>
               <span className="block text-[10.5px] leading-relaxed text-[#6E7075]">
-                Đ/C: 28C/88, Khu phố 13, Tam Hiệp, Tỉnh Đồng Nai, Việt Nam
+                Đ/C: 28C/88, Khu phố 13, Phường Long Bình, TP. Biên Hòa, Tỉnh Đồng Nai, Việt Nam
               </span>
               <a href="mailto:noithatphatloc2025@gmail.com" className="block text-[10.5px] text-[#00A8BC] hover:underline font-medium">
                 Email: noithatphatloc2025@gmail.com
