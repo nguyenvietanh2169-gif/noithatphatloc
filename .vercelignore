@@ -1,0 +1,6 @@
+.vercel
+.git
+node_modules
+print-exports
+*.tiff
+scripts

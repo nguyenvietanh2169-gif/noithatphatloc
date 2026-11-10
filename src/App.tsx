@@ -18,6 +18,7 @@ import { ContactModal } from './components/ContactModal';
 import { AdminDashboardPage } from './components/AdminDashboardPage';
 import { CustomerAlbum } from './types/album';
 import { getAlbums } from './utils/albumStorage';
+import { trackPageView } from './utils/analyticsTracker';
 import { Calculator, Phone, ArrowUp, Send } from 'lucide-react';
 
 function MainApp() {
@@ -30,8 +31,9 @@ function MainApp() {
   });
   const [showBackToTop, setShowBackToTop] = useState(false);
 
-  // Tải danh sách album từ IndexedDB
+  // Tải danh sách album từ IndexedDB & Ghi nhận lượt xem trang
   useEffect(() => {
+    trackPageView();
     getAlbums().then((loadedAlbums) => {
       setAlbums(loadedAlbums);
     });
