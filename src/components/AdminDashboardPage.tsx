@@ -43,10 +43,7 @@ import {
 } from '../utils/cloudSync';
 import {
   getAnalyticsData,
-  saveGSCMetrics,
   AnalyticsData,
-  GSCMetrics,
-  DEFAULT_GSC_METRICS,
 } from '../utils/analyticsTracker';
 import { INITIAL_CUSTOMER_ALBUMS } from '../data/defaultAlbums';
 
@@ -138,25 +135,11 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
   const [cloudUrl, setCloudUrl] = useState('');
   const [cloudKey, setCloudKey] = useState('');
 
-  // Analytics & Google Search Console State
+  // Analytics State (Đo lường lượt xem tự động)
   const [analytics, setAnalytics] = useState<AnalyticsData>(() => getAnalyticsData());
-  const [isEditingGSC, setIsEditingGSC] = useState(false);
-  const [editGSCForm, setEditGSCForm] = useState<GSCMetrics>(() => getAnalyticsData().searchConsole);
 
   const handleRefreshAnalytics = () => {
-    const updated = getAnalyticsData();
-    setAnalytics(updated);
-    setEditGSCForm(updated.searchConsole);
-  };
-
-  const handleSaveGSCMetrics = (e: React.FormEvent) => {
-    e.preventDefault();
-    saveGSCMetrics(editGSCForm);
-    setAnalytics((prev) => ({ ...prev, searchConsole: editGSCForm }));
-    setIsEditingGSC(false);
-    setStatusMessage('Đã cập nhật số liệu Google Search Console thành công!');
-    setStatusType('success');
-    setTimeout(() => setStatusMessage(null), 3000);
+    setAnalytics(getAnalyticsData());
   };
 
   useEffect(() => {
@@ -672,11 +655,11 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
           {activeTab === 'overview' && (
             <div className="space-y-6">
               {/* Header */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-white/[0.06]">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/[0.06]">
                 <div>
-                  <h2 className="text-lg sm:text-xl font-medium text-white tracking-tight">Tổng Quan Hiệu Suất</h2>
+                  <h2 className="text-lg sm:text-xl font-medium text-white tracking-tight">Tổng Quan Website</h2>
                   <p className="text-xs text-neutral-400 mt-0.5">
-                    Số liệu Google Search Console và lượt truy cập thực tế của noithatphatloc.com
+                    Theo dõi lượt truy cập thực tế và dự án của xưởng Phát Lộc
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
@@ -687,6 +670,15 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
                   >
                     Làm mới
                   </button>
+                  <a
+                    href="https://search.google.com/search-console/performance/search-analytics?resource_id=https%3A%2F%2Fnoithatphatloc.com%2F&metrics=CLICKS%2CIMPRESSIONS%2CCTR%2CPOSITION"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="px-3 py-1.5 bg-white/[0.04] hover:bg-white/[0.08] text-neutral-300 hover:text-white text-xs font-mono rounded-lg border border-white/[0.08] transition-colors cursor-pointer"
+                    title="Mở Google Search Console chính thức"
+                  >
+                    Google Search Console ↗
+                  </a>
                   {design3DAlbums.length === 0 && (
                     <button
                       onClick={handleSeedDefault3D}
@@ -703,14 +695,14 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
                 <div className="flex items-center justify-between pb-3 border-b border-white/[0.04]">
                   <div>
                     <span className="text-[10px] uppercase tracking-[0.2em] font-mono text-neutral-400 block">
-                      Hệ Thống Đếm Lượt Truy Cập
+                      Hệ Thống Đo Lường Tự Động
                     </span>
                     <h3 className="text-sm font-medium text-white tracking-wide mt-0.5">
                       Lượt Xem Website Thực Tế
                     </h3>
                   </div>
                   <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-400 px-2 py-0.5 rounded border border-white/10 bg-white/[0.02]">
-                    Trực tiếp
+                    Tự động 24/7
                   </span>
                 </div>
 
@@ -738,7 +730,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
 
                   <div className="bg-white/[0.02] border border-white/[0.04] p-4 rounded-xl">
                     <span className="text-[10px] uppercase tracking-wider font-mono text-neutral-400 block mb-1">
-                      Di động
+                      Thiết bị di động
                     </span>
                     <div className="text-2xl sm:text-3xl font-light text-white font-mono">
                       {Math.round(
@@ -792,141 +784,6 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
                     </div>
                   </div>
                 )}
-              </div>
-
-              {/* KHỐI 2: HIỆU SUẤT TÌM KIẾM GOOGLE (GOOGLE SEARCH CONSOLE) */}
-              <div className="bg-[#101115] border border-white/[0.06] p-5 sm:p-6 rounded-2xl space-y-5">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/[0.04]">
-                  <div>
-                    <span className="text-[10px] uppercase tracking-[0.2em] font-mono text-neutral-400 block">
-                      Google Search Console
-                    </span>
-                    <h3 className="text-sm font-medium text-white tracking-wide mt-0.5">
-                      Hiệu Suất Tìm Kiếm Google
-                    </h3>
-                    <span className="text-[11px] text-neutral-400 block mt-0.5 font-mono">
-                      noithatphatloc.com • {analytics.searchConsole.lastUpdated}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center gap-2 self-start sm:self-auto">
-                    <button
-                      onClick={() => {
-                        setEditGSCForm(analytics.searchConsole);
-                        setIsEditingGSC(true);
-                      }}
-                      className="px-3 py-1.5 bg-white/[0.04] hover:bg-white/[0.08] text-neutral-300 hover:text-white text-xs font-mono rounded-lg border border-white/[0.08] transition-colors cursor-pointer"
-                    >
-                      Cập nhật số liệu
-                    </button>
-                    <a
-                      href="https://search.google.com/search-console/performance/search-analytics?resource_id=https%3A%2F%2Fnoithatphatloc.com%2F&metrics=CLICKS%2CIMPRESSIONS%2CCTR%2CPOSITION"
-                      target="_blank"
-                      rel="noreferrer"
-                      className="px-3 py-1.5 bg-white text-black hover:bg-neutral-200 text-xs font-medium rounded-lg transition-colors cursor-pointer"
-                    >
-                      Mở Search Console ↗
-                    </a>
-                  </div>
-                </div>
-
-                {/* 4 Cards Google Search Console - Thiết kế Tối Giản Cao Cấp */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                  <div className="bg-white/[0.02] border border-white/[0.04] p-4 rounded-xl">
-                    <span className="text-[10px] uppercase tracking-wider font-mono text-neutral-400 block mb-1">
-                      Lượt nhấp
-                    </span>
-                    <div className="text-2xl sm:text-3xl font-light text-white font-mono">
-                      {analytics.searchConsole.clicks}
-                    </div>
-                    <span className="text-[10px] text-neutral-400 mt-1 block">Khách vào từ Google</span>
-                  </div>
-
-                  <div className="bg-white/[0.02] border border-white/[0.04] p-4 rounded-xl">
-                    <span className="text-[10px] uppercase tracking-wider font-mono text-neutral-400 block mb-1">
-                      Lượt hiển thị
-                    </span>
-                    <div className="text-2xl sm:text-3xl font-light text-white font-mono">
-                      {analytics.searchConsole.impressions.toLocaleString('vi-VN')}
-                    </div>
-                    <span className="text-[10px] text-neutral-400 mt-1 block">Xuất hiện trên tìm kiếm</span>
-                  </div>
-
-                  <div className="bg-white/[0.02] border border-white/[0.04] p-4 rounded-xl">
-                    <span className="text-[10px] uppercase tracking-wider font-mono text-neutral-400 block mb-1">
-                      CTR trung bình
-                    </span>
-                    <div className="text-2xl sm:text-3xl font-light text-white font-mono">
-                      {analytics.searchConsole.ctr}%
-                    </div>
-                    <span className="text-[10px] text-neutral-400 mt-1 block">Tỷ lệ nhấp chuột</span>
-                  </div>
-
-                  <div className="bg-white/[0.02] border border-white/[0.04] p-4 rounded-xl">
-                    <span className="text-[10px] uppercase tracking-wider font-mono text-neutral-400 block mb-1">
-                      Vị trí trung bình
-                    </span>
-                    <div className="text-2xl sm:text-3xl font-light text-white font-mono">
-                      {analytics.searchConsole.position}
-                    </div>
-                    <span className="text-[10px] text-neutral-400 mt-1 block">Trang 1 Google</span>
-                  </div>
-                </div>
-
-                {/* Top Search Queries Table - Tối Giản Không Icon */}
-                <div className="bg-white/[0.015] border border-white/[0.04] rounded-xl overflow-hidden">
-                  <div className="px-4 py-3 border-b border-white/[0.04] flex items-center justify-between">
-                    <span className="text-xs uppercase tracking-wider font-mono text-neutral-400">
-                      Cụm từ tìm kiếm phổ biến
-                    </span>
-                    <span className="text-[10px] font-mono text-neutral-400">
-                      {analytics.searchConsole.queries.length} từ khóa
-                    </span>
-                  </div>
-
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left text-xs">
-                      <thead>
-                        <tr className="border-b border-white/[0.04] text-neutral-400 text-[10px] uppercase tracking-wider font-mono">
-                          <th className="py-2.5 px-4 font-normal">Cụm từ tìm kiếm</th>
-                          <th className="py-2.5 px-4 font-normal text-right">Lượt nhấp</th>
-                          <th className="py-2.5 px-4 font-normal text-right">Hiển thị</th>
-                          <th className="py-2.5 px-4 font-normal text-right">CTR</th>
-                          <th className="py-2.5 px-4 font-normal text-right">Vị trí</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-white/[0.03]">
-                        {analytics.searchConsole.queries.map((q, idx) => {
-                          const isTopRank = q.position <= 3.0;
-                          return (
-                            <tr key={idx} className="hover:bg-white/[0.02] transition-colors">
-                              <td className="py-2.5 px-4 text-neutral-200 font-normal flex items-center gap-2">
-                                <span>{q.query}</span>
-                                {isTopRank && (
-                                  <span className="px-1.5 py-0.2 rounded text-[9px] font-mono border border-white/15 text-neutral-300 bg-white/[0.03]">
-                                    TOP {q.position}
-                                  </span>
-                                )}
-                              </td>
-                              <td className="py-2.5 px-4 text-right font-mono text-white">
-                                {q.clicks}
-                              </td>
-                              <td className="py-2.5 px-4 text-right font-mono text-neutral-400">
-                                {q.impressions.toLocaleString('vi-VN')}
-                              </td>
-                              <td className="py-2.5 px-4 text-right font-mono text-neutral-400">
-                                {q.ctr}%
-                              </td>
-                              <td className="py-2.5 px-4 text-right font-mono text-neutral-300">
-                                {q.position}
-                              </td>
-                            </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
               </div>
 
               {/* KHỐI 3: QUẢN LÝ ALBUM & DỰ ÁN */}
@@ -1504,122 +1361,6 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
           <span className="text-[10px] font-medium tracking-tight">Đồng bộ</span>
         </button>
       </nav>
-
-      {/* Modal Cập Nhật Số Liệu Google Search Console */}
-      {isEditingGSC && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
-          <div className="bg-[#101115] border border-white/10 rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
-              <div>
-                <span className="text-[10px] uppercase tracking-[0.2em] font-mono text-neutral-400 block">
-                  Google Search Console
-                </span>
-                <h3 className="text-sm font-medium text-white tracking-wide mt-0.5">
-                  Cập Nhật Số Liệu Hiệu Suất
-                </h3>
-              </div>
-              <button
-                onClick={() => setIsEditingGSC(false)}
-                className="text-neutral-400 hover:text-white text-xs px-2 py-1 font-mono transition-colors cursor-pointer"
-              >
-                Đóng
-              </button>
-            </div>
-
-            <form onSubmit={handleSaveGSCMetrics} className="space-y-3.5 text-xs">
-              <div>
-                <label className="block text-[10px] uppercase tracking-wider font-mono text-neutral-400 mb-1">
-                  Tổng lượt nhấp (Clicks)
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  value={editGSCForm.clicks}
-                  onChange={(e) => setEditGSCForm({ ...editGSCForm, clicks: Number(e.target.value) })}
-                  className="w-full px-3 py-2 bg-white/[0.02] border border-white/10 focus:border-white/30 rounded-xl text-white font-mono focus:outline-none transition-colors"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-[10px] uppercase tracking-wider font-mono text-neutral-400 mb-1">
-                  Tổng lượt hiển thị (Impressions)
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  value={editGSCForm.impressions}
-                  onChange={(e) => setEditGSCForm({ ...editGSCForm, impressions: Number(e.target.value) })}
-                  className="w-full px-3 py-2 bg-white/[0.02] border border-white/10 focus:border-white/30 rounded-xl text-white font-mono focus:outline-none transition-colors"
-                  required
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-[10px] uppercase tracking-wider font-mono text-neutral-400 mb-1">
-                    CTR trung bình (%)
-                  </label>
-                  <input
-                    type="number"
-                    step="0.1"
-                    min="0"
-                    max="100"
-                    value={editGSCForm.ctr}
-                    onChange={(e) => setEditGSCForm({ ...editGSCForm, ctr: Number(e.target.value) })}
-                    className="w-full px-3 py-2 bg-white/[0.02] border border-white/10 focus:border-white/30 rounded-xl text-white font-mono focus:outline-none transition-colors"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[10px] uppercase tracking-wider font-mono text-neutral-400 mb-1">
-                    Vị trí trung bình
-                  </label>
-                  <input
-                    type="number"
-                    step="0.1"
-                    min="1"
-                    value={editGSCForm.position}
-                    onChange={(e) => setEditGSCForm({ ...editGSCForm, position: Number(e.target.value) })}
-                    className="w-full px-3 py-2 bg-white/[0.02] border border-white/10 focus:border-white/30 rounded-xl text-white font-mono focus:outline-none transition-colors"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-[10px] uppercase tracking-wider font-mono text-neutral-400 mb-1">
-                  Ghi chú ngày cập nhật
-                </label>
-                <input
-                  type="text"
-                  value={editGSCForm.lastUpdated}
-                  onChange={(e) => setEditGSCForm({ ...editGSCForm, lastUpdated: e.target.value })}
-                  className="w-full px-3 py-2 bg-white/[0.02] border border-white/10 focus:border-white/30 rounded-xl text-white text-xs focus:outline-none transition-colors"
-                  placeholder="Ví dụ: 10/11/2026 (Nguồn: Google Search Console)"
-                />
-              </div>
-
-              <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-white/[0.08]">
-                <button
-                  type="button"
-                  onClick={() => setIsEditingGSC(false)}
-                  className="px-4 py-2 bg-white/[0.04] hover:bg-white/[0.08] text-neutral-300 rounded-xl font-mono text-xs cursor-pointer transition-colors"
-                >
-                  Hủy
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-white text-black hover:bg-neutral-200 font-medium text-xs rounded-xl cursor-pointer transition-colors"
-                >
-                  Lưu thay đổi
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
