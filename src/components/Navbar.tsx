@@ -120,6 +120,12 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenEstimator, onOpenContact }
               Dự Án
             </a>
             <a
+              href="/hoi-dap/"
+              className="whitespace-nowrap hover:text-[#00A8BC] transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1.5px] after:bg-[#00A8BC] hover:after:w-full after:transition-all text-[#00A8BC] font-semibold"
+            >
+              Hỏi Đáp Vật Liệu
+            </a>
+            <a
               href="/quy-trinh-bao-gia/"
               className="whitespace-nowrap hover:text-[#00A8BC] transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1.5px] after:bg-[#00A8BC] hover:after:w-full after:transition-all"
             >
@@ -243,6 +249,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenEstimator, onOpenContact }
               className="font-heading text-xl tracking-tight text-[#141414] hover:text-[#00A8BC] transition-colors"
             >
               Dự Án Thực Tế
+            </a>
+            <a
+              href="/hoi-dap/"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="font-heading text-xl tracking-tight text-[#00A8BC] font-bold transition-colors"
+            >
+              Hỏi Đáp Vật Liệu
             </a>
             <a
               href="/quy-trinh-bao-gia/"
