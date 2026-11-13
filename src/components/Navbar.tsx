@@ -58,7 +58,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenEstimator, onOpenContact }
             <img
               src="/assets/logo/logo-turquoise-clean.png"
               alt="Công ty TNHH Nội Thất Phát Lộc Logo"
-              className="h-10 sm:h-12 xl:h-13 w-auto object-contain filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.06)] transition-transform duration-300 group-hover:scale-105"
+              className="h-10 sm:h-12 xl:h-13 w-auto object-contain filter drop-shadow-[0_2px_6px_rgba(0,0,0,0.16)] drop-shadow-[0_1px_2px_rgba(0,0,0,0.10)] transition-transform duration-300 group-hover:scale-105"
             />
             <div className="flex flex-col justify-center">
               <span className="font-heading text-lg sm:text-xl xl:text-[22px] font-black tracking-tight text-[#141414] leading-none">
