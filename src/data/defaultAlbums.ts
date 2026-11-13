@@ -49,7 +49,7 @@ export const INITIAL_CUSTOMER_ALBUMS: CustomerAlbum[] = [
     categories: ['Tủ Bếp & Đảo Bếp', 'Tủ Quần Áo', 'Kệ Tivi'],
     albumType: 'real',
     materialNotes: 'MDF Lõi Xanh Chống Ẩm An Cường Phủ Melamine • Cánh Kính Khung Nhôm Slim Đèn LED',
-    testimonial: 'Thi công sắc nét, bàn giao đúng tiến độ trước Tết. Đội ngũ thợ mộc của xưởng Phát Lộc rất nhiệt tình và chu đáo.',
+    testimonial: 'Thi công sắc nét, bàn giao đúng tiến độ trước Tết. Đội ngũ thợ của xưởng nội thất Phát Lộc rất nhiệt tình và chu đáo.',
     createdAt: Date.now() - 1000 * 60 * 60 * 24 * 30,
     photos: [
       {
