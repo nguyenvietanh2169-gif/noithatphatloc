@@ -35,7 +35,7 @@ export const WorkshopSection: React.FC = () => {
               <div className="w-full h-64 md:h-80 overflow-hidden bg-black/10 border border-black/10">
                 <img
                   src="/assets/workshop/workshop-1.webp"
-                  alt="Xưởng nội thất Phát Lộc hiện đại"
+                  alt="xưởng nội thất Phát Lộc hiện đại"
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
                   loading="lazy"
                 />
